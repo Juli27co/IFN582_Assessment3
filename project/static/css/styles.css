@@ -1,0 +1,36 @@
+.main-header {
+  text-align: center;
+}
+
+.card {
+  flex-basis: 18rem;
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.header-bg {
+  height: 20rem;
+  background-image: url("../img/alif-ngoylung-jg-6ARMiaPM-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+  background-color: rgba(17, 13, 49, 0.73);
+}
+
+.portfolio {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.portfolio img {
+  height: 10rem;
+  margin: .5rem;
+}
+
+
