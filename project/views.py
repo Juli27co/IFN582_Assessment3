@@ -20,9 +20,8 @@ def itemDetails(photographer_service_id):
     form = InquireryForm()
  
     if form.validate_on_submit():
-        # flash("Thank you for submitting your getting in touch.\
-        #         We're reviewing it and will get in touch with you soon.","success")
-        flash("sample","info")
+        flash("Thank you for submitting your getting in touch.\
+                We're reviewing it and will get in touch with you soon.","success")
     else:
         flash("Your submission failed. Please try again.", "error")
     return render_template('item_details.html', portfolio = portfolio_by_service, service = service, types = types, addOns = addOns, form=form)

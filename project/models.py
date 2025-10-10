@@ -4,8 +4,9 @@ from dataclasses import dataclass
 class Image:
     id: str
     imageSource: str
-    imageDescription: str
-
+    description: str
+    serviceId: str
+    portpholioId: str
 
 @dataclass
 class Service:
@@ -13,7 +14,7 @@ class Service:
     name: str
     shortDescription: str
     longDescription: str
-    photos: Image
+    # photos: Image
     type: str
     addOns: str
     price: float
@@ -40,14 +41,27 @@ class Client:
     preferedPaymentMethod: str
     address: Address
 
+# @dataclass
+# class Photographer:
+#     portpholio: str
+#     bioDescription: str
+#     services: Service
+#     location: str
+#     availability: str
+#     rating: int
+
 @dataclass
 class Photographer:
-    portpholio: str
+    id: str 
+    email:str
+    password:str
+    telephone: str
+    firstName:str
+    lastName:str
     bioDescription: str
-    services: Service
     location: str
     availability: str
-    rating: int
+    rating: int = 0
 
 #Need to check
 @dataclass
@@ -72,6 +86,6 @@ class Type:
 
 #Need to check
 @dataclass
-class addOns:
+class addOn:
     id: str 
-    addOns: str
+    addOn: str

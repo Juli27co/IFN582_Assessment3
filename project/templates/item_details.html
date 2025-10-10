@@ -36,8 +36,8 @@
             <select class="form-select" aria-label="Select session type">
               <option selected>Choose a session</option>
               {% for type in types %}
-              <option value={{types.id}}>
-                {types.type} — {types.shortDescription}
+              <option value="{{types.id}}">
+                {{type.type}} — {{type.shortDescription}}
               </option>
               {% endfor %}
             </select>
@@ -45,28 +45,19 @@
 
           <div class="mb-3">
             <label class="form-label">Add-ons</label>
+            {% for addOn in addOns %}
             <div class="form-check">
               <input
                 class="form-check-input"
                 type="checkbox"
-                value="props"
-                id="addonProps"
+                value="{{ addOn.id }}"
+                id="{{ addOn.id }}"
               />
-              <label class="form-check-label" for="addonProps">
-                Extra props pack
+              <label class="form-check-label" for="{{ addOn.id }}">
+                {{ addOn.addOn }}
               </label>
             </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value="album"
-                id="addonAlbum"
-              />
-              <label class="form-check-label" for="addonAlbum">
-                Printed album
-              </label>
-            </div>
+            {% endfor %}
           </div>
 
           <div class="d-flex align-items-center gap-3 mb-3">
