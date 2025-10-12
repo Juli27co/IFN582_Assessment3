@@ -13,16 +13,23 @@ class Service:
     name: str
     shortDescription: str
     longDescription: str
-    photos: Image[]
+    photos: list[Image]
     type: str
     addOns: str
     price: float
 
-@classdata
+@dataclass
 class User:
     id: str
     email: str
     password: str
-    telephone: str
+    phone: str
     firstName: str
     lastName: str
+
+@dataclass
+class Client(User):
+    preferredPaymentMethod: str
+    address: str
+    
+
