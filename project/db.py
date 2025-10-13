@@ -7,7 +7,7 @@ def get_types():
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT  typeID,
+        SELECT  type_id,
                 type, 
                 shortDescription,
                 price
@@ -16,30 +16,30 @@ def get_types():
     )
     results = cur.fetchall()
     cur.close()
-    return [Type(row['typeID'],row['type'],row['shortDescription'],row['price']) for row in results]    
+    return [Type(row['type_id'],row['type'],row['shortDescription'],row['price']) for row in results]    
 
-def get_single_type(type_id):
+def get_single_type(typeId):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT  typeID,
+        SELECT  type_id,
                 type, 
                 shortDescription,
                 price
         FROM    Type
-        WHERE   typeID = %s
+        WHERE   type_id = %s
         """, 
-        (type_id,)
+        (typeId,)
     )
     row = cur.fetchone()
     cur.close()
-    return Type(row['typeID'],row['type'],row['shortDescription'],row['price']) if row else None    
+    return Type(row['type_id'],row['type'],row['shortDescription'],row['price']) if row else None    
 
 def get_addOns():
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT  addOnID,
+        SELECT  addOn_id,
                 addOn, 
                 price
         FROM    AddOn
@@ -47,42 +47,43 @@ def get_addOns():
     )
     results = cur.fetchall()
     cur.close()
-    return [AddOn(row['addOnID'],row['addOn'],row['price']) for row in results]    
+    return [AddOn(row['addOn_id'],row['addOn'],row['price']) for row in results]    
 
 
-def get_single_service(service_id):
+def get_single_service(serviceId):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT  serviceID,
+        SELECT  service_id,
                 name, 
                 shortDescription,
-                longDescription
+                longDescription,
+                price
         FROM    Service
-        WHERE   serviceID = %s
+        WHERE   service_id = %s
         """,
-        (service_id,)
+        (serviceId,)
     )
     row = cur.fetchone()
     cur.close()
-    return Service(row['serviceID'],row['name'],row['shortDescription'],row['longDescription']) if row else None   
+    return Service(row['service_id'],row['name'],row['shortDescription'],row['longDescription'],row['price']) if row else None   
 
 
 def get_photographer_service(photographer_service_id):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT  photographerServiceID,
-                photographerID, 
-                serviceID
+        SELECT  photographerService_id,
+                photographer_id, 
+                service_id
         FROM    Photographer_Service
-        WHERE   photographerServiceID = %s
+        WHERE   photographerService_id = %s
         """,
         (photographer_service_id,)
     )
     row = cur.fetchone()
     cur.close()
-    return PhotographerService(row['photographerServiceID'],row['photographerID'],row['serviceID']) if row else None   
+    return PhotographerService(row['photographerService_id'],row['photographer_id'],row['service_id']) if row else None   
 
 
 def get_portfolio_by_service(photographer_service):
@@ -92,24 +93,24 @@ def get_portfolio_by_service(photographer_service):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT  imageID,
+        SELECT  image_id,
                 imageSource, 
-                imageDescription,
-                serviceID,
-                portfolioID
-        FROM    Images
-        WHERE serviceID = %s
-        AND	portfolioID IN (
-            SELECT  portfolioID
+                image_description,
+                service_id,
+                portfolio_id
+        FROM    Image
+        WHERE service_id = %s
+        AND	portfolio_id IN (
+            SELECT  portfolio_id
             FROM    Portfolio
-            WHERE   photographerID = %s
+            WHERE   photographer_id = %s
         )
         """,
         (ser_id, ph_id)
     )
     results = cur.fetchall()
     cur.close()
-    return [Image(row['imageID'],row['imageSource'],row['imageDescription'],row['serviceID'],row['portfolioID']) for row in results] 
+    return [Image(row['image_id'],row['imageSource'],row['image_description'],row['service_id'],row['portfolio_id']) for row in results] 
 
 
 #For form on item_detail page

@@ -14,6 +14,7 @@ def index():
 def itemDetails(photographer_service_id):
     ph_ser = get_photographer_service(photographer_service_id)
     portfolio_by_service = get_portfolio_by_service(ph_ser)
+    print(portfolio_by_service)
     service = get_single_service(ph_ser.serviceId)
     types = get_types()
     addOns = get_addOns()

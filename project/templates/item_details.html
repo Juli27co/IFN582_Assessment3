@@ -34,7 +34,7 @@
           <div class="mb-3">
             <label class="form-label">Session Type</label>
             <select id="session-type" class="form-select" aria-label="Select session type" name="session-type">
-              <!-- <option selected>Choose a session</option> -->
+              <option selected>Choose a session</option>
               {% for type in types %}
               <option value="{{type.id}}">
                 {{type.type}} — {{type.shortDescription}}
@@ -63,7 +63,7 @@
           <div class="d-flex align-items-center gap-3 mb-3">
             <div>
               <div class="small">Price</div>
-              <div class="fs-3 fw-semibold">"$%.2f"|format(price)</div>
+              <div class="fs-3 fw-semibold">{{"$%.2f"|format(service.price)}}</div>
             </div>
             <div class="ms-auto d-flex align-items-center gap-2">
               <label for="quantity" class="visually-hidden">Quantity</label>

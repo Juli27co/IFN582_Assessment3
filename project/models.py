@@ -14,6 +14,7 @@ class Service:
     name: str
     shortDescription: str
     longDescription: str
+    price: float
 
 
 # @dataclass
