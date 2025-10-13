@@ -14,7 +14,7 @@ CREATE TABLE Client
     preferredPaymentMethod varchar(50) NOT NULL,
     address varchar(255) NOT NULL,
     PRIMARY KEY (client_id)
-)
+);
 
 CREATE TABLE Service
 (
@@ -22,8 +22,6 @@ CREATE TABLE Service
     name varchar(100) NOT NULL,
     shortDescription varchar(100) NOT NULL,
     longDescription varchar(255) NOT NULL,
-    type varchar(50) NOT NULL,
-    addOns varchar(50),
     price decimal(10,2) NOT NULL,
     PRIMARY KEY (service_id)
 );
@@ -70,7 +68,7 @@ CREATE TABLE Photographer_Service
     service_id varchar(100) NOT NULL,
     PRIMARY KEY (photographerService_id),
     FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id),
-    FOREIGN KEY (service_id) REFERENCES Service(service_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id),
 );
 
 CREATE TABLE Cart
@@ -109,9 +107,8 @@ CREATE TABLE Orders
     address_id varchar(100) NOT NULL,
     PRIMARY KEY (order_id),
     FOREIGN KEY (client_id) REFERENCES Client(client_id),
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id),
-    FOREIGN KEY (address_id) REFERENCES Address(address_id)
-)
+    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+);
 
 CREATE TABLE Order_Service
 (
@@ -138,6 +135,15 @@ CREATE TABLE AddOn
     addOn varchar(100) NOT NULL,
     price decimal(10,2) NOT NULL,
     PRIMARY KEY (addOn_id)
+);
+
+CREATE TABLE Inquery(
+    inquiry_id INT AUTO_INCREMENT PRIMARY KEY,
+    fullName VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    createdDate DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO Client (client_id, email, password, phone, firstName, lastName, preferredPaymentMethod, address) VALUES
