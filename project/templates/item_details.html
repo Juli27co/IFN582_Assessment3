@@ -33,10 +33,10 @@
         <form id="product-form">
           <div class="mb-3">
             <label class="form-label">Session Type</label>
-            <select class="form-select" aria-label="Select session type">
-              <option selected>Choose a session</option>
+            <select id="session-type" class="form-select" aria-label="Select session type" name="session-type">
+              <!-- <option selected>Choose a session</option> -->
               {% for type in types %}
-              <option value="{{types.id}}">
+              <option value="{{type.id}}">
                 {{type.type}} — {{type.shortDescription}}
               </option>
               {% endfor %}
@@ -63,13 +63,14 @@
           <div class="d-flex align-items-center gap-3 mb-3">
             <div>
               <div class="small">Price</div>
-              <div class="fs-3 fw-semibold">$199.00</div>
+              <div class="fs-3 fw-semibold">"$%.2f"|format(price)</div>
             </div>
             <div class="ms-auto d-flex align-items-center gap-2">
               <label for="quantity" class="visually-hidden">Quantity</label>
               <input
                 id="quantity"
                 type="number"
+                name = "quantity"
                 class="form-control"
                 value="1"
                 min="1"
@@ -94,7 +95,7 @@
             compliting your order, leave us a message and we'll contact you
             with the answers.
           </p>
-          <form class="row g-3">
+          <form class="row g-3" method="POST">
             <div class="col-md-12">
               {{ wtf.render_field(form.fullName) }}
             </div>

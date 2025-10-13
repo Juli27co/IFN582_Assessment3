@@ -14,19 +14,16 @@ class Service:
     name: str
     shortDescription: str
     longDescription: str
-    # photos: Image
-    type: str
-    addOns: str
-    price: float
 
-@dataclass
-class User:
-    id: str
-    email: str
-    password: str
-    telephone: str
-    firstName: str
-    lastName: str
+
+# @dataclass
+# class User:
+#     id: str
+#     email: str
+#     password: str
+#     telephone: str
+#     firstName: str
+#     lastName: str
 
 @dataclass
 class Address:
@@ -41,15 +38,6 @@ class Client:
     preferedPaymentMethod: str
     address: Address
 
-# @dataclass
-# class Photographer:
-#     portpholio: str
-#     bioDescription: str
-#     services: Service
-#     location: str
-#     availability: str
-#     rating: int
-
 @dataclass
 class Photographer:
     id: str 
@@ -61,22 +49,19 @@ class Photographer:
     bioDescription: str
     location: str
     availability: str
-    rating: int = 0
+    rating: float
 
-#Need to check
 @dataclass
 class PhotographerService:
     id: str
     photographerId: str
     serviceId: str
 
-#Need to check
 @dataclass
 class Portpholio:
     id: str
     photographerId: str
 
-#Need to check
 @dataclass
 class Type:
     id: str
@@ -84,8 +69,8 @@ class Type:
     shortDescription: str
     price: float
 
-#Need to check
 @dataclass
-class addOn:
+class AddOn:
     id: str 
     addOn: str
+    price: float
