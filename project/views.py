@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, flash
 from flask import redirect, url_for
 
-from project.db import get_photographer_service, get_portfolio_by_service, get_single_service, get_types, get_addOns, get_single_type
+from project.db import get_photographer_service, get_portfolio_by_service, get_single_service, get_types, get_addOns, add_inquiry
 from project.forms import InquireryForm
 
 bp = Blueprint('main', __name__)
@@ -25,13 +25,15 @@ def itemDetails(photographer_service_id):
     # price = get_details_of_type(selectedType).price * quantity
 
     form = InquireryForm()
- 
-    if form.validate_on_submit():
-        flash("Thank you for submitting your getting in touch.\
-        We're reviewing it and will get in touch with you soon.")
-    else:
-        flash("Your submission failed. Please try again.", "error")
-    
+    if request.method == "POST":
+        if form.validate_on_submit():
+            add_inquiry(form)
+            flash("Thank you for submitting a form.\
+            We're reviewing it and will get in touch with you soon.")
+            return redirect(request.url)
+        else:
+            flash("Your submission failed. Please try again.", "error")
+        
     return render_template(
         'item_details.html',
         portfolio = portfolio_by_service,

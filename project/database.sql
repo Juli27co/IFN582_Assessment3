@@ -115,12 +115,12 @@ CREATE TABLE Images(
 -- );
 
 CREATE TABLE Inquiry(
-	inquiryID CHAR(5) PRIMARY KEY,
+	inquiryID INT AUTO_INCREMENT PRIMARY KEY,
     fullName VARCHAR(40),
     email VARCHAR(50),
     telephone VARCHAR(20),
     message VARCHAR(200),
-    createdDate DATE
+    createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 );
 
 INSERT INTO Service (serviceID,name,shortDescription,longDescription
@@ -170,3 +170,7 @@ INSERT INTO  Images(imageID,imageSource,imageDescription,serviceID,portfolioID
     ('IMG008','pedro-de-sousa-BAVELu_vO-I-unsplash.jpg','Bride and groom at sunset','S001','PR002'),
     ('IMG009','janko-ferlic-EpbIXGCrtK0-unsplash.jpg','Bride and groom at sunset','S002','PR002'),
     ('IMG010','kelly-sikkema-WvVyudMd1Es-unsplash.jpg','Newborn baby sleeping peacefully','S002','PR002');
+
+
+INSERT INTO Inquiry(fullName, email, telephone, message
+) VALUES ("test","test","0000","test");
