@@ -1,5 +1,5 @@
 from . import mysql
-from .models import Client, Photographers, Service, Inquiry 
+from .models import Client, Photographer, Service, Inquiry, Portfolio
 
 
 def get_clients():
@@ -28,7 +28,7 @@ def get_photographers():
     results = cur.fetchall()
     cur.close()
     return [
-        Photographers(
+        Photographer(
             row["photographer_id"],
             row["email"],
             row["password"],
@@ -60,6 +60,7 @@ def get_services():
         for row in results
     ]
 
+
 def get_portfolio():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM Portfolio, Images")
@@ -74,6 +75,7 @@ def get_portfolio():
         )
         for row in results
     ]
+
 
 def get_inquiries():
     cur = mysql.connection.cursor()
@@ -92,6 +94,7 @@ def get_inquiries():
         for row in results
     ]
 
+
 def add_inquiry(inquiry: Inquiry):
     cur = mysql.connection.cursor()
     cur.execute(
@@ -100,21 +103,35 @@ def add_inquiry(inquiry: Inquiry):
     )
     mysql.connection.commit()
     cur.close()
-    
+
+
 def check_for_user(username, password):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         SELECT client_id, password, email, firstName, lastName, phone
         FROM Client
         WHERE email = %s AND password = %s
-    """, (username, password))
+    """,
+        (username, password),
+    )
     row = cur.fetchone()
     cur.close()
     if row:
-        return UserAccount(row['username'], row['user_password'], row['email'],
-                           UserInfo(str(row['user_id']), row['firstname'], row['surname'],
-                                    row['email'], row['phone']))
+        return UserAccount(
+            row["username"],
+            row["user_password"],
+            row["email"],
+            UserInfo(
+                str(row["user_id"]),
+                row["firstname"],
+                row["surname"],
+                row["email"],
+                row["phone"],
+            ),
+        )
     return None
+
 
 def is_admin(user_id):
     cur = mysql.connection.cursor()
@@ -123,12 +140,22 @@ def is_admin(user_id):
     cur.close()
     return True if row else False
 
+
 def add_user(form):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         INSERT INTO users (username, user_password, email, firstname, surname, phone)
         VALUES (%s, %s, %s, %s, %s, %s)
-    """, (form.username.data, form.password.data, form.email.data,
-          form.firstname.data, form.surname.data, form.phone.data))
+    """,
+        (
+            form.username.data,
+            form.password.data,
+            form.email.data,
+            form.firstname.data,
+            form.surname.data,
+            form.phone.data,
+        ),
+    )
     mysql.connection.commit()
     cur.close()
