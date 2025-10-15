@@ -5,17 +5,15 @@ USE sql12802431;
 
 CREATE TABLE Client
 (
-    client_id varchar(100) NOT NULL,
-    email varchar(100) NOT NULL,
-    password varchar(200) NOT NULL,
-    phone varchar(15) NOT NULL,
-    firstName varchar(20) NOT NULL,
-    lastName varchar(20) NOT NULL,
-    preferredPaymentMethod varchar(50) NOT NULL,
-    address varchar(255) NOT NULL,
-    PRIMARY KEY (client_id)
+    client_id CHAR(4) PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(200) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    firstName VARCHAR(20) NOT NULL,
+    lastName VARCHAR(20) NOT NULL,
+    preferredPaymentMethod VARCHAR(50) NOT NULL,
+    address VARCHAR(255) NOT NULL
 );
-
 CREATE TABLE Service
 (
     service_id varchar(100) NOT NULL,

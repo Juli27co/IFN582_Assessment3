@@ -14,8 +14,6 @@ class Service:
     shortDescription: str
     longDescription: str
     photos: list[Image]
-    type: str
-    addOns: str
     price: float
 
 @dataclass
@@ -32,4 +30,25 @@ class Client(User):
     preferredPaymentMethod: str
     address: str
     
-
+@dataclass
+class Photographer(User):
+    bioDescription: str
+    location: str
+    availability: str
+    rating: float
+    
+@dataclass
+class Inquiry:
+    inquiry_id: int
+    fullName: str
+    email: str
+    phone: str
+    message: str
+    createdDate: str
+    
+@dataclass
+class Portfolio:
+    portfolio_id: int
+    photographer_id: str
+    imageSource: str
+    imageDescription: str
