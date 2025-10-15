@@ -79,6 +79,24 @@ CREATE TABLE Cart
     FOREIGN KEY (client_id) REFERENCES Client(client_id)
 );
 
+CREATE TABLE Type
+(
+    type_id varchar(100) NOT NULL,
+    type varchar(100) NOT NULL,
+    shortDescription varchar(100),
+    price decimal(10,2) default 0.00 NOT NULL,
+    PRIMARY KEY (type_id)
+);
+
+CREATE TABLE AddOn
+(
+    addOn_id varchar(100) NOT NULL,
+    addOn varchar(100) NOT NULL,
+    price decimal(10,2) default 0.00 NOT NULL,
+    PRIMARY KEY (addOn_id)
+);
+
+
 CREATE TABLE Cart_Service
 (
     cartService_id varchar(100) NOT NULL,
@@ -106,6 +124,7 @@ CREATE TABLE Orders
     PRIMARY KEY (order_id),
     FOREIGN KEY (client_id) REFERENCES Client(client_id),
     FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+--     ,FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
 
 CREATE TABLE Order_Service

@@ -7,9 +7,9 @@ from enum import Enum
 class Image:
     image_id: str
     imageSource: str
-    image_description: str = ""
-    service_id: str = ""
-    portfolio_id: str = ""
+    description: str
+    serviceId: str
+    portpholioId: str
 
 
 # for using in the form.available
@@ -74,6 +74,13 @@ class Photographer(User):
 
 
 @dataclass
+class PhotographerService:
+    id: str
+    photographerId: str
+    serviceId: str
+
+
+@dataclass
 class Inquiry:
     inquiry_id: int
     fullName: str
@@ -87,5 +94,19 @@ class Inquiry:
 class Portfolio:
     portfolio_id: int
     photographer_id: str
-    imageSource: str
-    imageDescription: str
+    images: list[Image]
+
+
+@dataclass
+class Type:
+    id: str
+    type: str
+    shortDescription: str
+    price: float
+
+
+@dataclass
+class AddOn:
+    id: str
+    addOn: str
+    price: float

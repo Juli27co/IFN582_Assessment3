@@ -15,51 +15,79 @@
   <body>
     <header>
       <h1 style="padding: 20px" class="main-header mb-0">FotoBooking</h1>
-    </header>
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
-      <div class="container-fluid">
-        <a class="navbar-brand text-white" href="#">FotoBooking</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link text-light" aria-current="page" href="#"
-                >Newborn</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Weddings</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Pets</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Products</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-light" type="submit">Search</button>
-          </form>
+
+      <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white" href="#">FotoBooking</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link text-light" aria-current="page" href="#"
+                  >Newborn</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Weddings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Pets</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Products</a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-light" type="submit">Search</button>
+            </form>
+          </div>
         </div>
-      </div>
-    </nav>
-    <main>{% block main %} {% endblock %}</main>
+      </nav>
+      <!--For flash message when form submission has error-->
+      {% with messages = get_flashed_messages(category_filter='message') %}
+        {% if messages %}
+          <div class="alert alert-primary text-center p-2" role="alert" style="margin: 0px;">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %} 
+      {% with messages = get_flashed_messages(category_filter='error') %}
+        {% if messages %}
+          <div class="alert alert-danger text-center p-2" role="alert" style="margin: 0px;">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %} 
+
+      {% block head %}
+      {% endblock %}
+    </header>
+
+    <main>
+      {% block main %}
+      {% endblock %}
+    </main>
+
     <footer>
       <p class="text-center">Developed by: Juliana Cortes</p>
     </footer>
