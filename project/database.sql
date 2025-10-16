@@ -50,7 +50,6 @@ CREATE TABLE Photographer
     profilePicture VARCHAR(255) NULL
 );
 
-
 CREATE TABLE ServiceType
 (
     type_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,9 +72,7 @@ CREATE TABLE Image
     imageSource VARCHAR(255) NOT NULL,
     image_description VARCHAR(255),
     service_id INT,
-    portfolio_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-    FOREIGN KEY (portfolio_id) REFERENCES Portfolio(portfolio_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id)
 );
 
 CREATE TABLE Photographer_Service
@@ -185,6 +182,9 @@ INSERT INTO Photographer (email, password, phone, firstName, lastName, bioDescri
 ('chloe.davis@example.com', 'Chloe2023!Pass', '0412349876', 'Chloe', 'Davis', 'Wedding and portrait photographer with a passion for capturing candid moments and emotional stories.', 'Canberra', 'Short notice bookings', 4.8, '');
 
 
+
+
+
 INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
 (1,1),
 (2,2),
@@ -211,15 +211,15 @@ INSERT INTO Cart (createdDate, lastUpdated, client_id) VALUES
 ('2024-10-10 16:50:00','2024-10-10 16:50:00',10);
 
 
-INSERT INTO Image (imageSource, image_description, service_id, portfolio_id) VALUES
-('chris-CxoEeNkJwUA-unsplash.jpg','Bride and groom during ceremony',1,1),
-('asdrubal-luna-Qxi-boLL4bs-unsplash.jpg','Wedding couple with family',1,1),
-('jay-wennington-CdK2eYhWfQ0-unsplash1.jpg','Golden retriever portrait',2,2),
-('andrew-s-ouo1hbizWwo-unsplash.jpg','Cat in a playful pose',2,1),
-('garrett-jackson-oOnJWBMlb5A-unsplash.jpg','Newborn baby sleeping peacefully',3,1),
-('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3,1),
-('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4,1),
-('himani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4,2);
+INSERT INTO Image (imageSource, image_description, service_id) VALUES
+('chris-CxoEeNkJwUA-unsplash.jpg','Bride and groom during ceremony',1),
+('asdrubal-luna-Qxi-boLL4bs-unsplash.jpg','Wedding couple with family',1),
+('jay-wennington-CdK2eYhWfQ0-unsplash1.jpg','Golden retriever portrait',2),
+('andrew-s-ouo1hbizWwo-unsplash.jpg','Cat in a playful pose',2),
+('garrett-jackson-oOnJWBMlb5A-unsplash.jpg','Newborn baby sleeping peacefully',3),
+('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3),
+('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4),
+('himani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4);
 
 
 INSERT INTO Cart_Service (service_id, cart_id, type_id, addOn_id) VALUES
