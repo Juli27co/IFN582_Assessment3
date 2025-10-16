@@ -51,14 +51,6 @@ CREATE TABLE Photographer
 );
 
 
-CREATE TABLE Portfolio
-(
-    portfolio_id INT AUTO_INCREMENT PRIMARY KEY,
-    photographer_id INT,
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
-);
-
-
 CREATE TABLE ServiceType
 (
     type_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -191,19 +183,6 @@ INSERT INTO Photographer (email, password, phone, firstName, lastName, bioDescri
 ('ava.anderson@example.com', 'Ava2023secure', '0477889900', 'Ava', 'Anderson', 'Specializes in event photography and commercial shoots, ensuring high-quality results for every project.', 'Melbourne', 'Weekends', 4.7, ''),
 ('liam.thomas@example.com', 'LiamPhoto987', '0488992233', 'Liam', 'Thomas', 'Travel and adventure photographer who captures breathtaking landscapes and remote destinations.', 'Hobart', 'Weekdays', 4.9, ''),
 ('chloe.davis@example.com', 'Chloe2023!Pass', '0412349876', 'Chloe', 'Davis', 'Wedding and portrait photographer with a passion for capturing candid moments and emotional stories.', 'Canberra', 'Short notice bookings', 4.8, '');
-
-
-INSERT INTO Portfolio (photographer_id) VALUES
-(1),
-(2),
-(3),
-(4),
-(5),
-(6),
-(7),
-(8),
-(9),
-(10);
 
 
 INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
