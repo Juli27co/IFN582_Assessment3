@@ -14,7 +14,6 @@ CREATE TABLE Client
     preferredPaymentMethod VARCHAR(50) NOT NULL,
     address VARCHAR(255) NOT NULL
 );
-
 CREATE TABLE Service
 (
     service_id CHAR(4) PRIMARY KEY,
@@ -78,7 +77,7 @@ CREATE TABLE Photographer_Service
     photographer_id CHAR(5) NOT NULL,
     service_id CHAR(4) NOT NULL,
     FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id),
-    FOREIGN KEY (service_id) REFERENCES Service(service_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id),
 );
 
 CREATE TABLE Cart
@@ -135,35 +134,41 @@ CREATE TABLE Inquiry
     createdDate DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO Client (client_id, email, password, phone, firstName, lastName, preferredPaymentMethod, address) VALUES
-('C001', 'julicortesarb@gmail.com', '1234qwer', '0490557292', 'Juliana', 'Cortes', 'Credit Card', '22 Street Av'),
-('C002', 'mike.hansen88@yahoo.com', 'passM!ke88', '0451234567', 'Michael', 'Hansen', 'PayPal', '12 Maple Drive'),
-('C003', 'sara_lee12@gmail.com', 'saraLeePwd', '0478901234', 'Sara', 'Lee', 'Debit Card', '450 Ocean Blvd'),
-('C004', 'tom.jenkins@outlook.com', 'jenkinsT90', '0498765432', 'Tom', 'Jenkins', 'Bank Transfer', '99 Elm Street'),
-('C005', 'diana.ross@mail.com', 'rossDiana21', '0487654321', 'Diana', 'Ross', 'Credit Card', '102 Pine Ave'),
-('C006', 'lucas_ng@live.com', 'lucasNg@2023', '0477123456', 'Lucas', 'Ng', 'Cash', '78 Sunset Road'),
-('C007', 'emilybrown123@gmail.com', 'emBrown!45', '0466123456', 'Emily', 'Brown', 'Credit Card', '66 Birch Lane'),
-('C008', 'omar.youssef@gmail.com', 'Omar2024$', '0433556677', 'Omar', 'Youssef', 'Debit Card', '120 King Street'),
-('C009', 'natalie_woods@hotmail.com', 'natWoods99', '0499776655', 'Natalie', 'Woods', 'PayPal', '33 Riverbank Rd'),
-('C010', 'leo.fernandez@mail.com', 'FernLeo#10', '0422446688', 'Leo', 'Fernandez', 'Credit Card', '88 Queen Ave');
+CREATE TABLE AddOn
+(
+    addOn_id varchar(100) NOT NULL,
+    addOn varchar(100) NOT NULL,
+    price decimal(10,2) NOT NULL,
+    PRIMARY KEY (addOn_id)
+);
 
-INSERT INTO Cart (cart_id, createdDate, lastUpdated, client_id) VALUES
-('CR001', '2024-10-01 10:00:00', '2024-10-01 10:00:00', 'C001'),
-('CR002', '2024-10-02 14:15:00', '2024-10-02 14:15:00', 'C002'),
-('CR003', '2024-10-03 09:30:00', '2024-10-03 09:30:00', 'C003'),
-('CR004', '2024-10-04 17:45:00', '2024-10-04 17:45:00', 'C004'),
-('CR005', '2024-10-05 12:00:00', '2024-10-05 12:00:00', 'C005'),
-('CR006', '2024-10-06 08:30:00', '2024-10-06 08:30:00', 'C006'),
-('CR007', '2024-10-07 11:00:00', '2024-10-07 11:00:00', 'C007'),
-('CR008', '2024-10-08 13:25:00', '2024-10-08 13:25:00', 'C008'),
-('CR009', '2024-10-09 15:10:00', '2024-10-09 15:10:00', 'C009'),
-('CR010', '2024-10-10 16:50:00', '2024-10-10 16:50:00', 'C010');
+INSERT INTO Client
+    (client_id, email, password, phone, firstName, lastName, preferredPaymentMethod, address)
+VALUES
+    ('C001', 'julicortesarb@gmail.com', '1234qwer', '0490557292', 'Juliana', 'Cortes', 'Credit Card', '22 Street Av'),
+    ('C002', 'mike.hansen88@yahoo.com', 'passM!ke88', '0451234567', 'Michael', 'Hansen', 'PayPal', '12 Maple Drive'),
+    ('C003', 'sara_lee12@gmail.com', 'saraLeePwd', '0478901234', 'Sara', 'Lee', 'Debit Card', '450 Ocean Blvd'),
+    ('C004', 'tom.jenkins@outlook.com', 'jenkinsT90', '0498765432', 'Tom', 'Jenkins', 'Bank Transfer', '99 Elm Street'),
+    ('C005', 'diana.ross@mail.com', 'rossDiana21', '0487654321', 'Diana', 'Ross', 'Credit Card', '102 Pine Ave'),
+    ('C006', 'lucas_ng@live.com', 'lucasNg@2023', '0477123456', 'Lucas', 'Ng', 'Cash', '78 Sunset Road'),
+    ('C007', 'emilybrown123@gmail.com', 'emBrown!45', '0466123456', 'Emily', 'Brown', 'Credit Card', '66 Birch Lane'),
+    ('C008', 'omar.youssef@gmail.com', 'Omar2024$', '0433556677', 'Omar', 'Youssef', 'Debit Card', '120 King Street'),
+    ('C009', 'natalie_woods@hotmail.com', 'natWoods99', '0499776655', 'Natalie', 'Woods', 'PayPal', '33 Riverbank Rd'),
+    ('C010', 'leo.fernandez@mail.com', 'FernLeo#10', '0422446688', 'Leo', 'Fernandez', 'Credit Card', '88 Queen Ave');
 
-INSERT INTO Service (service_id, name, shortDescription, longDescription, price) VALUES
-('S001', 'Wedding Photography', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00),
-('S002', 'Pets Photography', 'Professional portrait sessions for pets.', 'Our pets photography sessions are perfect for capturing timeless images of your furry friends in a relaxed setting.', 300.00),
-('S003', 'Newborn Photography', 'Capture the precious moments of your newborn with professional photography services.', 'We specialize in newborn photography, offering a gentle and personalized experience to preserve the earliest moments of your baby’s life.', 1500.00),
-('S004', 'Product Photography', 'High-quality product photography to showcase your items.', 'Our product photography service is designed to highlight the features and details of your products, ideal for e-commerce and marketing materials.', 500.00);
+INSERT INTO Cart
+    (cart_id, createdDate, lastUpdated, client_id)
+VALUES
+    ('CR001', '2024-10-01 10:00:00', '2024-10-01 10:00:00', 'C001'),
+    ('CR002', '2024-10-02 14:15:00', '2024-10-02 14:15:00', 'C002'),
+    ('CR003', '2024-10-03 09:30:00', '2024-10-03 09:30:00', 'C003'),
+    ('CR004', '2024-10-04 17:45:00', '2024-10-04 17:45:00', 'C004'),
+    ('CR005', '2024-10-05 12:00:00', '2024-10-05 12:00:00', 'C005'),
+    ('CR006', '2024-10-06 08:30:00', '2024-10-06 08:30:00', 'C006'),
+    ('CR007', '2024-10-07 11:00:00', '2024-10-07 11:00:00', 'C007'),
+    ('CR008', '2024-10-08 13:25:00', '2024-10-08 13:25:00', 'C008'),
+    ('CR009', '2024-10-09 15:10:00', '2024-10-09 15:10:00', 'C009'),
+    ('CR010', '2024-10-10 16:50:00', '2024-10-10 16:50:00', 'C010');
 
 INSERT INTO Type (type_id, type_name, shortDescription, price) VALUES
 ('T001', 'Mini Session', '30 minutes session with 5 edited photos.', 100.00),

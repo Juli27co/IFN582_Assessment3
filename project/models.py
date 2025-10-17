@@ -1,22 +1,23 @@
 from dataclasses import dataclass, field
 from typing import List
 from uuid import uuid4
+from datetime import datetime
+from enum import Enum
+
+# for using in the form.available
+class AvailabilityStatus(Enum):
+    weekly_only = "Weekdays only"
+    weekend_only = "Weekends only"
+    short_notice_booking = "Short notice booking"
 
 @dataclass
 class Image:
-    id: str
+    image_id: str
     imageSource: str
     description: str
     serviceId: str
     portpholioId: str
 
-@dataclass
-class Service:
-    id: str
-    name: str
-    shortDescription: str
-    longDescription: str
-    price: float
 
 @dataclass
 class Type:
@@ -29,6 +30,15 @@ class Type:
 class AddOn:
     id: str 
     addOn: str
+    price: float
+
+@dataclass
+class Service:
+    service_id: str
+    name: str
+    shortDescription: str
+    longDescription: str
+    photos: list[Image]
     price: float
 
 @dataclass
@@ -47,30 +57,47 @@ class Cart:
         self.items.append(item)
 
 @dataclass
-class Address:
-    address1: str
-    address2: str
-    location: str
-    state: str
-    zip: str
+class User:
+    id: str
+    email: str
+    password: str
+    phone: str
+    firstName: str
+    lastName: str
+
 
 @dataclass
-class Client:
-    preferedPaymentMethod: str
-    address: Address
+class Client(User):
+    preferredPaymentMethod: str
+    address: str
 
 @dataclass
 class Photographer:
-    id: str 
-    email:str
-    password:str
-    telephone: str
-    firstName:str
-    lastName:str
+    Photographer_id: str
+    email: str
+    password: str
+    phone: str
+    firstName: str
+    lastName: str
+    availability: AvailabilityStatus
+    bioDescription: str = ""
+    location: str = ""
+    rating: float = 0
+
+
+@dataclass
+class Photographer(User):
     bioDescription: str
     location: str
     availability: str
     rating: float
+
+
+@dataclass
+class Portfolio:
+    portfolio_id: str
+    photographer_id: str
+    images: list[Image]
 
 @dataclass
 class PhotographerService:
@@ -78,7 +105,8 @@ class PhotographerService:
     photographerId: str
     serviceId: str
 
-@dataclass
-class Portpholio:
-    id: str
-    photographerId: str
+
+
+
+
+

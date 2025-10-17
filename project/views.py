@@ -1,14 +1,25 @@
-from flask import Blueprint, render_template, request, session, flash
-from flask import redirect, url_for
-from project.db import get_photographer_service, get_portfolio_by_service, get_single_service, get_types, get_addOns, add_inquiry, get_single_type, get_single_addOn
+from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 from project.session import add_to_cart
-from project.forms import InquireryForm, LoginForm
+from project.forms import InquireryForm, LoginForm, VendorProfileForm, AddServiceForm
+from flask import Blueprint, render_template, request, flash, redirect
+from project.forms import InquireryForm
+from project.db import (
+    get_photographer_service, 
+    get_portfolio_by_service, 
+    get_single_service, 
+    get_types,
+    get_addOns, 
+    add_inquiry, 
+    get_single_type, 
+    get_single_addOn,
+    get_clients
+)
 
 bp = Blueprint('main', __name__)
 
-@bp.route('/')
+@bp.route("/")
 def index():
-    return render_template('index.html', title = 'Home Page')
+    return render_template("index.html", title="Home Page")
 
 
 # test
@@ -43,6 +54,23 @@ def adding_to_cart():
 
 
 @bp.route("/item_details/<photographer_service_id>/", methods = ["POST","GET"])
+@bp.route("/vendor/", methods=["POST", "GET"])
+def vendor_management():
+    profile_form = VendorProfileForm(prefix="profile")
+    service_form = AddServiceForm(prefix="service")
+
+    if profile_form.validate_on_submit():
+        flash("Profile changes complted", "success")
+
+    return render_template(
+        "vendor_management.html",
+        title="Vendor Page",
+        profile_form=profile_form,
+        service_form=service_form,
+    )
+
+
+@bp.route("/item_details/<photographer_service_id>/", methods=["POST", "GET"])
 def itemDetails(photographer_service_id):
     # get images associated with selected photographer and service
     ph_ser = get_photographer_service(photographer_service_id)
@@ -70,12 +98,14 @@ def itemDetails(photographer_service_id):
     if request.method == "POST":
         if form.validate_on_submit():
             add_inquiry(form)
-            flash("Thank you for submitting a form.\
-            We're reviewing it and will get in touch with you soon.")
+            flash(
+                "Thank you for submitting a form.\
+            We're reviewing it and will get in touch with you soon."
+            )
             return redirect(request.url)
         else:
             flash("Your submission failed. Please try again.", "error")
-        
+
     return render_template(
         'item_details.html',
         pho_ser_id = photographer_service_id,
