@@ -2,13 +2,13 @@ from project.models import Client, Service, Photographer, PhotographerService, P
 from . import mysql
 
 
-#To show item_detail page
+
 def get_types():
     cur = mysql.connection.cursor()
     cur.execute(
         """
         SELECT  type_id,
-                type, 
+                type_name, 
                 shortDescription,
                 price
         FROM    Type
@@ -16,14 +16,14 @@ def get_types():
     )
     results = cur.fetchall()
     cur.close()
-    return [Type(row['type_id'],row['type'],row['shortDescription'],row['price']) for row in results]    
+    return [Type(row['type_id'],row['type_name'],row['shortDescription'],row['price']) for row in results]    
 
 def get_single_type(typeId):
     cur = mysql.connection.cursor()
     cur.execute(
         """
         SELECT  type_id,
-                type, 
+                type_name, 
                 shortDescription,
                 price
         FROM    Type
@@ -33,7 +33,7 @@ def get_single_type(typeId):
     )
     row = cur.fetchone()
     cur.close()
-    return Type(row['type_id'],row['type'],row['shortDescription'],row['price']) if row else None    
+    return Type(row['type_id'],row['type_name'],row['shortDescription'],row['price']) if row else None    
 
 def get_addOns():
     cur = mysql.connection.cursor()
@@ -48,6 +48,22 @@ def get_addOns():
     results = cur.fetchall()
     cur.close()
     return [AddOn(row['addOn_id'],row['addOn'],row['price']) for row in results]    
+
+def get_single_addOn(addonId):
+    cur = mysql.connection.cursor()
+    cur.execute(
+        """
+        SELECT  addOn_id,
+                addOn, 
+                price
+        FROM    AddOn
+        WHERE   addOn_id = %s
+        """, 
+        (addonId,)
+    )
+    row = cur.fetchone()
+    cur.close()
+    return AddOn(row['addOn_id'],row['addOn'],row['price']) if row else None
 
 
 def get_single_service(serviceId):
@@ -118,14 +134,31 @@ def add_inquiry(form):
     cur = mysql.connection.cursor()
     cur.execute(
         """
+        SELECT  inquiry_id
+        FROM    Inquiry
+        ORDER BY inquiry_id desc LIMIT 1
+        """
+    )
+    row = cur.fetchone()
+
+    if row :
+        lastID = row['inquiry_id']
+        newID = "IQ" + "%03d" % (int(lastID[2:]) + 1)
+    else:
+        newID = "IQ001"
+    
+    cur.execute(
+        """
         INSERT INTO Inquiry (
+            inquiry_id,
             fullName, 
             email, 
             telephone, 
             message
-        ) VALUES (%s, %s, %s, %s)
+        ) VALUES (%s, %s, %s, %s, %s)
         """,
         (
+            newID,
             form.fullName.data,
             form.email.data,
             form.phone.data,

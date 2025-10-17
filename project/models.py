@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
+from uuid import uuid4
 
 @dataclass
 class Image:
@@ -16,15 +18,33 @@ class Service:
     longDescription: str
     price: float
 
+@dataclass
+class Type:
+    id: str
+    type: str
+    shortDescription: str
+    price: float
 
-# @dataclass
-# class User:
-#     id: str
-#     email: str
-#     password: str
-#     telephone: str
-#     firstName: str
-#     lastName: str
+@dataclass
+class AddOn:
+    id: str 
+    addOn: str
+    price: float
+
+@dataclass
+class Cart_Service:
+    service: Service
+    type: Type
+    addon: AddOn
+    # generate unique identifier
+    id: str = field(default_factory=lambda: str(uuid4))
+
+@dataclass
+class Cart:
+    items: List[Cart_Service] = field(default_factory=lambda: [])
+
+    def add_item(self, item: Cart_Service):
+        self.items.append(item)
 
 @dataclass
 class Address:
@@ -62,16 +82,3 @@ class PhotographerService:
 class Portpholio:
     id: str
     photographerId: str
-
-@dataclass
-class Type:
-    id: str
-    type: str
-    shortDescription: str
-    price: float
-
-@dataclass
-class AddOn:
-    id: str 
-    addOn: str
-    price: float

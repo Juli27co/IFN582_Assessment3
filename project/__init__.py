@@ -1,6 +1,6 @@
 #import flask - from package import class
 from flask import Flask, render_template
-from flask_wtf import CSRFProtect
+from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap5
 from flask_mysqldb import MySQL
 
@@ -12,13 +12,13 @@ def create_app():
     app.debug = True
     app.secret_key = 'BetterSecretNeeded123'
 
-    # Enable CSRF Protection
-    csrf = CSRFProtect(app)  
+
+
 
     # MySQL configurations
     app.config['MYSQL_HOST']='localhost'
     app.config['MYSQL_USER']='root'
-    app.config['MYSQL_PASSWORD']='password'
+    app.config['MYSQL_PASSWORD']='MySQL@mari0633'
     app.config['MYSQL_DB']='sql12802431'
     app.config['MYSQL_CURSORCLASS']='DictCursor'
 

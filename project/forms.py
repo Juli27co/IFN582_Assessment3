@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, SubmitField,TextAreaField
+from wtforms.fields import StringField, SubmitField,TextAreaField, PasswordField
 from wtforms.validators import InputRequired, Email
 
 class  InquireryForm(FlaskForm):
@@ -9,3 +9,9 @@ class  InquireryForm(FlaskForm):
     phone = StringField("PhoneNumber", validators=[InputRequired()])
     message = TextAreaField("", validators=[InputRequired()])
     submit = SubmitField("Send Message")
+
+class  LoginForm(FlaskForm):
+    """Form for login page."""
+    username = StringField("Username", validators=[InputRequired()])
+    password = PasswordField("Password", validators=[InputRequired()])
+    submit = SubmitField("LOGIN")

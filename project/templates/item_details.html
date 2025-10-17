@@ -30,58 +30,87 @@
           {{ service.longDescription }}
         </p>
 
-        <form id="product-form">
-          <div class="mb-3">
-            <label class="form-label">Session Type</label>
-            <select id="session-type" class="form-select" aria-label="Select session type" name="session-type">
-              <option selected>Choose a session</option>
+        <form 
+          id="product-form-type" 
+          method="POST" 
+          action="{{ url_for('main.selectOption', photographer_service_id=pho_ser_id, type_id = selectedType.id, addOn_id = selectedAddOn.id) }}"
+        >
+          <div class="dropdown mb-3">
+            <label class="form-label">Session Type (Required)</label>
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-for-type" data-bs-toggle="dropdown">
+              {% if selectedType %}
+                {{ selectedType.type }}(+{{"$%.2f"|format(selectedType.price)}}) — {{selectedType.shortDescription}}
+              {% else %}
+                Choose a session
+              {% endif %}
+            </button>
+            <ul class="dropdown-menu">
               {% for type in types %}
-              <option value="{{type.id}}">
-                {{type.type}} — {{type.shortDescription}}
-              </option>
+                <li>
+                  <button  name="form-type" value="{{type.id}}" type="submit" class="dropdown-item">
+                    <a class="dropdown-item">{{type.type}}(+{{"$%.2f"|format(type.price)}}) — {{type.shortDescription}}</a>
+                  </button>
+                </li>
               {% endfor %}
-            </select>
+            </ul>
           </div>
+        </form>
 
+        <form 
+          id="product-form-addOn" 
+          method="POST" 
+          action="{{ url_for('main.selectOption', photographer_service_id=pho_ser_id, type_id = selectedType.id, addOn_id = selectedAddOn.id) }}"
+        >
           <div class="mb-3">
-            <label class="form-label">Add-ons</label>
+            <label class="form-label">Add-ons (Optional)</label>
             {% for addOn in addOns %}
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value="{{ addOn.id }}"
-                id="{{ addOn.id }}"
-              />
+            <div class="form-check container-for-addon d-flex mb-2">
+              <button 
+                name="form-addOn" 
+                value="{{ addOn.id }}" 
+                type="submit" 
+                class="btn btn-primary checkbox-for-addon me-1 {% if selectedAddOn.id == addOn.id %} active {% endif %}" 
+                data-toggle="button" 
+                aria-pressed= "{% if selectedAddOn.id == addOn.id %} true {% else %} false {% endif %}"
+              ><i class="fa fa-check" style="font-size:13px"></i>
+              </button>
               <label class="form-check-label" for="{{ addOn.id }}">
-                {{ addOn.addOn }}
+                {{ addOn.addOn }}(+{{"$%.2f"|format(addOn.price)}})
               </label>
             </div>
             {% endfor %}
           </div>
-
-          <div class="d-flex align-items-center gap-3 mb-3">
-            <div>
-              <div class="small">Price</div>
-              <div class="fs-3 fw-semibold">{{"$%.2f"|format(service.price)}}</div>
-            </div>
-            <div class="ms-auto d-flex align-items-center gap-2">
-              <label for="quantity" class="visually-hidden">Quantity</label>
-              <input
-                id="quantity"
-                type="number"
-                name = "quantity"
-                class="form-control"
-                value="1"
-                min="1"
-                style="width: 90px"
-              />
-              <button type="submit" class="btn btn-primary btn-lg">
-                Buy Now
-              </button>
-            </div>
-          </div>
         </form>
+
+        <div class="d-flex align-items-end flex-wrap gap-3 mb-3">
+          <div>
+            <div class="service-price">Price</div>
+            <div class="fs-3 fw-semibold">{{"$%.2f"|format(price)}}</div>
+          </div>
+          <div class="ms-auto d-flex align-items-center gap-2">
+            <form 
+              method="POST" 
+              action="{{ url_for('main.adding_to_cart') }}"
+            >
+              <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
+              <input type="hidden" name="serviceId" value={{service.id}}>
+              <input type="hidden" name="typeId" value={{selectedType.id}}>
+              <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
+              <button type="submit" class="btn btn-primary btn-lg ">
+                Add to Cart
+              </button>
+            </form>
+            <form
+              method="POST" 
+              action="{{ url_for('main.checkout') }}"
+            >
+              <button type="submit" class="btn btn-primary btn-lg">
+                Checkout
+              </button>
+            </form>
+          </div>
+        </div>
+
 
         <div class="small text-muted">
           Free rescheduling within 14 days. Safety and hygiene measures

@@ -34,3 +34,29 @@
 }
 
 
+/* For item_details page */
+.dropdown-for-type {
+  border: 1px solid #dee2e6;
+  color: black;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container-for-addon{
+  width: 100%;
+  height: fit-content;
+}
+
+.checkbox-for-addon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dee2e6;
+  border-radius: 100%;
+  background-color: white;
+  width: 25px;
+  height: 25px;
+}
+
