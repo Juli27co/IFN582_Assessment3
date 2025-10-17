@@ -43,7 +43,7 @@ def _save_cart_to_session(cart):
             {
                 "id": item.id,
                 "service": {
-                    "id": item.service.id
+                    "id": item.service.service_id
                 },
                 "type": {
                     "id": item.type.id

@@ -20,7 +20,7 @@ class Image:
 
 
 @dataclass
-class Type:
+class ServiceType:
     id: str
     type: str
     shortDescription: str
@@ -38,13 +38,12 @@ class Service:
     name: str
     shortDescription: str
     longDescription: str
-    photos: list[Image]
     price: float
 
 @dataclass
 class Cart_Service:
     service: Service
-    type: Type
+    type: ServiceType
     addon: AddOn
     # generate unique identifier
     id: str = field(default_factory=lambda: str(uuid4))
@@ -73,7 +72,7 @@ class Client(User):
 
 @dataclass
 class Photographer:
-    Photographer_id: str
+    photographer_id: str
     email: str
     password: str
     phone: str
@@ -102,8 +101,19 @@ class Portfolio:
 @dataclass
 class PhotographerService:
     id: str
-    photographerId: str
-    serviceId: str
+    photographer_id: str
+    service_id: str
+
+
+@dataclass
+class Inquiry:
+    inquiry_id: int
+    fullName: str
+    email: str
+    phone: str
+    message: str
+    createdDate: str
+
 
 
 

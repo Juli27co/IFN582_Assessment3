@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, flash, redirect
 from project.forms import InquireryForm
 from project.db import (
     get_photographer_service, 
-    get_portfolio_by_service, 
+    get_images_by_photographer_service, 
     get_single_service, 
     get_types,
     get_addOns, 
@@ -53,30 +53,29 @@ def adding_to_cart():
         return redirect(url_for("main.itemDetails", photographer_service_id=phSerId))
 
 
-@bp.route("/item_details/<photographer_service_id>/", methods = ["POST","GET"])
-@bp.route("/vendor/", methods=["POST", "GET"])
-def vendor_management():
-    profile_form = VendorProfileForm(prefix="profile")
-    service_form = AddServiceForm(prefix="service")
+# @bp.route("/vendor/", methods=["POST", "GET"])
+# def vendor_management():
+#     profile_form = VendorProfileForm(prefix="profile")
+#     service_form = AddServiceForm(prefix="service")
 
-    if profile_form.validate_on_submit():
-        flash("Profile changes complted", "success")
+#     if profile_form.validate_on_submit():
+#         flash("Profile changes complted", "success")
 
-    return render_template(
-        "vendor_management.html",
-        title="Vendor Page",
-        profile_form=profile_form,
-        service_form=service_form,
-    )
+#     return render_template(
+#         "vendor_management.html",
+#         title="Vendor Page",
+#         profile_form=profile_form,
+#         service_form=service_form,
+#     )
 
 
 @bp.route("/item_details/<photographer_service_id>/", methods=["POST", "GET"])
 def itemDetails(photographer_service_id):
     # get images associated with selected photographer and service
     ph_ser = get_photographer_service(photographer_service_id)
-    portfolio_by_service = get_portfolio_by_service(ph_ser)
+    images_by_ph_ser = get_images_by_photographer_service(ph_ser)
     # get necessary information to show titles, descriptions and lists
-    service = get_single_service(ph_ser.serviceId)
+    service = get_single_service(ph_ser.service_id)
     types = get_types()
     addOns = get_addOns()
 
@@ -109,7 +108,7 @@ def itemDetails(photographer_service_id):
     return render_template(
         'item_details.html',
         pho_ser_id = photographer_service_id,
-        portfolio = portfolio_by_service,
+        images = images_by_ph_ser,
         service = service,
         types = types,
         selectedType = selectedType,

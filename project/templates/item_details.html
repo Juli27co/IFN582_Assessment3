@@ -8,12 +8,12 @@
       <div class="col-md-6">
         <div class="card">
           <img
-            src="{{ url_for('static', filename='img/' + portfolio[0].imageSource) }}"
+            src="{{ url_for('static', filename='img/' + images[0].imageSource) }}"
             class="card-img-top img-fluid rounded"
           />
           <div class="card-body">
             <div class="d-flex gap-2 justify-content-center">
-              {% for image in portfolio[1:5] %}
+              {% for image in images[1:5] %}
               <img
                 src="{{ url_for('static', filename='img/' + image.imageSource) }}"
                 class="img-thumbnail"
@@ -93,7 +93,7 @@
               action="{{ url_for('main.adding_to_cart') }}"
             >
               <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
-              <input type="hidden" name="serviceId" value={{service.id}}>
+              <input type="hidden" name="serviceId" value={{service.service_id}}>
               <input type="hidden" name="typeId" value={{selectedType.id}}>
               <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
               <button type="submit" class="btn btn-primary btn-lg ">

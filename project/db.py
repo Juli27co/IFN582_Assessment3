@@ -5,7 +5,7 @@ from project.models import (
     Photographer,
     Portfolio,
     Image,
-    Type,
+    ServiceType,
     AddOn,
     PhotographerService,
     Inquiry,
@@ -172,12 +172,12 @@ def get_types():
                 type_name, 
                 shortDescription,
                 price
-        FROM    Type
+        FROM    ServiceType
         """
     )
     results = cur.fetchall()
     cur.close()
-    return [Type(row['type_id'],row['type_name'],row['shortDescription'],row['price']) for row in results]    
+    return [ServiceType(row['type_id'],row['type_name'],row['shortDescription'],row['price']) for row in results]    
 
 def get_single_type(typeId):
     cur = mysql.connection.cursor()
@@ -187,14 +187,14 @@ def get_single_type(typeId):
                 type_name, 
                 shortDescription,
                 price
-        FROM    Type
+        FROM    ServiceType
         WHERE   type_id = %s
         """,
         (typeId,),
     )
     row = cur.fetchone()
     cur.close()
-    return Type(row['type_id'],row['type_name'],row['shortDescription'],row['price']) if row else None    
+    return ServiceType(row['type_id'],row['type_name'],row['shortDescription'],row['price']) if row else None    
 
 def get_addOns():
     cur = mysql.connection.cursor()
@@ -249,7 +249,7 @@ def get_single_service(serviceId):
             row["name"],
             row["shortDescription"],
             row["longDescription"],
-            row["price"],
+            row["price"]
         )
         if row
         else None
@@ -279,9 +279,9 @@ def get_photographer_service(photographer_service_id):
     )
 
 
-def get_portfolio_by_service(photographer_service):
-    ph_id = photographer_service.photographerId
-    ser_id = photographer_service.serviceId
+def get_images_by_photographer_service(photographer_service):
+    ph_id = photographer_service.photographer_id
+    ser_id = photographer_service.service_id
 
     cur = mysql.connection.cursor()
     cur.execute(
@@ -290,14 +290,10 @@ def get_portfolio_by_service(photographer_service):
                 imageSource, 
                 image_description,
                 service_id,
-                portfolio_id
+                photographer_id
         FROM    Image
-        WHERE service_id = %s
-        AND	portfolio_id IN (
-            SELECT  portfolio_id
-            FROM    Portfolio
-            WHERE   photographer_id = %s
-        )
+        WHERE   service_id = %s
+        AND     photographer_id = %s
         """,
         (ser_id, ph_id),
     )
@@ -309,7 +305,7 @@ def get_portfolio_by_service(photographer_service):
             row["imageSource"],
             row["image_description"],
             row["service_id"],
-            row["portfolio_id"],
+            row["photographer_id"],
         )
         for row in results
     ]
@@ -318,33 +314,31 @@ def get_portfolio_by_service(photographer_service):
 # For form on item_detail page
 def add_inquiry(form):
     cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT  inquiry_id
-        FROM    Inquiry
-        ORDER BY inquiry_id desc LIMIT 1
-        """
-    )
-    row = cur.fetchone()
+    # cur.execute(
+    #     """
+    #     SELECT  inquiry_id
+    #     FROM    Inquiry
+    #     ORDER BY inquiry_id desc LIMIT 1
+    #     """
+    # )
+    # row = cur.fetchone()
 
-    if row :
-        lastID = row['inquiry_id']
-        newID = "IQ" + "%03d" % (int(lastID[2:]) + 1)
-    else:
-        newID = "IQ001"
+    # if row :
+    #     lastID = row['inquiry_id']
+    #     newID = "IQ" + "%03d" % (int(lastID[2:]) + 1)
+    # else:
+    #     newID = "IQ001"
     
     cur.execute(
         """
         INSERT INTO Inquiry (
-            inquiry_id,
             fullName, 
             email, 
             telephone, 
             message
-        ) VALUES (%s, %s, %s, %s, %s)
+        ) VALUES (%s, %s, %s, %s)
         """,
         (
-            newID,
             form.fullName.data,
             form.email.data,
             form.phone.data,
