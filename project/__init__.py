@@ -3,11 +3,12 @@ from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap5
 from flask_mysqldb import MySQL
-from flask_login import LoginManager
+# from flask_login import LoginManager
 
 
 mysql = MySQL()
-login_manager = LoginManager()
+# login_manager = LoginManager()
+
 
 # create a function that creates a web application
 def create_app():
@@ -23,11 +24,12 @@ def create_app():
     app.config['MYSQL_CURSORCLASS']='DictCursor'
 
     mysql.init_app(app)
-    login_manager.init_app(app)
+    # login_manager.init_app(app)
     bootstrap = Bootstrap5(app)
 
     # importing modules here to avoid circular references, register blueprints of routes
     from . import views
+
     app.register_blueprint(views.bp)
 
     @app.errorhandler(404)
@@ -40,4 +42,3 @@ def create_app():
         return render_template("500.html")
 
     return app
-

@@ -7,7 +7,7 @@ from wtforms.fields import (
     SelectMultipleField,
     DecimalField,
     SelectField,
-    PasswordField
+    PasswordField,
 )
 from flask_wtf.file import FileField, MultipleFileField, FileAllowed
 from wtforms.validators import InputRequired, Email
@@ -70,6 +70,7 @@ class AddServiceForm(FlaskForm):
     )
     serviceSubmit = SubmitField("Add Service!")
 
+
 class InquireryForm(FlaskForm):
     """Form for item_details page."""
 
@@ -79,8 +80,75 @@ class InquireryForm(FlaskForm):
     message = TextAreaField("", validators=[InputRequired()])
     submit = SubmitField("Send Message")
 
-class  LoginForm(FlaskForm):
+
+class LoginForm(FlaskForm):
     """Form for login page."""
     email = StringField("Email", validators=[InputRequired(), Email()])
     password = PasswordField("Password", validators=[InputRequired()])
+    user_type = RadioField(
+        "User Type",
+        choices=[
+            ("client", "Client"),
+            ("photographer", "Photographer"),
+            ("admin", "Admin"),
+        ],
+        validators=[InputRequired()],
+    )
     submit = SubmitField("LOGIN")
+
+
+class RegisterForm(FlaskForm):
+    """Form for user registry."""
+
+    email = StringField("Email", validators=[InputRequired(), Email()])
+    password = PasswordField("Password", validators=[InputRequired()])
+    firstName = StringField("Your first name", validators=[InputRequired()])
+    lastName = StringField("Your surname", validators=[InputRequired()])
+    phone = StringField("Your phone number", validators=[InputRequired()])
+    user_type = RadioField(
+        "User Type",
+        choices=[("client", "Client"), ("photographer", "Photographer")],
+        validators=[InputRequired()],
+    )
+    submit = SubmitField("Make Account")
+
+
+def filters_form_choices():
+    """Generate choices for filters form."""
+
+    service_types = [
+        ("Newborn Photography", "Newborn Photography"),
+        ("Wedding Photography", "Wedding Photography"),
+        ("Pets Photography", "Pets Photography"),
+        ("Product Photography", "Product Photography"),
+    ]
+    availability = [
+        ("Weekends", "Weekends only"),
+        ("Weekdays", "Weekdays only"),
+        ("Short notice bookings", "Short notice bookings"),
+    ]
+
+    locations = [
+        ("Sydney", "Sydney"),
+        ("Melbourne", "Melbourne"),
+        ("Brisbane", "Brisbane"),
+        ("Perth", "Perth"),
+
+    ]
+
+    return service_types, locations, availability
+
+
+class FiltersForm(FlaskForm):
+    """Form for filtering photographers on the index page."""
+
+    choices = filters_form_choices()
+
+    service_type = RadioField(
+        "Service Type :", choices=choices[0]
+    )
+    location = RadioField("Location :", choices=choices[1])
+    availability = RadioField(
+        "Availability :", choices=choices[2]
+    )
+    submit = SubmitField("Apply Filters")

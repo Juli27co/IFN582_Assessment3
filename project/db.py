@@ -1,9 +1,10 @@
+from hashlib import sha256
 from . import mysql
 from project.models import (
+    Admin,
     Client,
     Service,
     Photographer,
-    Portfolio,
     Image,
     ServiceType,
     AddOn,
@@ -13,172 +14,172 @@ from project.models import (
 )
 from . import mysql
 
-def getCurrentUser(user_id):
-    client = getSingleClient(user_id) 
-    vendor = getSingleVendor(user_id)
-    admin = getSingleAdmin(user_id)
+# def getCurrentUser(user_id):
+#     client = getSingleClient(user_id) 
+#     vendor = getSingleVendor(user_id)
+#     admin = getSingleAdmin(user_id)
     
-    if client: 
-        return client
-    elif vendor:
-        return vendor
-    elif admin:
-        return admin
-    else:
-        return None
+#     if client: 
+#         return client
+#     elif vendor:
+#         return vendor
+#     elif admin:
+#         return admin
+#     else:
+#         return None
 
-def checkLoginUser(email, password):
-    client = authenticateClient(email, password) 
-    vendor = authenticateVendor(email, password)
-    admin = authenticateAdmin(email, password)
+# def checkLoginUser(email, password):
+#     client = authenticateClient(email, password) 
+#     vendor = authenticateVendor(email, password)
+#     admin = authenticateAdmin(email, password)
     
-    if client: 
-        return client
-    elif vendor:
-        return vendor
-    elif admin:
-        return admin
-    else:
-        return None
+#     if client: 
+#         return client
+#     elif vendor:
+#         return vendor
+#     elif admin:
+#         return admin
+#     else:
+#         return None
 
 
-def authenticateClient(email, password):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT client_id, email, password, firstName, lastName
-        FROM Client
-        WHERE email = %s AND password = %s
-        """,
-        (email, password),
-    )
-    row = cur.fetchone()
-    cur.close()
-    return (
-        Client(
-            id = row['client_id'],
-            email = row['email'],
-            password = row['password'],
-            firstName = row['firstName'],
-            lastName = row['lastName'],
-            role = "client"
-        )
-    ) if row else None
+# def authenticateClient(email, password):
+#     cur = mysql.connection.cursor()
+#     cur.execute(
+#         """
+#         SELECT client_id, email, password, firstName, lastName
+#         FROM Client
+#         WHERE email = %s AND password = %s
+#         """,
+#         (email, password),
+#     )
+#     row = cur.fetchone()
+#     cur.close()
+#     return (
+#         Client(
+#             id = row['client_id'],
+#             email = row['email'],
+#             password = row['password'],
+#             firstName = row['firstName'],
+#             lastName = row['lastName'],
+#             role = "client"
+#         )
+#     ) if row else None
 
-def authenticateVendor(email, password):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT photographer_id, email, password, firstName, lastName
-        FROM Photographer
-        WHERE email = %s AND password = %s
-        """,
-        (email, password),
-    )
-    row = cur.fetchone()
-    cur.close()
-    return (
-        Photographer(
-            id = row['photographer_id'],
-            email = row['email'],
-            password = row['password'],
-            firstName = row['firstName'],
-            lastName = row['lastName'],
-            role = "vendor"
-        )
-    ) if row else None
+# def authenticateVendor(email, password):
+#     cur = mysql.connection.cursor()
+#     cur.execute(
+#         """
+#         SELECT photographer_id, email, password, firstName, lastName
+#         FROM Photographer
+#         WHERE email = %s AND password = %s
+#         """,
+#         (email, password),
+#     )
+#     row = cur.fetchone()
+#     cur.close()
+#     return (
+#         Photographer(
+#             id = row['photographer_id'],
+#             email = row['email'],
+#             password = row['password'],
+#             firstName = row['firstName'],
+#             lastName = row['lastName'],
+#             role = "vendor"
+#         )
+#     ) if row else None
 
-def authenticateAdmin(email, password):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT admin_id, email, password, firstName, lastName
-        FROM Admin
-        WHERE email = %s AND password = %s
-        """,
-        (email, password),
-    )
-    row = cur.fetchone()
-    cur.close()
-    return (
-        Admin(
-            id = row['admin_id'],
-            email = row['email'],
-            password = row['password'],
-            firstName = row['firstName'],
-            lastName = row['lastName'],
-            role = "admin"
-        )
-    ) if row else None
+# def authenticateAdmin(email, password):
+#     cur = mysql.connection.cursor()
+#     cur.execute(
+#         """
+#         SELECT admin_id, email, password, firstName, lastName
+#         FROM Admin
+#         WHERE email = %s AND password = %s
+#         """,
+#         (email, password),
+#     )
+#     row = cur.fetchone()
+#     cur.close()
+#     return (
+#         Admin(
+#             id = row['admin_id'],
+#             email = row['email'],
+#             password = row['password'],
+#             firstName = row['firstName'],
+#             lastName = row['lastName'],
+#             role = "admin"
+#         )
+#     ) if row else None
 
-def getSingleClient(user_id):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT client_id, email, password, firstName, lastName
-        FROM Client
-        WHERE client_id = %s
-        """,
-        (user_id),
-    )
-    row = cur.fetchone()
-    cur.close()
-    return (
-        Client(
-            id = row['client_id'],
-            email = row['email'],
-            password = row['password'],
-            firstName = row['firstName'],
-            lastName = row['lastName'],
-            role = "client"
-        )
-    ) if row else None
+# def getSingleClient(user_id):
+#     cur = mysql.connection.cursor()
+#     cur.execute(
+#         """
+#         SELECT client_id, email, password, firstName, lastName
+#         FROM Client
+#         WHERE client_id = %s
+#         """,
+#         (user_id),
+#     )
+#     row = cur.fetchone()
+#     cur.close()
+#     return (
+#         Client(
+#             id = row['client_id'],
+#             email = row['email'],
+#             password = row['password'],
+#             firstName = row['firstName'],
+#             lastName = row['lastName'],
+#             role = "client"
+#         )
+#     ) if row else None
 
-def getSingleVendor(user_id):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT photographer_id, email, password, firstName, lastName
-        FROM Photographer
-        WHERE photographer_id = %s
-        """,
-        (user_id),
-    )
-    row = cur.fetchone()
-    cur.close()
-    return (
-        Photographer(
-            id = row['photographer_id'],
-            email = row['email'],
-            password = row['password'],
-            firstName = row['firstName'],
-            lastName = row['lastName'],
-            role = "vendor"
-        )
-    ) if row else None
+# def getSingleVendor(user_id):
+#     cur = mysql.connection.cursor()
+#     cur.execute(
+#         """
+#         SELECT photographer_id, email, password, firstName, lastName
+#         FROM Photographer
+#         WHERE photographer_id = %s
+#         """,
+#         (user_id),
+#     )
+#     row = cur.fetchone()
+#     cur.close()
+#     return (
+#         Photographer(
+#             id = row['photographer_id'],
+#             email = row['email'],
+#             password = row['password'],
+#             firstName = row['firstName'],
+#             lastName = row['lastName'],
+#             role = "vendor"
+#         )
+#     ) if row else None
 
-def getSingleAdmin(user_id):
-    cur = mysql.connection.cursor()
-    cur.execute(
-        """
-        SELECT admin_id, email, password, firstName, lastName
-        FROM Admin
-        WHERE admin_id = %s
-        """,
-        (user_id),
-    )
-    row = cur.fetchone()
-    cur.close()
-    return (
-        Admin(
-            id = row['admin_id'],
-            email = row['email'],
-            password = row['password'],
-            firstName = row['firstName'],
-            lastName = row['lastName'],
-            role = "admin"
-        )
-    ) if row else None
+# def getSingleAdmin(user_id):
+#     cur = mysql.connection.cursor()
+#     cur.execute(
+#         """
+#         SELECT admin_id, email, password, firstName, lastName
+#         FROM Admin
+#         WHERE admin_id = %s
+#         """,
+#         (user_id),
+#     )
+#     row = cur.fetchone()
+#     cur.close()
+#     return (
+#         Admin(
+#             id = row['admin_id'],
+#             email = row['email'],
+#             password = row['password'],
+#             firstName = row['firstName'],
+#             lastName = row['lastName'],
+#             role = "admin"
+#         )
+#     ) if row else None
 
 
 def get_clients():
@@ -188,6 +189,7 @@ def get_clients():
     cur.close()
     return [
         Client(
+            "client",
             row["client_id"],
             row["email"],
             row["password"],
@@ -201,11 +203,49 @@ def get_clients():
     ]
 
 
-def get_photographers():
+def get_photographers(filters):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Photographer")
+
+    # Base query - use JOIN if filtering by service_type
+    if filters.get("service_type"):
+        query = """
+            SELECT DISTINCT p.photographer_id, p.email, p.password, p.phone, p.firstName, p.lastName, 
+                   p.bioDescription, p.location, p.availability, p.rating, p.profilePicture
+            FROM Photographer p
+            INNER JOIN Photographer_Service ps ON p.photographer_id = ps.photographer_id
+            INNER JOIN Service s ON ps.service_id = s.service_id
+            WHERE s.name = %s
+        """
+        params = [filters["service_type"]]
+    else:
+        query = "SELECT * FROM Photographer WHERE 1=1"
+        params = []
+
+    # Add location filter
+    if filters.get("location"):
+        if "WHERE" in query and "s.name" in query:
+            query += " AND p.location = %s"
+        else:
+            query += " AND location = %s"
+        params.append(filters["location"])
+
+    # Add availability filter
+    if filters.get("availability"):
+        if "WHERE" in query and "s.name" in query:
+            query += " AND p.availability = %s"
+        else:
+            query += " AND availability = %s"
+        params.append(filters["availability"])
+
+    print(f"Executing query: {query}")
+    print(f"With params: {params}")
+
+    cur.execute(query, params)
     results = cur.fetchall()
     cur.close()
+
+    print(f"Found {len(results)} photographers")
+
     return [
         Photographer(
             row["photographer_id"],
@@ -218,6 +258,7 @@ def get_photographers():
             row["location"],
             row["availability"],
             row["rating"],
+            row["profilePicture"],
         )
         for row in results
     ]
@@ -238,23 +279,6 @@ def get_services():
         )
         for row in results
     ]
-
-
-# def get_portfolio():
-#     cur = mysql.connection.cursor()
-#     cur.execute("SELECT * FROM Portfolio, Images")
-#     results = cur.fetchall()
-#     cur.close()
-#     return [
-#         Portfolio(
-#             row["portfolio_id"],
-#             row["photographer_id"],
-#             row["imageSource"],
-#             row["imageDescription"],
-#         )
-#         for row in results
-#     ]
-
 
 def get_inquiries():
     cur = mysql.connection.cursor()
@@ -300,33 +324,89 @@ def get_inquiries():
 #         )
 #     return None
 
-# def is_admin(user_id):
-#     cur = mysql.connection.cursor()
-#     cur.execute("SELECT * FROM admins WHERE user_id = %s", (user_id,))
-#     row = cur.fetchone()
-#     cur.close()
-#     return True if row else False
+def check_for_client(email, password):
+    cur = mysql.connection.cursor()
+    cur.execute(
+        """
+        SELECT client_id, password, email, firstName, lastName, phone
+        FROM Client
+        WHERE email = %s AND password = %s
+    """,
+        (email, password),
+    )
+    row = cur.fetchone()
+    cur.close()
+    if row:
+        return Client(
+            "client",
+            row["client_id"],
+            row["email"],
+            row["password"],
+            row["phone"],
+            row["firstName"],
+            row["lastName"],
+            "",
+            "",
+        )
+    return None
 
 
-# def add_user(form):
-#     cur = mysql.connection.cursor()
-#     cur.execute(
-#         """
-#         INSERT INTO users (username, user_password, email, firstname, surname, phone)
-#         VALUES (%s, %s, %s, %s, %s, %s)
-#         """,
-#         (
-#             form.username.data,
-#             form.password.data,
-#             form.email.data,
-#             form.firstname.data,
-#             form.surname.data,
-#             form.phone.data,
-#         ),
-#     )
-#     mysql.connection.commit()
-#     cur.close()
+def check_for_photographer(email, password):
+    cur = mysql.connection.cursor()
+    cur.execute(
+        """
+        SELECT photographer_id, password, email, firstName, lastName, phone, bioDescription, location, availability, rating, profilePicture
+        FROM Photographer
+        WHERE email = %s AND password = %s
+    """,
+        (email, password),
+    )
+    row = cur.fetchone()
+    cur.close()
+    if row:
+        return Photographer(
+            "photographer",
+            row["photographer_id"],
+            row["email"],
+            row["password"],
+            row["phone"],
+            row["firstName"],
+            row["lastName"],
+            row["bioDescription"],
+            row["location"],
+            row["availability"],
+            row["rating"],
+            row["profilePicture"],
+        )
+    return None
 
+
+def check_for_admin(email, password):
+    cur = mysql.connection.cursor()
+    cur.execute(
+        """
+        SELECT admin_id, password, email, firstName, lastName, phone
+        FROM Admin
+        WHERE email = %s AND password = %s
+    """,
+        (email, password),
+    )
+    row = cur.fetchone()
+    cur.close()
+    if row:
+        return Admin(
+            "admin",
+            row["admin_id"],
+            row["email"],
+            row["password"],
+            row["phone"],
+            row["firstName"],
+            row["lastName"],
+        )
+    return None
+
+
+# To show item_detail page
 def get_types():
     cur = mysql.connection.cursor()
     cur.execute(
@@ -396,6 +476,7 @@ def get_addOns():
         for row in results
     ]
 
+
 def get_single_addOn(addonId):
     cur = mysql.connection.cursor()
     cur.execute(
@@ -405,8 +486,8 @@ def get_single_addOn(addonId):
                 price
         FROM    AddOn
         WHERE   addOn_id = %s
-        """, 
-        (addonId,)
+        """,
+        (addonId,),
     )
     row = cur.fetchone()
     cur.close()
@@ -526,5 +607,48 @@ def add_inquiry(form):
             form.message.data,
         ),
     )
+    mysql.connection.commit()
+    cur.close()
+
+
+def add_user(form):
+    cur = mysql.connection.cursor()
+
+    hashedPassword = sha256(form.password.data.encode()).hexdigest()
+
+    if form.user_type.data == "client":
+        cur.execute(
+            """
+            INSERT INTO Client (email, password, firstName, lastName, phone, preferredPaymentMethod, address)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """,
+            (
+                form.email.data,
+                hashedPassword,
+                form.firstName.data,
+                form.lastName.data,
+                form.phone.data,
+                "",
+                "",
+            ),
+        )
+    elif form.user_type.data == "photographer":
+        cur.execute(
+            """
+            INSERT INTO Photographer (email, password, firstName, lastName, phone, bioDescription, location, availability, rating)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """,
+            (
+                form.email.data,
+                hashedPassword,
+                form.firstName.data,
+                form.lastName.data,
+                form.phone.data,
+                "",
+                "",
+                "",
+                0,
+            ),
+        )
     mysql.connection.commit()
     cur.close()

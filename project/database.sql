@@ -109,28 +109,6 @@ CREATE TABLE Cart_Service
     FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id)
 );
 
-CREATE TABLE Orders
-(
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
-    createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    message VARCHAR(100) NULL,
-    paymentMethod VARCHAR(50) NOT NULL,
-    photographer_id INT,
-    client_id INT,
-    FOREIGN KEY (client_id) REFERENCES Client(client_id),
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
-);
-
-CREATE TABLE Order_Service
-(
-    orderService_id INT AUTO_INCREMENT PRIMARY KEY,
-    service_id INT,
-    order_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-);
-
 CREATE TABLE Inquiry
 (
     inquiry_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -176,14 +154,14 @@ INSERT INTO AddOn (addOn, price) VALUES
 INSERT INTO Photographer (email, password, phone, firstName, lastName, bioDescription, location, availability, rating, profilePicture) VALUES
 ('john.doe@example.com', 'securePassword123', '0412345678', 'John', 'Doe', 'Experienced photographer specializing in portrait and event photography.', 'Sydney', 'Weekdays', 4.8, ''),
 ('emily.smith@example.com', 'pass1234secure', '0498765432', 'Emily', 'Smith', 'Specializing in landscape photography with a keen eye for natural light and outdoor scenes.', 'Melbourne', 'Weekdays', 4.7, 'jakob-owens-DQPP9rVLYGQ-unsplash.jpg'),
-('michael.jones@example.com', 'mikephoto321', '0401122334', 'Michael', 'Jones', 'Freelance photographer with a focus on corporate headshots and commercial photography.', 'Brisbane', 'Short notice bookings', 4.9, 'home-page-welcome'),
-('sophia.wilson@example.com', 'sophiaW!23', '0455667788', 'Sophia', 'Wilson', 'Creative portrait photographer with over 10 years of experience capturing moments that tell stories.', 'Perth', 'Weekends', 5.0, 'andre-furtado-JtV6zyOZSrA-unsplash'),
-('david.brown@example.com', 'davidsPhoto2023', '0422333445', 'David', 'Brown', 'Experienced in wedding and engagement photography, known for capturing genuine emotions and timeless moments.', 'Adelaide', 'Weekends', 4.6, 'home-page-welcome'),
-('olivia.miller@example.com', 'OliviaM123!', '0433556677', 'Olivia', 'Miller', 'Family and newborn photographer dedicated to capturing the purest moments of life with warmth and elegance.', 'Gold Coast', 'Weekdays', 4.9, ''),
-('benjamin.taylor@example.com', 'photoBen5678', '0466778899', 'Benjamin', 'Taylor', 'Fashion and editorial photographer with a passion for capturing the latest trends and unique styles.', 'Sydney', 'Weekdays', 4.8, ''),
-('ava.anderson@example.com', 'Ava2023secure', '0477889900', 'Ava', 'Anderson', 'Specializes in event photography and commercial shoots, ensuring high-quality results for every project.', 'Melbourne', 'Weekends', 4.7, ''),
-('liam.thomas@example.com', 'LiamPhoto987', '0488992233', 'Liam', 'Thomas', 'Travel and adventure photographer who captures breathtaking landscapes and remote destinations.', 'Hobart', 'Weekdays', 4.9, ''),
-('chloe.davis@example.com', 'Chloe2023!Pass', '0412349876', 'Chloe', 'Davis', 'Wedding and portrait photographer with a passion for capturing candid moments and emotional stories.', 'Canberra', 'Short notice bookings', 4.8, '');
+('michael.jones@example.com', 'mikephoto321', '0401122334', 'Michael', 'Jones', 'Freelance photographer with a focus on corporate headshots and commercial photography.', 'Brisbane', 'Short notice bookings', 4.9, 'home-page-welcome.jpg'),
+('sophia.wilson@example.com', 'sophiaW!23', '0455667788', 'Sophia', 'Wilson', 'Creative portrait photographer with over 10 years of experience capturing moments that tell stories.', 'Perth', 'Weekends', 5.0, 'andre-furtado-JtV6zyOZSrA-unsplash.jpg'),
+('david.brown@example.com', 'davidsPhoto2023', '0422333445', 'David', 'Brown', 'Experienced in wedding and engagement photography, known for capturing genuine emotions and timeless moments.', 'Adelaide', 'Weekends', 4.6, 'home-page-welcome.jpg'),
+('olivia.miller@example.com', 'OliviaM123!', '0433556677', 'Olivia', 'Miller', 'Family and newborn photographer dedicated to capturing the purest moments of life with warmth and elegance.', 'Gold Coast', 'Weekdays', 4.9, 'janko-ferlic-EpbIXGCrtK0-unsplash.jpg'),
+('benjamin.taylor@example.com', 'photoBen5678', '0466778899', 'Benjamin', 'Taylor', 'Fashion and editorial photographer with a passion for capturing the latest trends and unique styles.', 'Sydney', 'Weekdays', 4.8, 'jakob-owens-f3s0i96CRGQ-unsplash.jpg'),
+('ava.anderson@example.com', 'Ava2023secure', '0477889900', 'Ava', 'Anderson', 'Specializes in event photography and commercial shoots, ensuring high-quality results for every project.', 'Melbourne', 'Weekends', 4.7, 'daniel-korpai-hbTKIbuMmBI-unsplash.jpg'),
+('liam.thomas@example.com', 'LiamPhoto987', '0488992233', 'Liam', 'Thomas', 'Travel and adventure photographer who captures breathtaking landscapes and remote destinations.', 'Hobart', 'Weekdays', 4.9, 'andre-furtado-JtV6zyOZSrA-unsplash.jpg'),
+('chloe.davis@example.com', 'Chloe2023!Pass', '0412349876', 'Chloe', 'Davis', 'Wedding and portrait photographer with a passion for capturing candid moments and emotional stories.', 'Canberra', 'Short notice bookings', 4.8, 'garrett-jackson-oOnJWBMlb5A-unsplash.jpg');
 
 INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
 (1,1),

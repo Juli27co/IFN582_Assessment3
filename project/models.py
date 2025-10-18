@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 from datetime import datetime
 from enum import Enum
-from flask_login import UserMixin
+# from flask_login import UserMixin
+
 
 
 # for using in the form.available
@@ -11,16 +12,6 @@ class AvailabilityStatus(Enum):
     weekly_only = "Weekdays only"
     weekend_only = "Weekends only"
     short_notice_booking = "Short notice booking"
-
-@dataclass
-class User(UserMixin):
-    id: str
-    email: str
-    password: str
-    firstName: str
-    lastName: str
-    phone: str = None
-    role: str = None
 
 
 @dataclass
@@ -39,11 +30,13 @@ class ServiceType:
     shortDescription: str
     price: float
 
+
 @dataclass
 class AddOn:
-    id: str 
+    id: str
     addOn: str
     price: float
+
 
 @dataclass
 class Service:
@@ -54,6 +47,7 @@ class Service:
     price: float = 0.00
     coverImage: str = "foobar"
 
+
 @dataclass
 class Cart_Service:
     service: Service
@@ -61,6 +55,7 @@ class Cart_Service:
     addon: AddOn
     # generate unique identifier
     id: str = field(default_factory=lambda: str(uuid4))
+
 
 @dataclass
 class Cart:
@@ -71,26 +66,57 @@ class Cart:
 
 
 @dataclass
-class Admin(User):
-    pass
+class User:
+    role: str
+    id: str
+    email: str
+    password: str
+    phone: str
+    firstName: str
+    lastName: str
+
+
+# @dataclass
+# class User(UserMixin):
+#     id: str
+#     email: str
+#     password: str
+#     firstName: str
+#     lastName: str
+#     phone: str = None
+#     role: str = None
 
 @dataclass
 class Client(User):
-    preferredPaymentMethod: str = None
-    address: str = None
+    # preferredPaymentMethod: str = None
+    # address: str = None
+    preferredPaymentMethod: str
+    address: str
 
 @dataclass
 class Photographer(User):
-    bioDescription: str = None
-    location: str = None
-    availability: str = None
-    rating: float = 0.0
+#     bioDescription: str = None
+#     location: str = None
+#     availability: str = None
+#     rating: float = 0.0
+    bioDescription: str
+    location: str
+    availability: str
+    rating: float
+    profilePicture: str = "placeholder-image.png"
+
 
 @dataclass
-class Portfolio:
-    portfolio_id: str
-    photographer_id: str
-    images: list[Image]
+class Admin(User):
+    pass
+
+
+# @dataclass
+# class Portfolio:
+#     portfolio_id: str
+#     photographer_id: str
+#     images: list[Image]
+
 
 @dataclass
 class PhotographerService:
@@ -107,10 +133,3 @@ class Inquiry:
     phone: str
     message: str
     createdDate: str
-
-
-
-
-
-
-
