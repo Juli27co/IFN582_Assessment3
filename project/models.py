@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from enum import Enum
 
-
-@dataclass
-class Image:
+@dataclass 
+class Client:
     id: str
-    imageSource: str
-    imageDescription: str
-
+    email: str
+    password: str
+    phone: str
+    firstName: str
+    lastName: str
+    preferredPaymentMethod: str
+    address: str
 
 @dataclass
 class Service:
@@ -15,41 +17,30 @@ class Service:
     name: str
     shortDescription: str
     longDescription: str
-    photos: Image[]
-    type: str
-    addOns: str
-    price: float
-
-@dataclass
-class User:
-    id: str
-    email: str
-    password: str
-    telephone: str
-    firstName: str
-    lastName: str
-
-@dataclass
-class AvailabilityStatus(Enum):
-    WEEKDAYS_ONLY = "Weekdays only"
-    WEEKENDS_ONLL = "Weekends only"
-    SHORT_NOTICE_BOOKING = "Short notice booking"
+    price: float = 0.00
+    coverImage: str = "foobar"
 
 @dataclass
 class Photographer:
     id: str
     email: str
     password: str
-    telephone: str
+    phone: str
     firstName: str
     lastName: str
     bioDescription: str 
     location: str
-    availability: AvailabilityStatus
-    rating: float
+    availability: str 
+    rating: float = 0.0
+    profilePicture: str = "foobar"
 
 @dataclass
-class Portfolio:
+class Image:
     id: str
-    photographer: Photographer
+    service_id: str
+    photographer_id: str
+    imageSource: str = "foobar"
+    imageDescription: str = "foobar"
+    
+
 
