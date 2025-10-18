@@ -40,3 +40,4 @@ def create_app():
         return render_template("500.html")
 
     return app
+
