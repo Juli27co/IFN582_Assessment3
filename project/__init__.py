@@ -3,12 +3,8 @@ from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap5
 from flask_mysqldb import MySQL
-# from flask_login import LoginManager
-
 
 mysql = MySQL()
-# login_manager = LoginManager()
-
 
 # create a function that creates a web application
 def create_app():
@@ -19,12 +15,11 @@ def create_app():
     # MySQL configurations
     app.config['MYSQL_HOST']='localhost'
     app.config['MYSQL_USER']='root'
-    app.config['MYSQL_PASSWORD']='password'
+    app.config['MYSQL_PASSWORD']='MySQL@mari0633'
     app.config['MYSQL_DB']='sql12802431'
     app.config['MYSQL_CURSORCLASS']='DictCursor'
 
     mysql.init_app(app)
-    # login_manager.init_app(app)
     bootstrap = Bootstrap5(app)
 
     # importing modules here to avoid circular references, register blueprints of routes

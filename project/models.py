@@ -3,8 +3,6 @@ from typing import List, Optional
 from uuid import uuid4
 from datetime import datetime
 from enum import Enum
-# from flask_login import UserMixin
-
 
 
 # for using in the form.available
@@ -75,30 +73,13 @@ class User:
     firstName: str
     lastName: str
 
-
-# @dataclass
-# class User(UserMixin):
-#     id: str
-#     email: str
-#     password: str
-#     firstName: str
-#     lastName: str
-#     phone: str = None
-#     role: str = None
-
 @dataclass
 class Client(User):
-    # preferredPaymentMethod: str = None
-    # address: str = None
     preferredPaymentMethod: str
     address: str
 
 @dataclass
 class Photographer(User):
-#     bioDescription: str = None
-#     location: str = None
-#     availability: str = None
-#     rating: float = 0.0
     bioDescription: str
     location: str
     availability: str
@@ -109,13 +90,6 @@ class Photographer(User):
 @dataclass
 class Admin(User):
     pass
-
-
-# @dataclass
-# class Portfolio:
-#     portfolio_id: str
-#     photographer_id: str
-#     images: list[Image]
 
 
 @dataclass

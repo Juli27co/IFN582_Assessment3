@@ -1,15 +1,12 @@
 from flask import Blueprint, render_template, request, session, flash, redirect, url_for
-# from project.models import User
 from project.session import add_to_cart
-# from flask_login import login_user
-# from project import login_manager
 from project.forms import (
     InquireryForm,
     LoginForm,
     VendorProfileForm,
     AddServiceForm,
     RegisterForm,
-    FiltersForm,
+    FiltersForm
 )
 from hashlib import sha256
 from project.db import (
@@ -24,25 +21,13 @@ from project.db import (
     get_photographer_service,
     get_photographers,
     get_single_addOn,
-    # checkLoginUser,
-    # getCurrentUser,
     get_single_service,
     get_single_type,
-    get_types,
+    get_types
 )
 from project.wrappers import only_photographers
 
 bp = Blueprint("main", __name__)
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return getCurrentUser(user_id)
-
-#---------test---------
-@bp.route("/register/")
-def register():
-    return render_template("index.html", title="Home Page")
-# ---------------------
 
 @bp.route("/", methods=["GET", "POST"])
 def index():
@@ -109,6 +94,7 @@ def adding_to_cart():
     serviceId = request.form.get("serviceId")
     typeId = request.form.get("typeId")
     addOnId = request.form.get("addOnId")
+
     # handle the case when type is not selected.(type is requierd)
     if typeId == "":
         flash("Please select a session type before adding to cart.", "error")
@@ -148,7 +134,6 @@ def itemDetails(photographer_service_id):
     service = get_single_service(ph_ser.service_id)
     types = get_types()
     addOns = get_addOns()
-
     # showing selected type (when it doesn't exist: None)
     selected_type_id = request.args.get("type_id")
     selectedType = get_single_type(selected_type_id)
@@ -243,22 +228,6 @@ def login():
             flash("Login successful!")
             return redirect(url_for("main.index"))
     return render_template("login.html", form=form)
-
-# @bp.route('/login/', methods=["POST", "GET"])
-# def login():
-#     form = LoginForm()
-#     if request.method == "POST":
-#         if form.validate_on_submit():
-#             # check if the login account exists
-#             user = checkLoginUser(form.email.data, form.password.data)
-#             if not user:
-#                 flash("That username or password is incorrect. Please try again.", "error")
-#                 return redirect(url_for("main.login"))
-#             # if the account is authenticated, save login state to the session
-#             login_user(user)
-#             return redirect(url_for("main.index"))
-        
-#     return render_template('login.html', form=form)
 
 @bp.route("/register/", methods=["POST", "GET"])
 def register():

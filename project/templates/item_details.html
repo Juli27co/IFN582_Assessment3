@@ -93,7 +93,7 @@
               action="{{ url_for('main.adding_to_cart') }}"
             >
               <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
-              <input type="hidden" name="serviceId" value={{service.service_id}}>
+              <input type="hidden" name="serviceId" value={{service.id}}>
               <input type="hidden" name="typeId" value={{selectedType.id}}>
               <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
               <button type="submit" class="btn btn-primary btn-lg ">
