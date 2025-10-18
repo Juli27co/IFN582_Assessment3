@@ -215,15 +215,19 @@ def login():
             password = sha256(form.password.data.encode()).hexdigest()
             if form.user_type.data == "client":
                 user = check_for_client(email, password)
+                userType = "client"
             elif form.user_type.data == "photographer":
                 user = check_for_photographer(email, password)
+                userType = "vendor"
             elif form.user_type.data == "admin":
                 user = check_for_admin(email, password)
+                userType = "admin"
             if not user:
                 flash("Invalid username or password", "error")
                 return redirect(url_for("main.login"))
             # Store full user info in session
             session["user"] = user
+            session["userType"] = userType
             session["logged_in"] = True
             flash("Login successful!")
             return redirect(url_for("main.index"))
