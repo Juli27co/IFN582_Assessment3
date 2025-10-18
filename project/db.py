@@ -428,7 +428,8 @@ def get_single_service(serviceId):
                 name, 
                 shortDescription,
                 longDescription,
-                price
+                price,
+                coverImage
         FROM    Service
         WHERE   service_id = %s
         """,
@@ -442,7 +443,8 @@ def get_single_service(serviceId):
             row["name"],
             row["shortDescription"],
             row["longDescription"],
-            row["price"]
+            row["price"],
+            row["coverImage"]
         )
         if row else None
     )

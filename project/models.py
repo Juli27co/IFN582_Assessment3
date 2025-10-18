@@ -12,15 +12,6 @@ class AvailabilityStatus(Enum):
     weekend_only = "Weekends only"
     short_notice_booking = "Short notice booking"
 
-# @dataclass
-# class User:
-#     id: str
-#     email: str
-#     password: str
-#     phone: str
-#     firstName: str
-#     lastName: str
-
 @dataclass
 class User(UserMixin):
     id: str
@@ -56,11 +47,12 @@ class AddOn:
 
 @dataclass
 class Service:
-    service_id: str
+    id: str
     name: str
     shortDescription: str
     longDescription: str
-    price: float
+    price: float = 0.00
+    coverImage: str = "foobar"
 
 @dataclass
 class Cart_Service:
@@ -93,19 +85,6 @@ class Photographer(User):
     location: str = None
     availability: str = None
     rating: float = 0.0
-
-# @dataclass
-# class Photographer:
-#     photographer_id: str
-#     email: str
-#     password: str
-#     phone: str
-#     firstName: str
-#     lastName: str
-#     availability: AvailabilityStatus
-#     bioDescription: str = ""
-#     location: str = ""
-#     rating: float = 0
 
 @dataclass
 class Portfolio:
