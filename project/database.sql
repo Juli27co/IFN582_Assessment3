@@ -169,7 +169,7 @@ INSERT INTO ServiceType (type_name, shortDescription, price) VALUES
 
 INSERT INTO AddOn (addOn, price) VALUES
 ('Extra Edited Photos', 50.00),
-('Printed Album', 100.00);
+('Printed Album', 100.00),
 ('Both : Extra Edited Photos + Printed Album', 150.00);
 
 INSERT INTO Photographer (email, password, phone, firstName, lastName, bioDescription, location, availability, rating, profilePicture) VALUES

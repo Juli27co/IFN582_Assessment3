@@ -3,12 +3,34 @@ from typing import List
 from uuid import uuid4
 from datetime import datetime
 from enum import Enum
+from flask_login import UserMixin
+
 
 # for using in the form.available
 class AvailabilityStatus(Enum):
     weekly_only = "Weekdays only"
     weekend_only = "Weekends only"
     short_notice_booking = "Short notice booking"
+
+# @dataclass
+# class User:
+#     id: str
+#     email: str
+#     password: str
+#     phone: str
+#     firstName: str
+#     lastName: str
+
+@dataclass
+class User(UserMixin):
+    id: str
+    email: str
+    password: str
+    firstName: str
+    lastName: str
+    phone: str = None
+    role: str = None
+
 
 @dataclass
 class Image:
@@ -55,42 +77,35 @@ class Cart:
     def add_item(self, item: Cart_Service):
         self.items.append(item)
 
-@dataclass
-class User:
-    id: str
-    email: str
-    password: str
-    phone: str
-    firstName: str
-    lastName: str
 
+@dataclass
+class Admin(User):
+    pass
 
 @dataclass
 class Client(User):
-    preferredPaymentMethod: str
-    address: str
-
-@dataclass
-class Photographer:
-    photographer_id: str
-    email: str
-    password: str
-    phone: str
-    firstName: str
-    lastName: str
-    availability: AvailabilityStatus
-    bioDescription: str = ""
-    location: str = ""
-    rating: float = 0
-
+    preferredPaymentMethod: str = None
+    address: str = None
 
 @dataclass
 class Photographer(User):
-    bioDescription: str
-    location: str
-    availability: str
-    rating: float
+    bioDescription: str = None
+    location: str = None
+    availability: str = None
+    rating: float = 0.0
 
+# @dataclass
+# class Photographer:
+#     photographer_id: str
+#     email: str
+#     password: str
+#     phone: str
+#     firstName: str
+#     lastName: str
+#     availability: AvailabilityStatus
+#     bioDescription: str = ""
+#     location: str = ""
+#     rating: float = 0
 
 @dataclass
 class Portfolio:

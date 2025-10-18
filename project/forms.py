@@ -81,6 +81,6 @@ class InquireryForm(FlaskForm):
 
 class  LoginForm(FlaskForm):
     """Form for login page."""
-    username = StringField("Username", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email()])
     password = PasswordField("Password", validators=[InputRequired()])
     submit = SubmitField("LOGIN")

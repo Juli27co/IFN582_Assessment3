@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 from project.session import add_to_cart
 from project.forms import InquireryForm, LoginForm, VendorProfileForm, AddServiceForm
 from flask import Blueprint, render_template, request, flash, redirect
+from flask_login import login_user
+from project import login_manager
 from project.forms import InquireryForm
 from project.db import (
     get_photographer_service, 
@@ -12,21 +14,41 @@ from project.db import (
     add_inquiry, 
     get_single_type, 
     get_single_addOn,
-    get_clients
+    checkLoginUser,
+    getCurrentUser
 )
 
 bp = Blueprint('main', __name__)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return getCurrentUser(user_id)
+
+#---------test---------
+@bp.route("/register/")
+def register():
+    return render_template("index.html", title="Home Page")
+# ---------------------
 
 @bp.route("/")
 def index():
     return render_template("index.html", title="Home Page")
 
-
-# test
-# @bp.route('/login/')
-# def login():
-#     form = LoginForm()
-#     return render_template('login.html', form=form)
+@bp.route('/login/', methods=["POST", "GET"])
+def login():
+    form = LoginForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            # check if the login account exists
+            user = checkLoginUser(form.email.data, form.password.data)
+            if not user:
+                flash("That username or password is incorrect. Please try again.", "error")
+                return redirect(url_for("main.login"))
+            # if the account is authenticated, save login state to the session
+            login_user(user)
+            return redirect(url_for("main.index"))
+        
+    return render_template('login.html', form=form)
 
 @bp.post("/checkout/")
 def checkout():
