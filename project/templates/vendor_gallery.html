@@ -1,211 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FotoBooking - Vendor Gallery</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <link href="./css/styles.css" rel="stylesheet" />
-  </head>
-  <body>
-    <header>
-      <h1 style="padding: 20px" class="main-header mb-0">FotoBooking</h1>
-    </header>
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
-      <div class="container-fluid">
-        <a class="navbar-brand text-white" href="#">FotoBooking</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link text-light" aria-current="page" href="#"
-                >Newborn</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Weddings</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Pets</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Products</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-light" type="submit">Search</button>
-          </form>
-        </div>
+{% extends "base.html" %}
+{% from "bootstrap5/form.html" import render_form %}
+
+{% block main %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} mt-2" role="alert">
+        {{ message }}
       </div>
-    </nav>
-    <main>
-      <div class="header-bg d-flex justify-content-center align-items-center">
-        <h1 class="text-light"><strong>Kim Becker</strong></h1>
-      </div>
-      <div class="mx-md-5 row p-4 m-auto">
-        <div class="col-md-6 col-lg-8 p-4">
-          <div class="portfolio">
-            <img
-              src="img/pmv-chamara-CeQiQxNNdUM-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/pedro-de-sousa-BAVELu_vO-I-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/bonnie-kittle-MUcxe_wDurE-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/andrew-s-ouo1hbizWwo-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/mariah-krafft-ayc1G5wV3aA-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/natilyn-hicks-photography-abPrOvbLdAw-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/nikita-shirokov-7wjxyiUvt4I-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/alex-lvrs-mTw_GePuRUE-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/betzy-arosemena-NDthB5hzL_E-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/eric-ward-ISg37AI2A-s-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/garrett-jackson-oOnJWBMlb5A-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/chris-CxoEeNkJwUA-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/daniel-korpai-hbTKIbuMmBI-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/hollie-santos-aUtvHsu8Uzk-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/imani-bahati-LxVxPA1LOVM-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/krista-mangulsone-9gz3wfHr65U-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/lumin-1mp7rF7_j2I-unsplash.jpg"
-              alt="Responsive image"
-            />
-            <img
-              src="img/natallia-photo-IGALLPtWpAs-unsplash.jpg"
-              alt="Responsive image"
-            />
-          </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% if page == 'role' %}
+  <h2 class="mb-3">Register Your Account</h2>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    {{ form.clientSubmit(class="btn btn-primary me-2") }}
+    {{ form.photographerSubmit(class="btn btn-primary") }}
+  </form>
+
+{% elif page == 'client' %}
+  <h2 class="mb-3">New Client Registration</h2>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div>
+         <div class="mb-3">
+        {{ form.email.label }} {{ form.email(class="form-control") }}
+        {{ form.password.label }} {{ form.password(class="form-control") }}
+        {{ form.firstName.label }} {{ form.firstName(class="form-control") }}
+        {{ form.lastName.label }} {{ form.lastName(class="form-control") }}
+        {{ form.phone.label }} {{ form.phone(class="form-control") }}
+        {{ form.address.label }} {{ form.address(class="form-control") }}
+        {{ form.preferredPaymentMethod.label }} {{ form.preferredPaymentMethod(class="form-control") }}
         </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="card bg-light p-4 my-3">
-            <div class="card text-center mb-3">
-              <div class="card-body pt-5">
-                <h5 class="card-title">Newborn Photography</h5>
-                <p class="card-text">
-                  Preserve the magic of your baby’s first days with soft, serene
-                  portraits that celebrate new life.
-                </p>
-                <a href="#" class="btn btn-primary">Booking Now</a>
-              </div>
-            </div>
-            <div class="card text-center mb-3">
-              <div class="card-body pt-5">
-                <h5 class="card-title">Wedding Photography</h5>
-                <p class="card-text">
-                  From the first look to the last dance, our photographers turn
-                  your special day into timeless memories.
-                </p>
-                <a href="#" class="btn btn-primary">Booking Now</a>
-              </div>
-            </div>
-            <div class="card text-center mb-3">
-              <div class="card-body pt-5">
-                <h5 class="card-title">Pet Photography</h5>
-                <p class="card-text">
-                  Whether playful or poised, we capture your pet’s personality
-                  in fun, heartwarming portraits.
-                </p>
-                <a href="#" class="btn btn-primary">Booking Now</a>
-              </div>
-            </div>
-            <div class="card text-center mb-3">
-              <div class="card-body pt-5">
-                <h5 class="card-title">Product Photography</h5>
-                <p class="card-text">
-                  High-quality, detail-rich images that showcase your products
-                  and elevate your business presence.
-                </p>
-                <a href="#" class="btn btn-primary">Booking Now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </main>
-    <footer>
-      <p class="text-center">Developed by: Juliana Cortes</p>
-    </footer>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+    </div>
+       
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+
+{% elif page == 'photographer' %}
+  <h2 class="mb-3">New Photographer Registration</h2>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.email.label }} {{ form.email(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.password.label }} {{ form.password(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.firstName.label }} {{ form.firstName(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.lastName.label }} {{ form.lastName(class="form-control") }}
+    </div>
+    <div class="mb-3">
+      {{ form.phone.label }} {{ form.phone(class="form-control") }}
+    </div>   
+    <div class="mb-3">
+      {{ form.location.label }} {{ form.location(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+{% endif %}
+
+
+
+{% endblock %}
+
+
