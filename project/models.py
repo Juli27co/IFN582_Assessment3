@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 from datetime import datetime
 from enum import Enum
+
 
 # for using in the form.available
 class AvailabilityStatus(Enum):
     weekly_only = "Weekdays only"
     weekend_only = "Weekends only"
     short_notice_booking = "Short notice booking"
+
 
 @dataclass
 class Image:
@@ -26,11 +28,13 @@ class ServiceType:
     shortDescription: str
     price: float
 
+
 @dataclass
 class AddOn:
-    id: str 
+    id: str
     addOn: str
     price: float
+
 
 @dataclass
 class Service:
@@ -40,6 +44,7 @@ class Service:
     longDescription: str
     price: float
 
+
 @dataclass
 class Cart_Service:
     service: Service
@@ -48,6 +53,7 @@ class Cart_Service:
     # generate unique identifier
     id: str = field(default_factory=lambda: str(uuid4))
 
+
 @dataclass
 class Cart:
     items: List[Cart_Service] = field(default_factory=lambda: [])
@@ -55,8 +61,10 @@ class Cart:
     def add_item(self, item: Cart_Service):
         self.items.append(item)
 
+
 @dataclass
 class User:
+    role: str
     id: str
     email: str
     password: str
@@ -70,19 +78,6 @@ class Client(User):
     preferredPaymentMethod: str
     address: str
 
-@dataclass
-class Photographer:
-    photographer_id: str
-    email: str
-    password: str
-    phone: str
-    firstName: str
-    lastName: str
-    availability: AvailabilityStatus
-    bioDescription: str = ""
-    location: str = ""
-    rating: float = 0
-
 
 @dataclass
 class Photographer(User):
@@ -90,6 +85,12 @@ class Photographer(User):
     location: str
     availability: str
     rating: float
+    profilePicture: str = "placeholder-image.png"
+
+
+@dataclass
+class Admin(User):
+    pass
 
 
 @dataclass
@@ -97,6 +98,7 @@ class Portfolio:
     portfolio_id: str
     photographer_id: str
     images: list[Image]
+
 
 @dataclass
 class PhotographerService:
@@ -113,10 +115,3 @@ class Inquiry:
     phone: str
     message: str
     createdDate: str
-
-
-
-
-
-
-

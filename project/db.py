@@ -1,5 +1,7 @@
+from hashlib import sha256
 from . import mysql
 from project.models import (
+    Admin,
     Client,
     Service,
     Photographer,
@@ -9,7 +11,6 @@ from project.models import (
     AddOn,
     PhotographerService,
     Inquiry,
-    
 )
 from . import mysql
 
@@ -21,6 +22,7 @@ def get_clients():
     cur.close()
     return [
         Client(
+            "client",
             row["client_id"],
             row["email"],
             row["password"],
@@ -34,11 +36,49 @@ def get_clients():
     ]
 
 
-def get_photographers():
+def get_photographers(filters):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Photographer")
+
+    # Base query - use JOIN if filtering by service_type
+    if filters.get("service_type"):
+        query = """
+            SELECT DISTINCT p.photographer_id, p.email, p.password, p.phone, p.firstName, p.lastName, 
+                   p.bioDescription, p.location, p.availability, p.rating, p.profilePicture
+            FROM Photographer p
+            INNER JOIN Photographer_Service ps ON p.photographer_id = ps.photographer_id
+            INNER JOIN Service s ON ps.service_id = s.service_id
+            WHERE s.name = %s
+        """
+        params = [filters["service_type"]]
+    else:
+        query = "SELECT * FROM Photographer WHERE 1=1"
+        params = []
+
+    # Add location filter
+    if filters.get("location"):
+        if "WHERE" in query and "s.name" in query:
+            query += " AND p.location = %s"
+        else:
+            query += " AND location = %s"
+        params.append(filters["location"])
+
+    # Add availability filter
+    if filters.get("availability"):
+        if "WHERE" in query and "s.name" in query:
+            query += " AND p.availability = %s"
+        else:
+            query += " AND availability = %s"
+        params.append(filters["availability"])
+
+    print(f"Executing query: {query}")
+    print(f"With params: {params}")
+
+    cur.execute(query, params)
     results = cur.fetchall()
     cur.close()
+
+    print(f"Found {len(results)} photographers")
+
     return [
         Photographer(
             row["photographer_id"],
@@ -51,6 +91,7 @@ def get_photographers():
             row["location"],
             row["availability"],
             row["rating"],
+            row["profilePicture"],
         )
         for row in results
     ]
@@ -107,7 +148,7 @@ def get_inquiries():
     ]
 
 
-def check_for_user(username, password):
+def check_for_client(email, password):
     cur = mysql.connection.cursor()
     cur.execute(
         """
@@ -115,52 +156,78 @@ def check_for_user(username, password):
         FROM Client
         WHERE email = %s AND password = %s
     """,
-        (username, password),
+        (email, password),
     )
     row = cur.fetchone()
     cur.close()
     if row:
-        return UserAccount(
-            row["username"],
-            row["user_password"],
+        return Client(
+            "client",
+            row["client_id"],
             row["email"],
-            UserInfo(
-                str(row["user_id"]),
-                row["firstname"],
-                row["surname"],
-                row["email"],
-                row["phone"],
-            ),
+            row["password"],
+            row["phone"],
+            row["firstName"],
+            row["lastName"],
+            "",
+            "",
         )
     return None
 
 
-def is_admin(user_id):
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM admins WHERE user_id = %s", (user_id,))
-    row = cur.fetchone()
-    cur.close()
-    return True if row else False
-
-
-def add_user(form):
+def check_for_photographer(email, password):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        INSERT INTO users (username, user_password, email, firstname, surname, phone)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        SELECT photographer_id, password, email, firstName, lastName, phone, bioDescription, location, availability, rating, profilePicture
+        FROM Photographer
+        WHERE email = %s AND password = %s
     """,
-        (
-            form.username.data,
-            form.password.data,
-            form.email.data,
-            form.firstname.data,
-            form.surname.data,
-            form.phone.data,
-        ),
+        (email, password),
     )
-    mysql.connection.commit()
+    row = cur.fetchone()
     cur.close()
+    if row:
+        return Photographer(
+            "photographer",
+            row["photographer_id"],
+            row["email"],
+            row["password"],
+            row["phone"],
+            row["firstName"],
+            row["lastName"],
+            row["bioDescription"],
+            row["location"],
+            row["availability"],
+            row["rating"],
+            row["profilePicture"],
+        )
+    return None
+
+
+def check_for_admin(email, password):
+    cur = mysql.connection.cursor()
+    cur.execute(
+        """
+        SELECT admin_id, password, email, firstName, lastName, phone
+        FROM Admin
+        WHERE email = %s AND password = %s
+    """,
+        (email, password),
+    )
+    row = cur.fetchone()
+    cur.close()
+    if row:
+        return Admin(
+            "admin",
+            row["admin_id"],
+            row["email"],
+            row["password"],
+            row["phone"],
+            row["firstName"],
+            row["lastName"],
+        )
+    return None
 
 
 # To show item_detail page
@@ -177,7 +244,13 @@ def get_types():
     )
     results = cur.fetchall()
     cur.close()
-    return [ServiceType(row['type_id'],row['type_name'],row['shortDescription'],row['price']) for row in results]    
+    return [
+        ServiceType(
+            row["type_id"], row["type_name"], row["shortDescription"], row["price"]
+        )
+        for row in results
+    ]
+
 
 def get_single_type(typeId):
     cur = mysql.connection.cursor()
@@ -194,7 +267,14 @@ def get_single_type(typeId):
     )
     row = cur.fetchone()
     cur.close()
-    return ServiceType(row['type_id'],row['type_name'],row['shortDescription'],row['price']) if row else None    
+    return (
+        ServiceType(
+            row["type_id"], row["type_name"], row["shortDescription"], row["price"]
+        )
+        if row
+        else None
+    )
+
 
 def get_addOns():
     cur = mysql.connection.cursor()
@@ -210,6 +290,7 @@ def get_addOns():
     cur.close()
     return [AddOn(row["addOn_id"], row["addOn"], row["price"]) for row in results]
 
+
 def get_single_addOn(addonId):
     cur = mysql.connection.cursor()
     cur.execute(
@@ -219,12 +300,12 @@ def get_single_addOn(addonId):
                 price
         FROM    AddOn
         WHERE   addOn_id = %s
-        """, 
-        (addonId,)
+        """,
+        (addonId,),
     )
     row = cur.fetchone()
     cur.close()
-    return AddOn(row['addOn_id'],row['addOn'],row['price']) if row else None
+    return AddOn(row["addOn_id"], row["addOn"], row["price"]) if row else None
 
 
 def get_single_service(serviceId):
@@ -249,7 +330,7 @@ def get_single_service(serviceId):
             row["name"],
             row["shortDescription"],
             row["longDescription"],
-            row["price"]
+            row["price"],
         )
         if row
         else None
@@ -328,7 +409,7 @@ def add_inquiry(form):
     #     newID = "IQ" + "%03d" % (int(lastID[2:]) + 1)
     # else:
     #     newID = "IQ001"
-    
+
     cur.execute(
         """
         INSERT INTO Inquiry (
@@ -345,5 +426,48 @@ def add_inquiry(form):
             form.message.data,
         ),
     )
+    mysql.connection.commit()
+    cur.close()
+
+
+def add_user(form):
+    cur = mysql.connection.cursor()
+
+    hashedPassword = sha256(form.password.data.encode()).hexdigest()
+
+    if form.user_type.data == "client":
+        cur.execute(
+            """
+            INSERT INTO Client (email, password, firstName, lastName, phone, preferredPaymentMethod, address)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """,
+            (
+                form.email.data,
+                hashedPassword,
+                form.firstName.data,
+                form.lastName.data,
+                form.phone.data,
+                "",
+                "",
+            ),
+        )
+    elif form.user_type.data == "photographer":
+        cur.execute(
+            """
+            INSERT INTO Photographer (email, password, firstName, lastName, phone, bioDescription, location, availability, rating)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """,
+            (
+                form.email.data,
+                hashedPassword,
+                form.firstName.data,
+                form.lastName.data,
+                form.phone.data,
+                "",
+                "",
+                "",
+                0,
+            ),
+        )
     mysql.connection.commit()
     cur.close()

@@ -6,6 +6,7 @@ from flask_mysqldb import MySQL
 
 mysql = MySQL()
 
+
 # create a function that creates a web application
 def create_app():
     app = Flask(__name__)
@@ -13,11 +14,11 @@ def create_app():
     app.secret_key = "BetterSecretNeeded123"
 
     # MySQL configurations
-    app.config['MYSQL_HOST']='localhost'
-    app.config['MYSQL_USER']='root'
-    app.config['MYSQL_PASSWORD']=''
-    app.config['MYSQL_DB']='sql12802431'
-    app.config['MYSQL_CURSORCLASS']='DictCursor'
+    app.config["MYSQL_HOST"] = "localhost"
+    app.config["MYSQL_USER"] = "root"
+    app.config["MYSQL_PASSWORD"] = "1234"
+    app.config["MYSQL_DB"] = "sql12802431"
+    app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
     mysql.init_app(app)
 
@@ -25,6 +26,7 @@ def create_app():
 
     # importing modules here to avoid circular references, register blueprints of routes
     from . import views
+
     app.register_blueprint(views.bp)
 
     @app.errorhandler(404)
@@ -37,4 +39,3 @@ def create_app():
         return render_template("500.html")
 
     return app
-

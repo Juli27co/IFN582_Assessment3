@@ -57,6 +57,15 @@
               />
               <button class="btn btn-light" type="submit">Search</button>
             </form>
+            <div class="d-flex ms-2">
+              {% if session.get('logged_in') %}
+                <span class="navbar-text text-light me-2">Welcome, {{ session.get('user').firstName }}!</span>
+                <a href="{{ url_for('main.logout') }}" class="btn btn-outline-light">Logout</a>
+              {% else %}
+                <a href="{{ url_for('main.login') }}" class="btn btn-outline-light me-2">Login</a>
+                <a href="{{ url_for('main.register') }}" class="btn btn-light">Register</a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </nav>
