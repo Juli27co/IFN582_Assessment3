@@ -32,7 +32,8 @@ CREATE TABLE Service
     name VARCHAR(100) NOT NULL,
     shortDescription VARCHAR(100) NULL,
     longDescription VARCHAR(255) NULL,
-    price DECIMAL(10,2) NOT NULL DEFAULT 0.00
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    coverImage VARCHAR(255) NULL
 );
 
 CREATE TABLE Photographer
@@ -44,9 +45,9 @@ CREATE TABLE Photographer
     firstName VARCHAR(20) NOT NULL,
     lastName VARCHAR(20) NOT NULL,
     bioDescription VARCHAR(255) NULL,
-    location VARCHAR(50) NULL,
-    availability ENUM('Weekends','Weekdays','Short notice bookings') DEFAULT 'Weekdays',
-    rating DECIMAL(2,1) NULL,
+    location VARCHAR(50) NOT NULL,
+    availability VARCHAR(50) NULL DEFAULT 'Not set',
+    rating DECIMAL(2,1) NULL DEFAULT 0.0,
     profilePicture VARCHAR(255) NULL
 );
 
@@ -156,11 +157,11 @@ INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymen
 ('natalie_woods@hotmail.com', 'natWoods99', '0499776655', 'Natalie', 'Woods', 'PayPal', '33 Riverbank Rd'),
 ('leo.fernandez@mail.com', 'FernLeo#10', '0422446688', 'Leo', 'Fernandez', 'Credit Card', '88 Queen Ave');
 
-INSERT INTO Service (name, shortDescription, longDescription, price) VALUES
-('Wedding Photography', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00),
-('Pets Photography', 'Professional portrait sessions for pets.', 'Our pets photography sessions are perfect for capturing timeless images of your furry friends in a relaxed setting.', 300.00),
-('Newborn Photography', 'Capture the precious moments of your newborn with professional photography services.', 'We specialize in newborn photography, offering a gentle and personalized experience to preserve the earliest moments of your baby’s life.', 1500.00),
-('Product Photography', 'High-quality product photography to showcase your items.', 'Our product photography service is designed to highlight the features and details of your products, ideal for e-commerce and marketing materials.', 500.00);
+INSERT INTO Service (name, shortDescription, longDescription, price, coverImage) VALUES
+('Wedding Photography', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00, 'drew-coffman-llWjwo200fo-unsplash.jpg'),
+('Pets Photography', 'Professional portrait sessions for pets.', 'Our pets photography sessions are perfect for capturing timeless images of your furry friends in a relaxed setting.', 300.00, 'jamie-street-s9Tf1eBDFqw-unsplash.jpg'),
+('Newborn Photography', 'Capture the precious moments of your newborn with professional photography services.', 'We specialize in newborn photography, offering a gentle and personalized experience to preserve the earliest moments of your baby’s life.', 1500.00, 'janko-ferlic-EpbIXGCrtK0-unsplash.jpg'),
+('Product Photography', 'High-quality product photography to showcase your items.', 'Our product photography service is designed to highlight the features and details of your products, ideal for e-commerce and marketing materials.', 500.00, 'pmv-chamara-CeQiQxNNdUM-unsplash.jpg');
 
 INSERT INTO ServiceType (type_name, shortDescription, price) VALUES
 ('Mini Session', 'Basic session with 5 edited photos.', 0.00),
@@ -169,7 +170,7 @@ INSERT INTO ServiceType (type_name, shortDescription, price) VALUES
 
 INSERT INTO AddOn (addOn, price) VALUES
 ('Extra Edited Photos', 50.00),
-('Printed Album', 100.00);
+('Printed Album', 100.00),
 ('Both : Extra Edited Photos + Printed Album', 150.00);
 
 INSERT INTO Photographer (email, password, phone, firstName, lastName, bioDescription, location, availability, rating, profilePicture) VALUES
@@ -186,9 +187,9 @@ INSERT INTO Photographer (email, password, phone, firstName, lastName, bioDescri
 
 INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
 (1,1),
-(2,2),
-(3,3),
-(4,4),
+(1,2),
+(1,3),
+(1,4),
 (5,1),
 (6,3),
 (7,4),
@@ -213,12 +214,12 @@ INSERT INTO Cart (createdDate, lastUpdated, client_id) VALUES
 INSERT INTO Image (imageSource, image_description, service_id, photographer_id) VALUES
 ('chris-CxoEeNkJwUA-unsplash.jpg','Bride and groom during ceremony',1, 1),
 ('asdrubal-luna-Qxi-boLL4bs-unsplash.jpg','Wedding couple with family',1, 1),
-('jay-wennington-CdK2eYhWfQ0-unsplash1.jpg','Golden retriever portrait',2, 1),
+('jay-wennington-CdK2eYhWfQ0-unsplash.jpg','Golden retriever portrait',2, 1),
 ('andrew-s-ouo1hbizWwo-unsplash.jpg','Cat in a playful pose',2, 1),
 ('garrett-jackson-oOnJWBMlb5A-unsplash.jpg','Newborn baby sleeping peacefully',3, 1),
-('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3, 2),
+('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3, 1),
 ('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
-('himani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4, 2);
+('imani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4, 1);
 
 
 INSERT INTO Cart_Service (service_id, cart_id, type_id, addOn_id) VALUES
@@ -234,5 +235,8 @@ INSERT INTO Cart_Service (service_id, cart_id, type_id, addOn_id) VALUES
 (2,8,2,1),
 (4,9,1,2),
 (3,10,2,1);
+
+  
+
     
  
