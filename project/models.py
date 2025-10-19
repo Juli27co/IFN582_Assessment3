@@ -1,67 +1,60 @@
-from dataclasses import dataclass, field
-from datetime import datetime   
+from dataclasses import dataclass
 from enum import Enum
+from flask_login import UserMixin
 
-# this class is about customer information, which does not related to my path. however, someone may use this class.
-@dataclass
-class Address:
+from dataclasses import dataclass
+
+@dataclass 
+class Client:
     id: str
-    address1: str
-    address2: str
-    location: str
-    state: str
-    zip: str
-
-# for using in the form.available
-
-class AvailabilityStatus(Enum):
-    weekly_only = "Weekdays only"
-    weekend_only = "Weekends only"
-    short_notice_booking = "Short notice booking"
-
-# for using in the service type
-
-class ServiceType(Enum):
-    new_born = "New Born"
-    weddings = "Weddings"
-    pets = "Pets"
-    products = "Products"
-
-
-@dataclass
-class Photographer:
-    Photographer_id: str
     email: str
     password: str
     phone: str
     firstName: str
     lastName: str
-    bioDescription: str = ''
-    location: str = ''
-    availability: AvailabilityStatus
-    rating: float = 0
-
+    preferredPaymentMethod: str
+    address: str
 
 @dataclass
 class Service:
-    service_id: str
+    id: str
     name: str
     shortDescription: str
     longDescription: str
-    price: float
-    type: ServiceType
+    price: float = 0.00
+    coverImage: str = "foobar"
 
 @dataclass
-class Portfolio:
-    portfolio_id: str
-    photographer_id: str
+class Photographer:
+    id: str
+    email: str
+    password: str
+    phone: str
+    firstName: str
+    lastName: str
+    bioDescription: str 
+    location: str
+    availability: str 
+    rating: float = 0.0
+    profilePicture: str = "foobar"
 
+@dataclass
+class Photographer_Service:
+    photographerService_id: str
+    photographer_id: str
+    service_id: str
+    
 @dataclass
 class Image:
-    image_id: str
-    imageSource: str
-    image_description: str = ''
-    service_id: str =''
-    portfolio_id: str = ''
+    id: str
+    service_id: str
+    photographer_id: str
+    imageSource: str = "foobar"
+    imageDescription: str = "foobar"
 
-
+class User(UserMixin):
+    def __init__(self, id, email, role, photographer_id=None):
+        self.id = str(id)
+        self.email = email
+        self.role = role
+        self.photographer_id = photographer_id

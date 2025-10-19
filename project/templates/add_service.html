@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% import 'bootstrap5/form.html' as wtf %}
+{% block main %}
+
+<div class="container mt-5">
+  <h2 class="mb-4">Upload Images for Your Service</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ wtf.render_field(form.name) }}
+    {{ wtf.render_field(form.image) }}
+ <div class="row align-items-center g-2 py-3">
+  <div class="col">
+    <a class="btn btn-light" 
+       href="{{ url_for('main.vendor_management', photographer_id=photographer_id) }}">
+      Back
+    </a>
+  </div>
+  <div class="col text-end">
+    {{ wtf.render_field(form.submit, class_="btn btn-primary") }}
+  </div>
+</div>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+          <p>{{ message }}</p>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+
+  <hr class="my-4">
+  <h4 class="mb-3">Your Images</h4>
+
+  {% if images and images|length > 0 %}
+    <div class="row g-3">
+      {% for img in images %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card h-100">
+            <img
+              src="{{ url_for('static', filename=img['imageSource']) }}"
+              class="card-img-top"
+              alt="{{ img['image_description'] or 'image' }}"
+              style="object-fit: cover; aspect-ratio: 1/1;"
+            >
+            <div class="card-body">
+              <p class="card-text small mb-1">
+                <strong>ID:</strong> {{ img['image_id'] }}
+              </p>
+              <p class="card-text small text-muted">
+                {{ img['image_description'] }}
+              </p>
+
+              <form method="POST"
+                         action="{{ url_for('main.delete_image',
+                         photographer_id=photographer_id,
+                         image_id=img['image_id']) }}"
+                      onsubmit="return confirm('Delete this image?');">
+                          {{ form.csrf_token }}
+                <button button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-secondary mt-3">
+      No images yet. Upload some above.
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}
