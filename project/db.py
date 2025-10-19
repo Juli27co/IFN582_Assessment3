@@ -1,4 +1,4 @@
-from project.models import Photographer, Image, Service, Client
+from project.models import Photographer, Image, Service
 from . import mysql
 
 
