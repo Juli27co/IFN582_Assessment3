@@ -34,8 +34,6 @@ def index():
 
 
 @bp.route('/photographer/<int:photographer_id>', methods = [ 'POST', 'GET'])
-# @login_required
-# @photographer_required
 def vendor_management(photographer_id):
     form = PhotographerEditForm(prefix = 'EditProfile')
 
@@ -74,8 +72,6 @@ def vendor_management(photographer_id):
 
 
 @bp.route("/photographer/add-images/<int:photographer_id>/", methods=["GET", "POST"])
-# @login_required
-# @photographer_required
 def add_images_photographer(photographer_id):
     form = PhotographerAddImage()
 
@@ -102,8 +98,6 @@ def add_images_photographer(photographer_id):
 
 
 @bp.post("/photographer/<int:photographer_id>/images/<int:image_id>/delete")
-# @login_required
-# @photographer_required
 def delete_image(photographer_id, image_id):
     # to delete the images of photographer by photographer_id
     deleted = delete_image_row(image_id, photographer_id)
