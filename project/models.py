@@ -38,11 +38,12 @@ class AddOn:
 
 @dataclass
 class Service:
-    service_id: str
+    id: str
     name: str
     shortDescription: str
     longDescription: str
-    price: float
+    price: float = 0.00
+    coverImage: str = "foobar"
 
 
 @dataclass
@@ -72,12 +73,10 @@ class User:
     firstName: str
     lastName: str
 
-
 @dataclass
 class Client(User):
     preferredPaymentMethod: str
     address: str
-
 
 @dataclass
 class Photographer(User):
@@ -91,13 +90,6 @@ class Photographer(User):
 @dataclass
 class Admin(User):
     pass
-
-
-@dataclass
-class Portfolio:
-    portfolio_id: str
-    photographer_id: str
-    images: list[Image]
 
 
 @dataclass

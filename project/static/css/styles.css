@@ -33,8 +33,19 @@
   margin: .5rem;
 }
 
+/* login page */
+.login-con {
+  width: 800px;
+}
 
-/* For item_details page */
+.login-pic{
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+
+/* item_details page */
 .dropdown-for-type {
   border: 1px solid #dee2e6;
   color: black;

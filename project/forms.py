@@ -83,7 +83,6 @@ class InquireryForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     """Form for login page."""
-
     email = StringField("Email", validators=[InputRequired(), Email()])
     password = PasswordField("Password", validators=[InputRequired()])
     user_type = RadioField(

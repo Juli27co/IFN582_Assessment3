@@ -3,23 +3,23 @@
 {% import 'bootstrap5/form.html' as wtf %}
 
 {% block main %}
-  <main class="container p-4">
+  <main class="container p-4 login-con">
     <div class="card mb-3">
       <div class="row g-0">
-        <div class="col-md-4">
-          <img src="/static/img/alif-ngoylung-jg-6ARMiaPM-unsplash.jpg" class="img-fluid rounded-start">
+        <div class="col-md-5">
+          <img src="/static/img/alif-ngoylung-jg-6ARMiaPM-unsplash.jpg" class="img-fluid rounded-start login-pic">
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
           <div class="card-body">
             <h3 class="card-title">Sign in</h3>
-            <p class="card-text">Hello there! We're happy to see you again. Please login to continue.</p>
-              <form class="" method="POST">
+            <p class="card-text">Hello there! We're happy to see you again.<br>Please login to continue.</p>
+              <form method="POST" class="login-form">
                 {{ form.hidden_tag() }}
                 {{ wtf.render_form(form) }}
               </form>
             <p class="card-text">
               <small class="text-body-secondary">
-                Don't have an account? <a href=#>Register here</a>
+                Don't have an account? <a href="{{ url_for('main.register') }}">Register here</a>
               </small>
             </p>
           </div>
