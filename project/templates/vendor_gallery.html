@@ -1,72 +1,54 @@
-{% extends "base.html" %}
-{% from "bootstrap5/form.html" import render_form %}
+{% extends 'base.html' %}
 
 {% block main %}
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }} mt-2" role="alert">
-        {{ message }}
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
 
-{% if page == 'role' %}
-  <h2 class="mb-3">Register Your Account</h2>
-  <form method="post">
-    {{ form.hidden_tag() }}
-    {{ form.clientSubmit(class="btn btn-primary me-2") }}
-    {{ form.photographerSubmit(class="btn btn-primary") }}
-  </form>
-
-{% elif page == 'client' %}
-  <h2 class="mb-3">New Client Registration</h2>
-  <form method="post">
-    {{ form.hidden_tag() }}
-    <div>
-         <div class="mb-3">
-        {{ form.email.label }} {{ form.email(class="form-control") }}
-        {{ form.password.label }} {{ form.password(class="form-control") }}
-        {{ form.firstName.label }} {{ form.firstName(class="form-control") }}
-        {{ form.lastName.label }} {{ form.lastName(class="form-control") }}
-        {{ form.phone.label }} {{ form.phone(class="form-control") }}
-        {{ form.address.label }} {{ form.address(class="form-control") }}
-        {{ form.preferredPaymentMethod.label }} {{ form.preferredPaymentMethod(class="form-control") }}
+<main>
+    <div class="header-bg d-flex flex-column justify-content-center align-items-center">
+        <h1 class="text-light mb-2"><strong>{{ photographer.firstName }} {{ photographer.lastName }}</strong></h1>
+        <div class="text_color text-start">
+            <p class="mb-2"><strong>Bio:</strong> {{ photographer.bioDescription }}</p>
         </div>
+        <p class="mb-2 text_color"><strong>Location:</strong> {{ photographer.location }}</p>
+        <p class="mb-2 text_color"><strong>Availability:</strong> {{ photographer.availability }}</p>
+        <p class="mb-0 text_color">⭐ <strong>Rating:</strong> {{ photographer.rating }}</p>
+
     </div>
+
+    <div class="mx-md-5 row p-4 m-auto">
+        <div class="col-md-6 col-lg-8 row g-3 justify-content-center">
+            {% for image in images %}
+            <div class="portfolio col-12 col-md-4 col-lg-4 ">
+                <img
+                    src="{{ url_for('static', filename='img/' + image.imageSource) }}"
+                    alt="{{ image.imageDescription }}"/>
+            </div>
+            {% endfor %}
+        </div>
+        
+
+    
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-light p-4 my-3">
+                {% for service in services %}
+                <div class="card  text-center mb-3">   
+                    <div class="card-body pt-4 p-3">
+                        <h5 class="card-title">{{ service.name }}</h5>
+                        <p class="card-text">{{ service.shortDescription }}</p>
+                        <a href="{{ url_for('main.itemDetails', photographer_service_id=service.photographer_service_id) }}"
+                            class="btn btn-primary"> Booking Now </a>
+
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
        
-    {{ form.submit(class="btn btn-primary") }}
-  </form>
-
-{% elif page == 'photographer' %}
-  <h2 class="mb-3">New Photographer Registration</h2>
-  <form method="post">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">
-      {{ form.email.label }} {{ form.email(class="form-control") }}
     </div>
-    <div class="mb-3">
-      {{ form.password.label }} {{ form.password(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.firstName.label }} {{ form.firstName(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.lastName.label }} {{ form.lastName(class="form-control") }}
-    </div>
-    <div class="mb-3">
-      {{ form.phone.label }} {{ form.phone(class="form-control") }}
-    </div>   
-    <div class="mb-3">
-      {{ form.location.label }} {{ form.location(class="form-control") }}
-    </div>
-    {{ form.submit(class="btn btn-primary") }}
-  </form>
-{% endif %}
-
-
-
+        
+</main>
 {% endblock %}
+
 
 
