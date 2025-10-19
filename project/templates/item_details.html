@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block main %}
+  <main class="container p-4">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card">
+          <img
+            src="{{ url_for('static', filename='img/' + images[0].imageSource) }}"
+            class="card-img-top img-fluid rounded"
+          />
+          <div class="card-body">
+            <div class="d-flex gap-2 justify-content-center">
+              {% for image in images[1:5] %}
+              <img
+                src="{{ url_for('static', filename='img/' + image.imageSource) }}"
+                class="img-thumbnail"
+                style="width: 80px; height: 80px; object-fit: cover"
+              />
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-2">{{ service.name }}</h2>
+        <p class="mb-4">
+          {{ service.longDescription }}
+        </p>
+
+        <form 
+          id="product-form-type" 
+          method="POST" 
+          action="{{ url_for('main.selectOption', photographer_service_id=pho_ser_id, type_id = selectedType.id, addOn_id = selectedAddOn.id) }}"
+        >
+          <div class="dropdown mb-3">
+            <label class="form-label">Session Type (Required)</label>
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-for-type" data-bs-toggle="dropdown">
+              {% if selectedType %}
+                {{ selectedType.type }}(+{{"$%.2f"|format(selectedType.price)}}) — {{selectedType.shortDescription}}
+              {% else %}
+                Choose a session
+              {% endif %}
+            </button>
+            <ul class="dropdown-menu">
+              {% for type in types %}
+                <li>
+                  <button  name="form-type" value="{{type.id}}" type="submit" class="dropdown-item">
+                    <a class="dropdown-item">{{type.type}}(+{{"$%.2f"|format(type.price)}}) — {{type.shortDescription}}</a>
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </form>
+
+        <form 
+          id="product-form-addOn" 
+          method="POST" 
+          action="{{ url_for('main.selectOption', photographer_service_id=pho_ser_id, type_id = selectedType.id, addOn_id = selectedAddOn.id) }}"
+        >
+          <div class="mb-3">
+            <label class="form-label">Add-ons (Optional)</label>
+            {% for addOn in addOns %}
+            <div class="form-check container-for-addon d-flex mb-2">
+              <button 
+                name="form-addOn" 
+                value="{{ addOn.id }}" 
+                type="submit" 
+                class="btn btn-primary checkbox-for-addon me-1 {% if selectedAddOn.id == addOn.id %} active {% endif %}" 
+                data-toggle="button" 
+                aria-pressed= "{% if selectedAddOn.id == addOn.id %} true {% else %} false {% endif %}"
+              ><i class="fa fa-check" style="font-size:13px"></i>
+              </button>
+              <label class="form-check-label" for="{{ addOn.id }}">
+                {{ addOn.addOn }}(+{{"$%.2f"|format(addOn.price)}})
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </form>
+
+        <div class="d-flex align-items-end flex-wrap gap-3 mb-3">
+          <div>
+            <div class="service-price">Price</div>
+            <div class="fs-3 fw-semibold">{{"$%.2f"|format(price)}}</div>
+          </div>
+          <div class="ms-auto d-flex align-items-center gap-2">
+            <form 
+              method="POST" 
+              action="{{ url_for('main.adding_to_cart') }}"
+            >
+              <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
+              <input type="hidden" name="serviceId" value={{service.service_id}}>
+              <input type="hidden" name="typeId" value={{selectedType.id}}>
+              <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
+              <button type="submit" class="btn btn-primary btn-lg ">
+                Add to Cart
+              </button>
+            </form>
+            <form
+              method="POST" 
+              action="{{ url_for('main.checkout') }}"
+            >
+              <button type="submit" class="btn btn-primary btn-lg">
+                Checkout
+              </button>
+            </form>
+          </div>
+        </div>
+
+
+        <div class="small text-muted">
+          Free rescheduling within 14 days. Safety and hygiene measures
+          observed.
+        </div>
+        <div class="alert alert-info small mt-4" role="alert">
+          <strong>Have a question?</strong>
+          <h3>Get in touch first</h3>
+          <p>
+            If your having any douts or need any additional information before
+            compliting your order, leave us a message and we'll contact you
+            with the answers.
+          </p>
+          <form class="row g-3" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="col-md-12">
+              {{ wtf.render_field(form.fullName) }}
+            </div>
+            <div class="col-md-6">
+              {{ wtf.render_field(form.email) }}
+            </div>
+            <div class="col-md-6">
+              {{ wtf.render_field(form.phone) }}
+            </div>
+            <div class="col-12">
+              {{ wtf.render_field(form.message) }}
+            </div>
+              {{ wtf.render_field(form.submit) }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

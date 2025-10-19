@@ -1,0 +1,111 @@
+{% extends 'base.html' %} {% block main %}
+<div class="bg-light row">
+  <div
+    class="col-md-6 d-flex flex-column justify-content-center align-items-center py-5"
+  >
+    <h1>Welcome</h1>
+    <h4>Capture. Connect. Create</h4>
+    <p style="text-align: justify; padding: 25px">
+      FotoBooking connects you with talented photographers ready to capture your
+      special moments. Whether you need a newborn session, a wedding
+      storyteller, pet portraits, or product photography, FotoBooking makes it
+      easy to explore portfolios, compare styles, filter by price and
+      availability, and book the perfect photographer, all in one place.
+    </p>
+  </div>
+  <div class="col">
+    <img
+      class="p-4 img-fluid rounded"
+      src="/static/img/home-page-welcome.jpg"
+      alt="Responsive image"
+    />
+  </div>
+</div>
+<div class="mx-md-5 row p-4 m-auto">
+  <div class="col-md-6 col-lg-4 card p-4">
+    <form method="GET">
+      {{ form.hidden_tag() }}
+      <div class="form-group mb-3">
+        <h4>{{ form.service_type.label.text }}</h4>
+        {% for subfield in form.service_type %}
+        <div class="form-check">
+          {{ subfield(class="form-check-input") }} {{
+          subfield.label(class="form-check-label") }}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="form-group mb-3">
+        <h4>{{ form.availability.label.text }}</h4>
+        {% for subfield in form.availability %}
+        <div class="form-check">
+          {{ subfield(class="form-check-input") }} {{
+          subfield.label(class="form-check-label") }}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="form-group mb-3">
+        <h4>{{ form.location.label.text }}</h4>
+        {% for subfield in form.location %}
+        <div class="form-check">
+          {{ subfield(class="form-check-input") }} {{
+          subfield.label(class="form-check-label") }}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="form-group mb-3">
+        <h4>Ratings</h4>
+        <label for="rating" class="form-label">0 to 5 stars</label>
+        <input type="range" class="form-range" min="0" max="5" id="rating" />
+      </div>
+      <br />
+      <div class="d-flex justify-content-between">
+        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
+          Clear Filters
+        </a>
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </form>
+  </div>
+  <div class="col-md-6 col-lg-8">
+    <div class="home-photographers container">
+      <div class="d-flex flex-wrap p-4">
+        {% for photographer in photographers %}
+        <div class="card">
+          <img
+            src="{% if photographer.profilePicture %}{{ url_for('static', filename='img/' + photographer.profilePicture) }}{% else %}{{ url_for('static', filename='img/placeholder-image.png') }}{% endif %}"
+            class="card-img-top"
+            alt="photographer-image"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ photographer.firstName }} {{ photographer.lastName }}
+            </h5>
+            <p style="padding: 5px" class="card-text">
+              {{ photographer.bioDescription }}
+            </p>
+            <p class="card-text">
+              <small class="text-muted">📍 {{ photographer.location }}</small>
+            </p>
+            <p class="card-text">
+              <small class="text-muted"
+                >⭐ Rating: {{ photographer.rating }}/5</small
+              >
+            </p>
+            <p class="card-text">
+              <small class="text-muted"
+                >📅 {{ photographer.availability }}</small
+              >
+            </p>
+            <a
+              href="/vendor_gallery/{{ photographer.id }}"
+              class="btn btn-primary"
+              >View Portfolio</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

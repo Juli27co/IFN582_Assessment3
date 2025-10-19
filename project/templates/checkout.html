@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FotoBooking - Checkout</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <link href="./css/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <h1 style="padding: 20px" class="main-header mb-0">FotoBooking</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
+      <div class="container-fluid">
+        <a class="navbar-brand text-white" href="#">FotoBooking</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link text-light" aria-current="page" href="#"
+                >Newborn</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#">Weddings</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#">Pets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#">Products</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-light" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <main class="row p-5 bg-light">
+      <div class="col-7">
+        <div class="card">
+          <h1 class="ms-4 mt-4">Personal Information</h1>
+          <form class="row g-3 p-4">
+            <div class="col-md-12">
+              <label for="inputName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="inputName" />
+            </div>
+            <div class="col-md-6">
+              <label for="inputEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="inputEmail" />
+            </div>
+            <div class="col-md-6">
+              <label for="inputPhone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="inputPhone" />
+            </div>
+            <div class="col-12">
+              <label for="inputAddress" class="form-label">Address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputAddress"
+                placeholder="1234 Main St"
+              />
+            </div>
+            <div class="col-12">
+              <label for="inputAddress2" class="form-label">Address 2</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputAddress2"
+                placeholder="Apartment, studio, or floor"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="inputCity" class="form-label">City</label>
+              <input type="text" class="form-control" id="inputCity" />
+            </div>
+            <div class="col-md-4">
+              <label for="inputState" class="form-label">State</label>
+              <select id="inputState" class="form-select">
+                <option selected>Choose...</option>
+                <option>NSW</option>
+                <option>VIC</option>
+                <option>QLD</option>
+                <option>SA</option>
+                <option>WA</option>
+                <option>TAS</option>
+                <option>ACT</option>
+                <option>NT</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="inputZip" class="form-label">Zip</label>
+              <input type="text" class="form-control" id="inputZip" />
+            </div>
+            <div class="col-12 pt-4 border-top">
+              <label for="vendorBio" class="form-label">
+                Message to the Photographer (optional)
+              </label>
+              <textarea class="form-control" id="vendorBio" rows="5">
+              </textarea>
+            </div>
+            <div class="col-12 pt-4 border-top">
+              <h4>Select a payment method</h4>
+              <div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radioDefault"
+                    id="radioDefault1"
+                  />
+                  <label class="form-check-label" for="radioDefault1">
+                    Credit Card
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radioDefault"
+                    id="radioDefault2"
+                    checked
+                  />
+                  <label class="form-check-label" for="radioDefault2">
+                    Cash
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">
+                Submit Order
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-5">
+        <div class="card p-4">
+          <h1>Order Summary</h1>
+          <div class="container mt-5">
+            <h3>Selected Services</h3>
+            <p>Thanks for trusting FotoBooking</p>
+            <div class="border-top border-bottom p-4 row">
+              <div class="col-4">
+                <img
+                  width="100%"
+                  src="./img/bonnie-kittle-MUcxe_wDurE-unsplash.jpg"
+                />
+              </div>
+              <div class="col-7">
+                <h5>Pet Photo Studio</h5>
+                <p>Pepito Perez</p>
+                <p>Unit cost: <strong>$500.05</strong></p>
+              </div>
+              <div class="col-1 d-flex align-items-center">
+                <p><strong>X</strong></p>
+              </div>
+            </div>
+            <div class="border-top border-bottom p-4 row">
+              <div class="col-4">
+                <img
+                  width="100%"
+                  src="./img/garrett-jackson-oOnJWBMlb5A-unsplash.jpg"
+                />
+              </div>
+              <div class="col-7">
+                <h5>Newborn Photo Studio</h5>
+                <p>Hernesto Perez</p>
+                <p>Unit cost: <strong>$300.05</strong></p>
+              </div>
+              <div class="col-1 d-flex align-items-center">
+                <p><strong>X</strong></p>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end py-2">
+              <p style="font-size: 1.3rem">
+                Total cost: <strong>$800.10</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p class="text-center">Developed by: Juliana Cortes</p>
+    </footer>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
