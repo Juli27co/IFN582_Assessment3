@@ -5,10 +5,13 @@
 {% block main %}
   <main class="container p-4">
     <div class="row g-4">
+      <!-- left panel  -->
       <div class="col-md-6">
+        <!-- showing service image and portpholio  -->
         <div class="card">
           <img
             src="{{ url_for('static', filename='img/' + service.coverImage) }}"
+            alt="Service Image"
             class="card-img-top img-fluid rounded"
           />
           <div class="card-body">
@@ -16,6 +19,7 @@
               {% for image in images %}
               <img
                 src="{{ url_for('static', filename='img/' + image.imageSource) }}"
+                alt="Portpholio Image {{ loop.index }}"
                 class="img-thumbnail"
                 style="width: 80px; height: 80px; object-fit: cover"
               />
@@ -24,11 +28,52 @@
           </div>
         </div>
       </div>
+      <!-- right panel  -->
       <div class="col-md-6">
+        <!-- showing info of service  -->
         <h2 class="mb-2">{{ service.name }}</h2>
         <p class="mb-4">
           {{ service.longDescription }}
         </p>
+        <!-- showing info of photographer  -->
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <img
+            src="{% if photographer.profilePicture %}{{ url_for('static', filename='img/' ~ photographer.profilePicture) }}{% else %}{{ url_for('static', filename='img/placeholder-image.png') }}{% endif %}"
+            alt="Profile photo"
+            class="rounded-circle border flex-shrink-0"
+            style="width:150px;height:150px;object-fit:cover;"
+          >
+          <div class="flex-grow-1">
+            <h2><span id="profileName" class="display-6">{{ photographer.firstName }} {{ photographer.lastName }}</span></h2>
+          </div>
+        </div>
+        <!-- showing info of item  -->
+        <label class="form-label-item mb-3">Photoshoot Schedule Availability</label>
+        <div class="item-details-info">
+          <p class="m-0"><b> {{ photographer.availability }} </b></p>
+          <p class="small order-guide">*Once your order is placed, our team will contact you to finalise the schedule and process the payment.</p>
+        </div>
+          <!-- <form 
+          id="product-form-schedule" 
+          method="POST" 
+          action="#"
+        > -->
+          <!-- <div class="dropdown mb-3">
+            <label class="form-label">Preferred photoshoot schedule (Required)</label>
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-for-schedule" data-bs-toggle="dropdown">
+                Choose a preferred schedule
+            </button>
+            <ul class="dropdown-menu">
+              {% for availability in photographer.availability %}
+                <li>
+                  <button  name="form-schedule" value="" type="submit" class="dropdown-item">
+                    <a class="dropdown-item">{{ photographer.availability }}</a>
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          </div> -->
+        <!-- </form> -->
 
         <form 
           id="product-form-type" 
@@ -36,7 +81,7 @@
           action="{{ url_for('main.selectOption', photographer_service_id=pho_ser_id, type_id = selectedType.id, addOn_id = selectedAddOn.id) }}"
         >
           <div class="dropdown mb-3">
-            <label class="form-label">Session Type (Required)</label>
+            <label class="form-label-item">Session Type (Required)</label>
             <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-for-type" data-bs-toggle="dropdown">
               {% if selectedType %}
                 {{ selectedType.type }}(+{{"$%.2f"|format(selectedType.price)}}) — {{selectedType.shortDescription}}
@@ -62,7 +107,7 @@
           action="{{ url_for('main.selectOption', photographer_service_id=pho_ser_id, type_id = selectedType.id, addOn_id = selectedAddOn.id) }}"
         >
           <div class="mb-3">
-            <label class="form-label">Add-ons (Optional)</label>
+            <label class="form-label-item">Add-ons (Optional)</label>
             {% for addOn in addOns %}
             <div class="form-check container-for-addon d-flex mb-2">
               <button 
@@ -93,6 +138,7 @@
               action="{{ url_for('main.adding_to_cart') }}"
             >
               <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
+              <input type="hidden" name="photographer_id" value={{photographer.id}}>
               <input type="hidden" name="serviceId" value={{service.id}}>
               <input type="hidden" name="typeId" value={{selectedType.id}}>
               <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
@@ -111,7 +157,7 @@
           </div>
         </div>
 
-
+        <!-- showing inquiry form  -->
         <div class="small text-muted">
           Free rescheduling within 14 days. Safety and hygiene measures
           observed.

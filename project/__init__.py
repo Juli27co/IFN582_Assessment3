@@ -22,7 +22,7 @@ def create_app():
 
     # MySQL configurations
     app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = 'Smbrella5991'
+    app.config['MYSQL_PASSWORD'] = 'pass'
     app.config['MYSQL_DB'] = 'sql12802431'
     app.config['MYSQL_HOST'] = 'localhost'
     app.config['MYSQL_CURSORCLASS'] = 'DictCursor'

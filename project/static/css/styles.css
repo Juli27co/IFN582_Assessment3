@@ -71,6 +71,14 @@
   height: 25px;
 }
 
+.item-details-info {
+  margin-left: 30px;
+}
+
+.order-guide {
+  width: 90%;
+}
+
 /* to make the images in index page got the same size */
 .img-fit {
   width: 100%;

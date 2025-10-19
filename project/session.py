@@ -1,15 +1,16 @@
-from project.db import get_single_service, get_single_type, get_single_addOn
+from project.db import get_single_service, get_single_type, get_single_addOn, get_photographer
 from project.models import Cart, Cart_Service
 from flask import session
 
 
-def add_to_cart(serviceId, typeId, addOnId):
+def add_to_cart(serviceId, pho_id, typeId, addOnId):
     # get current session data
     cart = get_cart()
     # create a new data (append a new item to the list in the cart)
     cart.add_item(
         Cart_Service(
             service = get_single_service(serviceId),
+            photographer = get_photographer(pho_id),
             type = get_single_type(typeId),
             addon = get_single_addOn(addOnId)
         )
@@ -24,16 +25,18 @@ def get_cart():
     if isinstance(cart_data, dict):
         for item in cart_data.get("items", []):
             # Search each items from DB 
-            serviceSearched = get_single_service(item["service"]["id"])
-            typeSearched = get_single_type(item["type"]["id"])
-            addonSearched = get_single_addOn(item["addon"]["id"])
+            serviceInCurrentSession = get_single_service(item["service"]["id"])
+            photographerInCurrentSession = get_photographer(item["photographer"]["id"])
+            typeInCurrentSession = get_single_type(item["type"]["id"])
+            addonInCurrentSession = get_single_addOn(item["addon"]["id"])
             # Add the results into cart item
-            if serviceSearched and typeSearched and addonSearched:
+            if serviceInCurrentSession and photographerInCurrentSession:
                 cart.add_item(Cart_Service(
                     id = str(item["id"]),
-                    service = serviceSearched,
-                    type = typeSearched,
-                    addon = addonSearched
+                    service = serviceInCurrentSession,
+                    photographer = photographerInCurrentSession,
+                    type = typeInCurrentSession,
+                    addon = addonInCurrentSession
                 ))
     return cart
 
@@ -44,6 +47,9 @@ def _save_cart_to_session(cart):
                 "id": item.id,
                 "service": {
                     "id": item.service.id
+                },
+                "photographer": {
+                    "id": item.photographer.id
                 },
                 "type": {
                     "id": item.type.id

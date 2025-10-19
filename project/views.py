@@ -197,6 +197,7 @@ def checkout():
 def adding_to_cart():
     # get item information from request
     phSerId = request.form.get("photographer_service_id")
+    pho_id = request.form.get("photographer_id")
     serviceId = request.form.get("serviceId")
     typeId = request.form.get("typeId")
     addOnId = request.form.get("addOnId")
@@ -209,7 +210,7 @@ def adding_to_cart():
     if addOnId == "":
         addOnId = "None"
 
-    add_to_cart(serviceId, typeId, addOnId)
+    add_to_cart(serviceId, pho_id, typeId, addOnId)
     flash("Your items have been added to your cart!")
     return redirect(url_for("main.itemDetails", photographer_service_id=phSerId))
 
@@ -221,6 +222,7 @@ def itemDetails(photographer_service_id):
     ph_ser = get_photographer_service(photographer_service_id)
     images_by_ph_ser = get_images_by_photographer_service(ph_ser)
     # get necessary information to show titles, descriptions and lists
+    photographer = get_photographer(ph_ser.photographer_id)
     service = get_single_service(ph_ser.service_id)
     types = get_types()
     addOns = get_addOns()
@@ -256,6 +258,7 @@ def itemDetails(photographer_service_id):
         "item_details.html",
         pho_ser_id=photographer_service_id,
         images=images_by_ph_ser,
+        photographer=photographer,
         service=service,
         types=types,
         selectedType=selectedType,

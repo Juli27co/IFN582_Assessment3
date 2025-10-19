@@ -45,24 +45,6 @@ class Service:
     price: float = 0.00
     coverImage: str = "foobar"
 
-
-@dataclass
-class Cart_Service:
-    service: Service
-    type: ServiceType
-    addon: AddOn
-    # generate unique identifier
-    id: str = field(default_factory=lambda: str(uuid4))
-
-
-@dataclass
-class Cart:
-    items: List[Cart_Service] = field(default_factory=lambda: [])
-
-    def add_item(self, item: Cart_Service):
-        self.items.append(item)
-
-
 @dataclass
 class User:
     role: str
@@ -90,6 +72,23 @@ class Photographer(User):
 @dataclass
 class Admin(User):
     pass
+
+@dataclass
+class Cart_Service:
+    service: Service
+    photographer: Photographer
+    type: ServiceType
+    addon: AddOn
+    # generate unique identifier
+    id: str = field(default_factory=lambda: str(uuid4))
+
+
+@dataclass
+class Cart:
+    items: List[Cart_Service] = field(default_factory=lambda: [])
+
+    def add_item(self, item: Cart_Service):
+        self.items.append(item)
 
 
 @dataclass
