@@ -43,7 +43,7 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
           <div class="card h-100">
             <img
-              src="{{ url_for('static', filename=img['imageSource']) }}"
+              src="{{ url_for('static', filename='img/' ~ img['imageSource']) }}"
               class="card-img-top"
               alt="{{ img['image_description'] or 'image' }}"
               style="object-fit: cover; aspect-ratio: 1/1;"
@@ -53,7 +53,7 @@
                 <strong>ID:</strong> {{ img['image_id'] }}
               </p>
               <p class="card-text small text-muted">
-                {{ img['image_description'] }}
+                {{ img['image_description'] or "No description" }}
               </p>
 
               <form method="POST"
@@ -61,7 +61,6 @@
                          photographer_id=photographer_id,
                          image_id=img['image_id']) }}"
                       onsubmit="return confirm('Delete this image?');">
-                          {{ form.csrf_token }}
                 <button button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
               </form>
             </div>

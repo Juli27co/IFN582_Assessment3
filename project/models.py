@@ -1,19 +1,40 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List, Optional
+from uuid import uuid4
+from datetime import datetime
 from enum import Enum
-from flask_login import UserMixin
 
-from dataclasses import dataclass
 
-@dataclass 
-class Client:
+# for using in the form.available
+class AvailabilityStatus(Enum):
+    weekly_only = "Weekdays only"
+    weekend_only = "Weekends only"
+    short_notice_booking = "Short notice booking"
+
+
+@dataclass
+class Image:
+    image_id: str
+    imageSource: str
+    description: str
+    serviceId: str
+    portpholioId: str
+
+
+@dataclass
+class ServiceType:
     id: str
-    email: str
-    password: str
-    phone: str
-    firstName: str
-    lastName: str
-    preferredPaymentMethod: str
-    address: str
+    type: str
+    shortDescription: str
+    price: float
+
+
+@dataclass
+class AddOn:
+    id: str
+    addOn: str
+    price: float
+
 
 @dataclass
 class Service:
@@ -24,37 +45,65 @@ class Service:
     price: float = 0.00
     coverImage: str = "foobar"
 
+
 @dataclass
-class Photographer:
+class Cart_Service:
+    service: Service
+    type: ServiceType
+    addon: AddOn
+    # generate unique identifier
+    id: str = field(default_factory=lambda: str(uuid4))
+
+
+@dataclass
+class Cart:
+    items: List[Cart_Service] = field(default_factory=lambda: [])
+
+    def add_item(self, item: Cart_Service):
+        self.items.append(item)
+
+
+@dataclass
+class User:
+    role: str
     id: str
     email: str
     password: str
     phone: str
     firstName: str
     lastName: str
-    bioDescription: str 
+
+@dataclass
+class Client(User):
+    preferredPaymentMethod: str
+    address: str
+
+@dataclass
+class Photographer(User):
+    bioDescription: str
     location: str
-    availability: str 
-    rating: float = 0.0
-    profilePicture: str = "foobar"
+    availability: str
+    rating: float
+    profilePicture: str = "placeholder-image.png"
+
 
 @dataclass
-class Photographer_Service:
-    photographerService_id: str
-    photographer_id: str
-    service_id: str
-    
+class Admin(User):
+    pass
+
+
 @dataclass
-class Image:
+class PhotographerService:
     id: str
-    service_id: str
     photographer_id: str
-    imageSource: str = "foobar"
-    imageDescription: str = "foobar"
+    service_id: str
 
-class User(UserMixin):
-    def __init__(self, id, email, role, photographer_id=None):
-        self.id = str(id)
-        self.email = email
-        self.role = role
-        self.photographer_id = photographer_id
+
+@dataclass
+class Inquiry:
+    inquiry_id: int
+    fullName: str
+    email: str
+    phone: str
+    message: str
+    createdDate: str

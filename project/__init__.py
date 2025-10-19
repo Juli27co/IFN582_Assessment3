@@ -1,5 +1,6 @@
-#import flask - from package import class
+# import flask - from package import class
 from flask import Flask, render_template
+from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap5
 from flask_mysqldb import MySQL
 from uuid import uuid4

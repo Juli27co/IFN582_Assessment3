@@ -33,4 +33,60 @@
   margin: .5rem;
 }
 
+/* login page */
+.login-con {
+  width: 800px;
+}
+
+.login-pic{
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+
+/* item_details page */
+.dropdown-for-type {
+  border: 1px solid #dee2e6;
+  color: black;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container-for-addon{
+  width: 100%;
+  height: fit-content;
+}
+
+.checkbox-for-addon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dee2e6;
+  border-radius: 100%;
+  background-color: white;
+  width: 25px;
+  height: 25px;
+}
+
+/* to make the images in index page got the same size */
+.img-fit {
+  width: 100%;
+  height: 220px;        
+  object-fit: cover;    
+}
+
+.portfolio-fixed{
+  width: 100%;
+  height: 280px;      
+  border-radius: 10px;
+}
+.portfolio-fixed img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   
+  display: block;
+}
 
