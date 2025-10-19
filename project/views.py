@@ -9,11 +9,11 @@ from .forms import RoleForRegistration, ClientRegistrationForm, PhotographerRegi
 
 bp = Blueprint('main', __name__)
 
-@bp.route('/vendor/<int:photographerid>/')
-def vendor(photographerid):
-    photographer = get_photographer(photographerid)
-    images = get_images_for_photographer(photographerid)
-    services = get_services_for_photographer(photographerid)
+@bp.route("/vendor_gallery/<photographer_id>/")
+def vendor(photographer_id):
+    photographer = get_photographer(photographer_id)
+    images = get_images_for_photographer(photographer_id)
+    services = get_services_for_photographer(photographer_id)
     return render_template('vendor_gallery.html', photographer = photographer, images = images, services = services)
 
 
@@ -60,3 +60,4 @@ def register_photographer():
             return redirect(url_for('main.register_role'))
 
     return render_template('register.html', page='photographer', form=form)
+
