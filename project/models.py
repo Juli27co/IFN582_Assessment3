@@ -81,7 +81,8 @@ class Cart_Service:
     type: ServiceType
     addon: AddOn
     # generate unique identifier
-    id: str = field(default_factory=lambda: str(uuid4))
+    id: str = field(default_factory=lambda: str(uuid4()))
+    subtotal: float = 0.00
 
 
 @dataclass
@@ -91,6 +92,49 @@ class Cart:
     def add_item(self, item: Cart_Service):
         self.items.append(item)
 
+    def get_item(self, item_id: str):
+        for item in self.items:
+            if item.id == item_id:
+                return item
+        return None
+
+    def remove_cart_item(self, item_id: str):
+        self.items = [item for item in self.items if item.id != item_id]
+
+    def total_cost(self):
+        return sum( float(item.subtotal) for item in self.items)
+
+@dataclass 
+class Orders:
+    id: str
+    createdDate: datetime
+    lastUpdated: datetime
+    client_id: str
+    address: str
+
+@dataclass
+class OrderService:
+    id: str
+    order_id: str
+    service_id: str
+    type_id: str
+    addOn_id: str 
+    photographer_id: str
+    subtotal: float = 0.00
+
+class PaymentStatus(Enum):
+    PENDING = 'Pending'
+    CONFIRMED = 'Confirmed'
+    CANCELLED = 'Cancelled'
+
+
+@dataclass
+class Payment:
+    id: str
+    order_id: str
+    payment_method: str
+    payment_status: PaymentStatus
+    total_price: float = 0.00
 
 @dataclass
 class PhotographerService:

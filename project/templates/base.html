@@ -103,7 +103,13 @@
                       >
                     </li>
                     {% if session.get('userType') == 'admin' %}
-                    <li><a class="dropdown-item" href="#">Admin Panel</a></li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="{{url_for('main.admin_management')}}"
+                        >Admin Panel</a
+                      >
+                    </li>
                     {% endif %}
                   </ul>
                 </li>

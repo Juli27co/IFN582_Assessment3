@@ -28,7 +28,7 @@ CREATE TABLE Client
 CREATE TABLE Service
 (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
     shortDescription VARCHAR(100) NULL,
     longDescription VARCHAR(255) NULL,
     price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -234,7 +234,6 @@ INSERT INTO Image (imageSource, image_description, service_id, photographer_id) 
 ('andrew-s-ouo1hbizWwo-unsplash.jpg','Cat in a playful pose',2, 1),
 ('garrett-jackson-oOnJWBMlb5A-unsplash.jpg','Newborn baby sleeping peacefully',3, 1),
 ('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3, 1),
-('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
 ('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
 ('imani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4, 1);
 
