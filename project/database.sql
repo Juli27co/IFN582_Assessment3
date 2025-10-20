@@ -74,7 +74,7 @@ CREATE TABLE Image
     image_description VARCHAR(255),
     service_id INT,
     photographer_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE,
     FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
 );
 
@@ -84,7 +84,7 @@ CREATE TABLE Photographer_Service
     photographer_id INT,
     service_id INT,
     FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id),
-    FOREIGN KEY (service_id) REFERENCES Service(service_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Cart
@@ -103,10 +103,10 @@ CREATE TABLE Cart_Service
     cart_id INT,
     type_id INT,
     addOn_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-    FOREIGN KEY (cart_id) REFERENCES Cart(cart_id),
-    FOREIGN KEY (type_id) REFERENCES ServiceType(type_id),
-    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE,
+    FOREIGN KEY (cart_id) REFERENCES Cart(cart_id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES ServiceType(type_id) ON DELETE CASCADE,
+    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Orders
@@ -127,8 +127,8 @@ CREATE TABLE Order_Service
     orderService_id INT AUTO_INCREMENT PRIMARY KEY,
     service_id INT,
     order_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE RESTRICT,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Inquiry
