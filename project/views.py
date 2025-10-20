@@ -1,7 +1,7 @@
 # views.py
 from flask import Blueprint, render_template, request, flash, redirect, current_app, url_for
-from .forms import PhotographerEditForm, PhotographerAddImage
-from .db import get_photographer, add_or_update_photographer, get_photographer_management, get_services_for_photographer
+from .forms import PhotographerEditForm, PhotographerAddImage, AddServiceForm
+from .db import get_photographer, add_or_update_photographer, get_photographer_management, get_services_for_photographer, insert_service
 from .db import get_all_services, insert_image, ensure_photographer_service, get_images_for_photographer, delete_image_row
 import os
 from werkzeug.utils import secure_filename
@@ -56,7 +56,8 @@ def save_image(file_storage):
 
 
 
-@bp.route('/photographer/<int:photographer_id>', methods = [ 'POST', 'GET'])
+@bp.route('/vendor/<int:photographer_id>', methods = [ 'POST', 'GET'])
+@only_photographers
 def vendor_management(photographer_id):
     form = PhotographerEditForm(prefix = 'EditProfile')
 
@@ -79,14 +80,14 @@ def vendor_management(photographer_id):
         if form.profilePicture.data:
             image_filename = save_image(form.profilePicture.data)
         
-        saved_id = add_or_update_photographer(
-            form, photographer_id=photographer_id, image_filename=image_filename
-        )
+        saved_id = add_or_update_photographer(form, photographer_id=photographer_id, image_filename=image_filename)
         flash("Your changes completed!!", 'success')
         return redirect(url_for('main.vendor_management', photographer_id=saved_id))
 
     row = get_photographer_management(photographer_id)
-    vendor_name = bio = profile_image = None
+    vendor_name = None
+    bio = None
+    profile_image = None
     if row:
         vendor_name = f"{row['firstName']} {row['lastName']}".strip()
         bio = row['bioDescription']
@@ -98,7 +99,24 @@ def vendor_management(photographer_id):
                            profile_image=profile_image, bio=bio,
                            photographer_id=photographer_id)
 
-@bp.route("/photographer/add-images/<int:photographer_id>/", methods=["GET", "POST"])
+
+@bp.route('/vendor/management/', methods=['GET'])
+@only_photographers
+def vendor_management_check():
+    if session.get('userType') != 'photographer':
+        flash('Please log in as a photographer.', 'error')
+        return redirect(url_for('main.login'))
+
+    vendor = session.get('photographer_id')
+    if not vendor:
+        flash('Photographer ID missing.', 'error')
+        return redirect(url_for('main.login'))
+
+    return redirect(url_for('main.vendor_management', photographer_id=vendor))
+
+
+@bp.route("/vendor/add-images/<int:photographer_id>/", methods=["GET", "POST"])
+@only_photographers
 def add_images_photographer(photographer_id):
     form = PhotographerAddImage()
 
@@ -125,7 +143,8 @@ def add_images_photographer(photographer_id):
                            services=services, images=images)
 
 
-@bp.post("/photographer/<int:photographer_id>/images/<int:image_id>/delete")
+@bp.post("/vendor/<int:photographer_id>/images/<int:image_id>/delete")
+@only_photographers
 def delete_image(photographer_id, image_id):
     # to delete the images of photographer by photographer_id
     deleted = delete_image_row(image_id, photographer_id)
@@ -306,12 +325,13 @@ def login():
         if form.validate_on_submit():
             email = form.email.data
             password = sha256(form.password.data.encode()).hexdigest()
+
             if form.user_type.data == "client":
                 user = check_for_client(email, password)
                 userType = "client"
             elif form.user_type.data == "photographer":
                 user = check_for_photographer(email, password)
-                userType = "vendor"
+                userType = "photographer"
             elif form.user_type.data == "admin":
                 user = check_for_admin(email, password)
                 userType = "admin"
@@ -322,6 +342,8 @@ def login():
             session["user"] = user
             session["userType"] = userType
             session["logged_in"] = True
+            if userType == "photographer":
+                session["photographer_id"] = int(user.id)
             flash("Login successful!")
             return redirect(url_for("main.index"))
     return render_template("login.html", form=form)
@@ -354,3 +376,26 @@ def vendor(photographer_id):
     images = get_images_for_photographer(photographer_id)
     services = get_services_for_photographer(photographer_id)
     return render_template('vendor_gallery.html', photographer = photographer, images = images, services = services)
+
+
+
+@bp.route('/manage/add-service/', methods=['GET', 'POST'])
+def add_new_service():
+    form = AddServiceForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        name  = form.serviceName.data
+        short = form.serviceShortDescription.data
+        long  = form.serviceLongDescription.data
+        price = float(form.servicePrice.data)
+
+        coverImage = None
+        file = form.serviceCoverPicture.data
+        if file:
+            coverImage = save_image(file)
+
+        insert_service(name, short, long, price, coverImage)
+        flash("Service added!", "success")
+        return redirect(url_for('main.add_new_service'))
+
+    return render_template('admin_manage.html', form=form)

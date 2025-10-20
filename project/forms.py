@@ -79,28 +79,14 @@ class VendorProfileForm(FlaskForm):
     submit = SubmitField("Save Changes")
 
 
-# vendor add their servcies
 class AddServiceForm(FlaskForm):
-    serviceName = SelectField(
-        "Service Name :",
-        choices=[
-            ("Newborn Photography", "Newborn Photography"),
-            ("Wedding Photography", "Wedding Photography"),
-            ("Pets Photography", "Pets Photography"),
-            ("Product Photography", "Product Photography"),
-        ],
-        validators=[InputRequired()],
-    )
-    serviceShortDescription = StringField(
-        "Short Description :", validators=[InputRequired()]
-    )
-    serviceLongDescription = TextAreaField("Long Description :", render_kw={"rows": 3})
-    servicePrice = DecimalField("Price :", validators=[InputRequired()])
-    serviceImage = MultipleFileField(
-        "Portfolio / Service Images :",
-        validators=[FileAllowed(["jpg", "jpeg", "png", "gif", "webp"], "Images only!")],
-    )
-    serviceSubmit = SubmitField("Add Service!")
+    serviceName = StringField("Service Name :",validators=[InputRequired()],
+                              render_kw={"placeholder": " e.g. Drone Photography"})
+    serviceShortDescription = StringField("Short Description :",validators =[InputRequired(), Length(min=3, max=100)])
+    serviceLongDescription = TextAreaField("Long Description :",render_kw={"rows": 3}, validators=[Length(min=3, max=255)])
+    servicePrice = DecimalField("Price", validators=[InputRequired()])
+    serviceCoverPicture = FileField("Cover image", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"])])
+    serviceSubmit = SubmitField("Add New Service")
 
 
 class InquireryForm(FlaskForm):

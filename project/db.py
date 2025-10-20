@@ -670,3 +670,15 @@ def get_services_for_photographer(photographer_id):
         s.photographer_service_id = row['photographer_service_id']
         services.append(s)
     return services
+
+
+def insert_service(name, short_desc, long_desc, price, cover_image=None):
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        INSERT INTO Service (name, shortDescription, longDescription, price, coverImage)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (name, short_desc, long_desc, price, cover_image))
+    mysql.connection.commit()
+    cur.close()
+
+
