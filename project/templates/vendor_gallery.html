@@ -3,14 +3,21 @@
 
 <main>
 
+
   <div class="header-bg d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-light mb-2 display-6"><strong>{{ photographer.firstName }} {{ photographer.lastName }}</strong></h1>
-    <div class="text-light text-start">
-      <p class="mb-2 text-light"><strong>Bio:</strong> {{ photographer.bioDescription }}</p>
-    </div>
-    <p class="mb-2 text-light"><strong>Location:</strong> {{ photographer.location }}</p>
-    <p class="mb-2 text-light"><strong>Availability:</strong> {{ photographer.availability }}</p>
-    <p class="mb-0 text-light">⭐ <strong>Rating:</strong> {{ photographer.rating }}</p>
+      <img
+       src="{{ url_for('static', filename='img/' ~ (vendorProfile.profilePicture or 'placeholder-user.png')) }}"
+       alt="Profile photo of {{ vendorProfile.profilePicture }}"
+       class="rounded-circle border flex-shrink-0"
+       style="width:150px;height:150px;object-fit:cover;">
+
+      <h1 class="text-light mb-2 display-6"><strong>{{ photographer.firstName }} {{ photographer.lastName }}</strong></h1>
+      <div class="text-light text-start">
+        <p class="mb-2 text-light"><strong>Bio:</strong> {{ photographer.bioDescription }}</p>
+      </div class="flex-grow-1">
+      <p class="mb-2 text-light"><strong>Location:</strong> {{ photographer.location }}</p>
+      <p class="mb-2 text-light"><strong>Availability:</strong> {{ photographer.availability }}</p>
+      <p class="mb-0 text-light">⭐ <strong>Rating:</strong> {{ photographer.rating }}</p>
   </div>
 
 

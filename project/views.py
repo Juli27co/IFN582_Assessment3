@@ -7,31 +7,43 @@ from flask import (
     redirect,
     current_app,
     url_for,
+    session,
 )
-from .forms import PhotographerEditForm, PhotographerAddImage, AddServiceForm
+from hashlib import sha256
+import os
+from werkzeug.utils import secure_filename
+
+# Form imports
+from .forms import (
+    PhotographerEditForm, 
+    PhotographerAddImage, 
+    AddServiceForm,
+    AddTypeForm, 
+    AddOnForm,
+    InquireryForm, 
+    LoginForm, 
+    RegisterForm, 
+    FiltersForm
+)
+
+# Database function imports
 from .db import (
     get_photographer,
     add_or_update_photographer,
     get_photographer_management,
     get_services_for_photographer,
-    insert_service,
-)
-from .db import (
     get_all_services,
     insert_image,
     ensure_photographer_service,
     get_images_for_photographer,
     delete_image_row,
-)
-import os
-from werkzeug.utils import secure_filename
-
-
-from flask import Blueprint, render_template, request, session, flash, redirect, url_for
-from project.session import add_to_cart
-from project.forms import InquireryForm, LoginForm, RegisterForm, FiltersForm
-from hashlib import sha256
-from project.db import (
+    admin_insert_service,
+    get_services,
+    admin_add_type,
+    admin_add_addon,
+    admin_delete_service,
+    admin_delete_type,
+    admin_delete_addon,
     add_inquiry,
     add_user,
     check_for_admin,
@@ -47,7 +59,10 @@ from project.db import (
     get_single_type,
     get_types,
 )
-from project.wrappers import only_admins, only_photographers
+
+# Session and wrapper imports
+from project.session import add_to_cart
+from project.wrappers import only_photographers, only_admins
 
 bp = Blueprint("main", __name__)
 
@@ -70,8 +85,9 @@ def save_image(file_storage):
     return filename
 
 
-@bp.route("/vendor/<int:photographer_id>", methods=["POST", "GET"])
-@only_photographers
+
+@bp.route('/vendor/<int:photographer_id>', methods = [ 'POST', 'GET'])
+# @only_photographers
 def vendor_management(photographer_id):
     form = PhotographerEditForm(prefix="EditProfile")
 
@@ -120,8 +136,8 @@ def vendor_management(photographer_id):
     )
 
 
-@bp.route("/vendor/management/", methods=["GET"])
-@only_photographers
+@bp.route('/vendor/management/', methods=['GET'])
+# @only_photographers
 def vendor_management_check():
     if session.get("userType") != "photographer":
         flash("Please log in as a photographer.", "error")
@@ -136,7 +152,7 @@ def vendor_management_check():
 
 
 @bp.route("/vendor/add-images/<int:photographer_id>/", methods=["GET", "POST"])
-@only_photographers
+# @only_photographers
 def add_images_photographer(photographer_id):
     form = PhotographerAddImage()
 
@@ -172,7 +188,7 @@ def add_images_photographer(photographer_id):
 
 
 @bp.post("/vendor/<int:photographer_id>/images/<int:image_id>/delete")
-@only_photographers
+# @only_photographers
 def delete_image(photographer_id, image_id):
     # to delete the images of photographer by photographer_id
     deleted = delete_image_row(image_id, photographer_id)
@@ -410,31 +426,142 @@ def vendor(photographer_id):
     photographer = get_photographer(photographer_id)
     images = get_images_for_photographer(photographer_id)
     services = get_services_for_photographer(photographer_id)
-    return render_template(
-        "vendor_gallery.html",
-        photographer=photographer,
-        images=images,
-        services=services,
-    )
+    vendorProfile = get_photographer_management(photographer_id)
+    
+    return render_template('vendor_gallery.html', photographer = photographer, images = images, 
+                           services = services, vendorProfile = vendorProfile)
 
 
-@bp.route("/manage/add-service/", methods=["GET", "POST"])
+
+# functions about admin management: add and delete servcie, session, and add-om
+
+@bp.route("/admin/manage/", methods=["GET"])
+@only_admins
+def admin_management():
+    services = get_services()
+    types = get_types()
+    addons = get_addOns()
+    return render_template("admin_manage.html",serviceForm=AddServiceForm(prefix="service"),typeForm=AddTypeForm(prefix="type"),
+                           addonForm=AddOnForm(prefix="addon"), services = services, types = types, addons = addons)
+
+@bp.post('/admin/manage/service/')
 def add_new_service():
-    form = AddServiceForm()
+    serviceForm = AddServiceForm(prefix ="service")
+    typeForm = AddTypeForm(prefix = "type")
+    addonForm = AddOnForm(prefix = "addon")
 
-    if request.method == "POST" and form.validate_on_submit():
-        name = form.serviceName.data
-        short = form.serviceShortDescription.data
-        long = form.serviceLongDescription.data
-        price = float(form.servicePrice.data)
+    if  serviceForm.validate_on_submit():
+        name  = serviceForm.serviceName.data
+        short = serviceForm.serviceShortDescription.data
+        long  = serviceForm.serviceLongDescription.data
+        price = float(serviceForm.servicePrice.data)
 
         coverImage = None
-        file = form.serviceCoverPicture.data
+        file = serviceForm.serviceCoverPicture.data
         if file:
             coverImage = save_image(file)
 
-        insert_service(name, short, long, price, coverImage)
+        admin_insert_service(name, short, long, price, coverImage)
         flash("Service added!", "success")
-        return redirect(url_for("main.add_new_service"))
+        return redirect(url_for('main.admin_management'))
+    
+    services = get_services()
+    types    = get_types()
+    addons   = get_addOns()
 
-    return render_template("admin_manage.html", form=form)
+    flash("Please fill the Service form", "error")
+    return render_template('admin_manage.html', serviceForm = serviceForm, typeForm = typeForm, addonForm = addonForm,
+                           services = services, types = types, addons = addons)
+
+
+@bp.post("/admin/manage/type")
+def add_new_type():
+    typeForm = AddTypeForm(prefix="type")
+    serviceForm = AddServiceForm(prefix="service")
+    addonForm = AddOnForm(prefix="addon")
+
+    if typeForm.validate_on_submit():
+        name = typeForm.typeName.data
+        short = typeForm.shortDescription.data
+        price = float(typeForm.price.data)
+
+        admin_add_type(name, short, price)
+        flash("Service Type Added!", "success")
+        return redirect(url_for("main.admin_management"))
+    
+    services = get_services()
+    types    = get_types()
+    addons   = get_addOns()
+
+    flash("Please fill the Type form", "error")
+    return render_template("admin_manage.html",serviceForm=serviceForm,typeForm=typeForm,addonForm=addonForm, 
+                           services = services, types = types, addons = addons)
+
+@bp.post("/admin/manage/addon")
+def add_new_addon():
+    addonForm = AddOnForm(prefix="addon")
+    serviceForm = AddServiceForm(prefix="service")
+    typeForm = AddTypeForm(prefix="type")
+
+    if addonForm.validate_on_submit():
+        name = addonForm.addOn.data
+        price = float(addonForm.price.data)
+        
+        admin_add_addon(name, price)
+        flash("Add-On Added!", "success")
+        return redirect(url_for("main.admin_management"))
+    
+    services = get_services()
+    types    = get_types()
+    addons   = get_addOns()
+
+    flash("Please fill the Add-on Form", "error")
+    return render_template("admin_manage.html",serviceForm=serviceForm,typeForm=typeForm,addonForm=addonForm, 
+                           services = services, types = types, addons = addons)
+
+@bp.post("/admin/manage/service/delete")
+def delete_service():
+    service_id = request.form.get("service_id", type=int)
+    if not service_id:
+        flash("Invalid service id", "error")
+        return redirect(url_for("main.admin_management"))
+
+    deleted = admin_delete_service(service_id)
+    if deleted:
+        flash("Service deleted", "success")
+    else:
+        flash("Cannot delete: service is not found", "error")
+    return redirect(url_for("main.admin_management"))
+
+@bp.post("/admin/manage/type/delete")
+def delete_type():
+    type_id = request.form.get("type_id", type=int)
+    if not type_id:
+        flash("Invalid type id", "error")
+        return redirect(url_for("main.admin_management"))
+
+    deleted = admin_delete_type(type_id)
+    if deleted:
+        flash("Session type deleted", "success")
+    else:
+        flash("Cannot delete: session type is not found", "error")
+    return redirect(url_for("main.admin_management"))
+
+@bp.post("/admin/manage/addon/delete")
+def delete_addon():
+    addon_id = request.form.get("addon_id", type=int)
+    if not addon_id:
+        flash("Invalid add-on id", "error")
+        return redirect(url_for("main.admin_management"))
+
+    deleted = admin_delete_addon(addon_id)
+    if deleted:
+        flash("Add-on deleted", "success")
+    else:
+        flash("Cannot delete: add-on is not found", "error")
+    return redirect(url_for("main.admin_management"))
+
+
+
+
+

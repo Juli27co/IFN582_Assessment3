@@ -76,7 +76,9 @@
               />
               <button class="btn btn-light" type="submit">Search</button>
             </form>
-            <div class="d-flex ms-2 justify-content-end align-items-center mt-1">
+            <div
+              class="d-flex ms-2 justify-content-end align-items-center mt-1"
+            >
               {% if session.get('logged_in') %}
               <span class="navbar-text text-light me-2"
                 >Welcome, {{ session.get('user').firstName }}!</span
