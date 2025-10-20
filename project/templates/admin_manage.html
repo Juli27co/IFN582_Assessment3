@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block main %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        <p>The new service has been updated  {{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<main class="container py-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div class="card p-4">
+        <div class="mb-4">
+          <h1 class="mb-0">Add New Service</h1>
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-12">
+            <div class="mb-3">
+       
+              <form action="{{ url_for('main.add_new_service') }}" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ wtf.render_field(form.serviceName) }}
+                {{ wtf.render_field(form.serviceShortDescription) }}
+                {{ wtf.render_field(form.serviceLongDescription) }}
+                {{ wtf.render_field(form.servicePrice) }}
+                {{ wtf.render_field(form.serviceCoverPicture) }}
+                <div class="text-end">
+                  <a class="btn btn-outline-secondary" href="{{ url_for('main.add_new_service') }}">Back</a>
+                  {{ wtf.render_field(form.serviceSubmit) }}  
+                </div>
+              </form>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

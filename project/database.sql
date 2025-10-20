@@ -29,7 +29,7 @@ CREATE TABLE Client
 CREATE TABLE Service
 (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     shortDescription VARCHAR(100) NULL,
     longDescription VARCHAR(255) NULL,
     price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -107,6 +107,28 @@ CREATE TABLE Cart_Service
     FOREIGN KEY (cart_id) REFERENCES Cart(cart_id),
     FOREIGN KEY (type_id) REFERENCES ServiceType(type_id),
     FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id)
+);
+
+CREATE TABLE Orders
+(
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    message VARCHAR(100) NULL,
+    paymentMethod VARCHAR(50) NOT NULL,
+    photographer_id INT,
+    client_id INT,
+    FOREIGN KEY (client_id) REFERENCES Client(client_id),
+    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+);
+
+CREATE TABLE Order_Service
+(
+    orderService_id INT AUTO_INCREMENT PRIMARY KEY,
+    service_id INT,
+    order_id INT,
+    FOREIGN KEY (service_id) REFERENCES Service(service_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 
 CREATE TABLE Inquiry
@@ -197,6 +219,7 @@ INSERT INTO Image (imageSource, image_description, service_id, photographer_id) 
 ('garrett-jackson-oOnJWBMlb5A-unsplash.jpg','Newborn baby sleeping peacefully',3, 1),
 ('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3, 1),
 ('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
+('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
 ('imani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4, 1);
 
 
@@ -213,8 +236,3 @@ INSERT INTO Cart_Service (service_id, cart_id, type_id, addOn_id) VALUES
 (2,8,2,1),
 (4,9,1,2),
 (3,10,2,1);
-
-  
-
-    
- 
