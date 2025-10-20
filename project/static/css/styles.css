@@ -2,15 +2,19 @@
   text-align: center;
 }
 
-.card {
-  flex-basis: 18rem;
-  flex-grow: 1;
-  flex-shrink: 1;
-  margin: 0.5rem;
-}
+
 
 .form-group {
   margin-bottom: 1rem;
+}
+
+
+
+
+
+/* vendor gallery */
+.text_color {
+  color: white
 }
 
 .header-bg {
@@ -22,10 +26,11 @@
   background-color: rgba(17, 13, 49, 0.73);
 }
 
-.portfolio {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+.card_vendor_gallery {
+  flex-basis: 10rem;
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0.5rem;
 }
 
 .portfolio img {
