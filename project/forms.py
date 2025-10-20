@@ -29,3 +29,15 @@ class PhotographerRegistrationForm(FlaskForm):
     lastName = StringField("Your last name", validators= [InputRequired()])
     location = StringField("Your location", validators= [Optional()])
     submit = SubmitField("Register")
+
+class CheckoutForm(FlaskForm):
+    full_name = StringField("Full name", validators=[InputRequired(), Length(min=2, max=100)])
+    email = StringField("Email", validators=[InputRequired(), Email()])
+    phone = StringField("PhoneNumber", validators=[InputRequired()])
+    address = StringField("Address", validators=[InputRequired()])
+    payment_method = RadioField(
+        "Payment Method",
+        choices=[("cash", "Cash"), ("credit card", "Credite card")],
+        validators=[InputRequired()],
+    )
+    checkout_submit = SubmitField("Checkout")
