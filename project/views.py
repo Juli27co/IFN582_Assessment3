@@ -34,7 +34,7 @@ from project.db import (
     get_types
 )
 from project.wrappers import only_photographers
-from project.session import get_cart, remove_cart_item
+from project.session import get_cart, remove_cart_item, empty_cart
 
 bp = Blueprint("main", __name__)
 
@@ -58,7 +58,7 @@ def save_image(file_storage):
 @bp.route("/checkout/", methods=["GET", "POST"])
 def checkout():
     cart = get_cart()
-    return render_template("checkout.html", cart=cart, total_cost = cart.total_cost() )
+    return render_template("test.html", cart=cart, total_cost = cart.total_cost() )
 
 @bp.post("/cart/remove/")
 def cart_remove():
@@ -72,6 +72,12 @@ def cart_remove():
     else:
         flash("Item not found in basket.", "warning")
 
+    return redirect(url_for("main.checkout"))
+
+@bp.post("/cart/clear/")
+def clear_cart():
+    empty_cart()
+    flash("Your cart has been cleared.")
     return redirect(url_for("main.checkout"))
 
 @bp.route('/photographer/<int:photographer_id>', methods = [ 'POST', 'GET'])

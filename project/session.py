@@ -72,3 +72,8 @@ def _save_cart_to_session(cart):
             } for item in cart.items
         ]
     }
+
+def empty_cart():
+    session["cart"] = {
+        "items": []
+    }
