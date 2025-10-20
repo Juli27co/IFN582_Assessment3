@@ -24,7 +24,7 @@ class Image:
 @dataclass
 class ServiceType:
     id: str
-    type: str
+    name: str
     shortDescription: str
     price: float
 
@@ -44,6 +44,7 @@ class Service:
     longDescription: str
     price: float = 0.00
     coverImage: str = "foobar"
+    photographer_service_id: int = None
 
 @dataclass
 class User:

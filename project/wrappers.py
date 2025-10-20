@@ -51,3 +51,4 @@ def only_admins(func):
         return func(*args, **kwargs)
 
     return wrapper
+
