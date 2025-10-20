@@ -1,6 +1,8 @@
-{# project/templates/checkout.html #}
-{% extends "base.html" %}
-{% block content %}
+{% extends 'base.html' %}
+
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block main %}
 <style>
 .btn-navbar{background-color:#212529;border-color:#212529;color:#fff;}
 .btn-navbar:hover,.btn-navbar:focus{background-color:#1a1e21;border-color:#1a1e21;color:#fff;}
@@ -143,13 +145,13 @@
                   <img src="{{ url_for('static', filename='img/' ~ it.service.coverImage) }}"
                        alt="{{ it.service.name or 'item' }}"
                        style="width:64px;height:64px;object-fit:cover;border-radius:10px;">
-                  <div class="order-con me-4">
-                    <div class="d-flex justify-content-between">
+                  <div class="order-con">
+                    <div class="d-flex justify-content-between align-items-end">
                       <p class="fw-semibold">#{{ loop.index }} {{ it.service.name }}</p>
                       <p class="text-muted small">${{ '%.2f'|format((it.service.price)|float) }}</p>
                     </div>
                     <div class="mb-3">
-                      <p>{{ it.photographer.firstName }} {{ it.photographer.lastName }}</p>
+                      <p>{{ it.photographer.firstName }} {{ it.photographer.lastName }}({{ it.photographer.availability }})</p>
                     </div>  
                       <div class="text-muted small d-flex justify-content-between">
                         <p>Session Type: {{ it.type.type }}</p>
