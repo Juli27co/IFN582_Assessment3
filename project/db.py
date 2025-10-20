@@ -81,3 +81,14 @@ def get_services_for_photographer(photographer_id):
         s.photographer_service_id = row['photographer_service_id']
         services.append(s)
     return services
+
+def insert_order_detail(client_id, address, payment_method):
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        INSERT INTO Orders (client_id, address, payment_method)
+        VALUES (%s, %s, %s)
+    """, (client_id, address, payment_method))
+    mysql.connection.commit()
+    cur.close()
+
+
