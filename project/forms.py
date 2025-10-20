@@ -45,40 +45,6 @@ from flask_wtf.file import FileField, MultipleFileField, FileAllowed
 from wtforms.validators import InputRequired, Email
 
 
-# Vender Edit Their Profile
-class VendorProfileForm(FlaskForm):
-    firstName = StringField("First Name :", validators=[InputRequired()])
-    lastName = StringField("Last Name :", validators=[InputRequired()])
-    phone = StringField("Phone Number :", validators=[InputRequired()])
-    bio = TextAreaField(
-        "Bio/Description :",
-        validators=[InputRequired()],
-        render_kw={
-            "placeholder": "Tell clients about your style, experience, packages…",
-            "rows": 4,
-        },
-    )
-    availability = RadioField(
-        "Availability :",
-        choices=[
-            ("Weekends", "Weekends only"),
-            ("Weekdays", "Weekdays only"),
-            ("Short notice bookings", "Short notice bookings"),
-        ],
-        validators=[InputRequired()],
-    )
-    location = StringField(
-        "City :",
-        render_kw={"placeholder": "Put City Name only e.g. Sydney", "rows": 1},
-        validators=[InputRequired()],
-    )
-    profileImage = FileField(
-        "Profile Images :",
-        validators=[FileAllowed(["jpg", "jpeg", "png", "gif", "webp"], "Images only!")],
-    )
-    submit = SubmitField("Save Changes")
-
-
 class AddServiceForm(FlaskForm):
     serviceName = StringField("Service Name :",validators=[InputRequired()],
                               render_kw={"placeholder": " e.g. Drone Photography"})
@@ -87,6 +53,20 @@ class AddServiceForm(FlaskForm):
     servicePrice = DecimalField("Price", validators=[InputRequired()])
     serviceCoverPicture = FileField("Cover image", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"])])
     serviceSubmit = SubmitField("Add New Service")
+
+class AddTypeForm(FlaskForm):
+    typeName = StringField("Type Name",validators=[InputRequired(), Length(max=100)])
+    shortDescription = TextAreaField("Short Description",validators=[InputRequired(), Length(max=255)])
+    price = DecimalField("Price",validators=[DataRequired()])
+    submit = SubmitField("Add Type")
+
+
+class AddOnForm(FlaskForm):
+    addOn = StringField("Add-On Name",validators=[DataRequired(), Length(max=255)])
+    price = DecimalField("Price",validators=[DataRequired()])
+    submit = SubmitField("Save Add-On")
+
+
 
 
 class InquireryForm(FlaskForm):

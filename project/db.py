@@ -356,17 +356,17 @@ def get_types():
         FROM    ServiceType
         """
     )
-    results = cur.fetchall()
+    rows = cur.fetchall()
     cur.close()
     return [
         ServiceType(
-            row['type_id'],
-            row['type_name'],
-            row['shortDescription'],
-            row['price']
+            id=row['type_id'],
+            name=row['type_name'],              
+            shortDescription=row['shortDescription'],
+            price=float(row['price'])
         )
-        for row in results
-    ]    
+        for row in rows
+    ]   
 
 def get_single_type(typeId):
     cur = mysql.connection.cursor()
@@ -648,7 +648,7 @@ def get_services_for_photographer(photographer_id):
     cur = mysql.connection.cursor()
     cur.execute("""
         SELECT
-            ps.photographerService_id AS photographer_service_id,  -- << สำคัญ
+            ps.photographerService_id AS photographer_service_id,
             s.service_id, s.name, s.shortDescription, s.longDescription, s.price
         FROM Photographer_Service ps
         JOIN Service s ON s.service_id = ps.service_id
@@ -657,22 +657,21 @@ def get_services_for_photographer(photographer_id):
     rows = cur.fetchall()
     cur.close()
 
-    services = []
-    for row in rows:
-        s = Service(
-            row['service_id'],
-            row['name'],
-            row['shortDescription'],
-            row['longDescription'],
-            float(row['price'])
+    return [
+        Service(
+            id=row['service_id'],
+            name=row['name'],
+            shortDescription=row['shortDescription'],
+            longDescription=row['longDescription'],
+            price=float(row['price']),
+            coverImage=row.get('coverImage', "foobar"),  
+            photographer_service_id=row['photographer_service_id']
         )
-        
-        s.photographer_service_id = row['photographer_service_id']
-        services.append(s)
-    return services
+        for row in rows
+    ]
 
 
-def insert_service(name, short_desc, long_desc, price, cover_image=None):
+def admin_insert_service(name, short_desc, long_desc, price, cover_image=None):
     cur = mysql.connection.cursor()
     cur.execute("""
         INSERT INTO Service (name, shortDescription, longDescription, price, coverImage)
@@ -682,3 +681,49 @@ def insert_service(name, short_desc, long_desc, price, cover_image=None):
     cur.close()
 
 
+def admin_add_type(name, short_desc, price):
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        INSERT INTO ServiceType (type_name, shortDescription, price)
+        VALUES (%s, %s, %s)
+    """, (name, short_desc, price))
+    mysql.connection.commit()
+    cur.close()
+
+def admin_add_addon(name, price):
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        INSERT INTO Addon (AddOn, price)
+        VALUES (%s, %s)
+    """, (name, price))
+    mysql.connection.commit()
+    cur.close()
+
+def admin_delete_service(service_id: int):
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("DELETE FROM Service WHERE service_id=%s", (service_id,))
+        mysql.connection.commit()
+        return cur.rowcount
+    finally:
+        cur.close()
+
+
+def admin_delete_type(type_id: int):
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("DELETE FROM ServiceType WHERE type_id=%s", (type_id,))
+        mysql.connection.commit()
+        return cur.rowcount
+    finally:
+        cur.close()
+
+
+def admin_delete_addon(addon_id: int):
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute("DELETE FROM AddOn WHERE addOn_id=%s", (addon_id,))
+        mysql.connection.commit()
+        return cur.rowcount
+    finally:
+        cur.close()

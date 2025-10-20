@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS sql12802431;
 CREATE DATABASE sql12802431;
 USE sql12802431;
 
-CREATE TABLE ADMIN
+CREATE TABLE Admin
 (
 	admin_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -142,8 +142,8 @@ CREATE TABLE Inquiry
 );
 
 INSERT INTO Admin (email, password, phone, firstName, lastName, lastUpdated) VALUES
-('admin1@gmail.com', '1234qwer', '0490557292', '', '', '2024-10-16 13:25:00'),
-('admin2@gmail.com', '1234qwer', '0490557292', '', '', '2024-10-19 11:40:00');
+('admin1@gmail.com', 'ef51306214d9a6361ee1d5b452e6d2bb70dc7ebb85bf9e02c3d4747fb57d6bec', '0490557292', '', '', '2024-10-16 13:25:00'),
+('admin2@gmail.com', 'ef51306214d9a6361ee1d5b452e6d2bb70dc7ebb85bf9e02c3d4747fb57d6bec', '0490557292', '', '', '2024-10-19 11:40:00');
 
 INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymentMethod, address) VALUES
 ('julicortesarb@gmail.com', '1234qwer', '0490557292', 'Juliana', 'Cortes', 'Credit Card', '22 Street Av'),
