@@ -1,218 +1,249 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FotoBooking - Checkout</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <link href="./css/styles.css" rel="stylesheet" />
-  </head>
-  <body>
-    <header>
-      <h1 style="padding: 20px" class="main-header mb-0">FotoBooking</h1>
-    </header>
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
-      <div class="container-fluid">
-        <a class="navbar-brand text-white" href="#">FotoBooking</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link text-light" aria-current="page" href="#"
-                >Newborn</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Weddings</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Pets</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light" href="#">Products</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-light" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-    <main class="row p-5 bg-light">
-      <div class="col-7">
-        <div class="card">
-          <h1 class="ms-4 mt-4">Personal Information</h1>
-          <form class="row g-3 p-4">
-            <div class="col-md-12">
-              <label for="inputName" class="form-label">Full Name</label>
-              <input type="text" class="form-control" id="inputName" />
-            </div>
-            <div class="col-md-6">
-              <label for="inputEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" id="inputEmail" />
-            </div>
-            <div class="col-md-6">
-              <label for="inputPhone" class="form-label">Phone Number</label>
-              <input type="text" class="form-control" id="inputPhone" />
-            </div>
-            <div class="col-12">
-              <label for="inputAddress" class="form-label">Address</label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputAddress"
-                placeholder="1234 Main St"
-              />
-            </div>
-            <div class="col-12">
-              <label for="inputAddress2" class="form-label">Address 2</label>
-              <input
-                type="text"
-                class="form-control"
-                id="inputAddress2"
-                placeholder="Apartment, studio, or floor"
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="inputCity" class="form-label">City</label>
-              <input type="text" class="form-control" id="inputCity" />
-            </div>
-            <div class="col-md-4">
-              <label for="inputState" class="form-label">State</label>
-              <select id="inputState" class="form-select">
-                <option selected>Choose...</option>
-                <option>NSW</option>
-                <option>VIC</option>
-                <option>QLD</option>
-                <option>SA</option>
-                <option>WA</option>
-                <option>TAS</option>
-                <option>ACT</option>
-                <option>NT</option>
-              </select>
-            </div>
-            <div class="col-md-2">
-              <label for="inputZip" class="form-label">Zip</label>
-              <input type="text" class="form-control" id="inputZip" />
-            </div>
-            <div class="col-12 pt-4 border-top">
-              <label for="vendorBio" class="form-label">
-                Message to the Photographer (optional)
-              </label>
-              <textarea class="form-control" id="vendorBio" rows="5">
-              </textarea>
-            </div>
-            <div class="col-12 pt-4 border-top">
-              <h4>Select a payment method</h4>
-              <div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="radioDefault"
-                    id="radioDefault1"
-                  />
-                  <label class="form-check-label" for="radioDefault1">
-                    Credit Card
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="radioDefault"
-                    id="radioDefault2"
-                    checked
-                  />
-                  <label class="form-check-label" for="radioDefault2">
-                    Cash
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="col-12">
-              <button type="submit" class="btn btn-primary">
-                Submit Order
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="col-5">
-        <div class="card p-4">
-          <h1>Order Summary</h1>
-          <div class="container mt-5">
-            <h3>Selected Services</h3>
-            <p>Thanks for trusting FotoBooking</p>
-            <div class="border-top border-bottom p-4 row">
-              <div class="col-4">
-                <img
-                  width="100%"
-                  src="./img/bonnie-kittle-MUcxe_wDurE-unsplash.jpg"
-                />
-              </div>
-              <div class="col-7">
-                <h5>Pet Photo Studio</h5>
-                <p>Pepito Perez</p>
-                <p>Unit cost: <strong>$500.05</strong></p>
-              </div>
-              <div class="col-1 d-flex align-items-center">
-                <p><strong>X</strong></p>
-              </div>
-            </div>
-            <div class="border-top border-bottom p-4 row">
-              <div class="col-4">
-                <img
-                  width="100%"
-                  src="./img/garrett-jackson-oOnJWBMlb5A-unsplash.jpg"
-                />
-              </div>
-              <div class="col-7">
-                <h5>Newborn Photo Studio</h5>
-                <p>Hernesto Perez</p>
-                <p>Unit cost: <strong>$300.05</strong></p>
-              </div>
-              <div class="col-1 d-flex align-items-center">
-                <p><strong>X</strong></p>
-              </div>
-            </div>
-            <div class="d-flex justify-content-end py-2">
-              <p style="font-size: 1.3rem">
-                Total cost: <strong>$800.10</strong>
-              </p>
-            </div>
+{# project/templates/checkout.html #}
+{% extends "base.html" %}
+{% block content %}
+<style>
+.btn-navbar{background-color:#212529;border-color:#212529;color:#fff;}
+.btn-navbar:hover,.btn-navbar:focus{background-color:#1a1e21;border-color:#1a1e21;color:#fff;}
+.min-w-40{min-width:40px;display:inline-block;}
+</style>
+
+<div class="container my-5">
+  <div class="row g-4">
+
+    <div class="col-12 col-lg-7">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="mb-4 d-flex justify-content-between align-items-center">
+            <span>Checkout</span>
+            <form action="{{ url_for('main.cart_clear') }}" method="post" class="d-inline">
+              {{ clear_form.hidden_tag() }}
+              <button type="submit" class="btn btn-outline-danger btn-sm">Clear Basket</button>
+            </form>
+          </h3>
+
+          {% if not cart.items %}
+            <div class="alert alert-warning mb-4">Your basket is empty. Please add items before checkout.</div>
+          {% endif %}
+
+          <div class="table-responsive">
+            <table class="table align-middle" id="cart-table">
+              <thead>
+                <tr>
+                  <th style="width:90px;">Photo</th>
+                  <th>Item</th>
+                  <th class="text-center" style="width:110px;">Qty</th>
+                  <th class="text-end" style="width:120px;">Unit</th>
+                  <th class="text-end" style="width:120px;">Line</th>
+                  <th style="width:90px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for it in cart.items %}
+                <tr>
+                  <td>
+                    <img src="{{ url_for('static', filename='img/' ~ (it.image_filename or 'placeholder.jpg')) }}"
+                         alt="{{ it.title or 'item' }}"
+                         style="width:70px;height:70px;object-fit:cover;border-radius:8px;">
+                  </td>
+                  <td>
+                    <div class="fw-semibold">{{ it.title or ('Service #' ~ (it.service.id if it.service else '')) }}</div>
+                  </td>
+                  <td class="text-center">
+                    <form action="{{ url_for('main.cart_update') }}" method="post" class="d-inline-flex gap-2 justify-content-center">
+                      <input type="hidden" name="item_id" value="{{ it.id }}">
+                      <input name="qty" type="number" min="1" max="99" value="{{ it.qty }}" class="form-control form-control-sm" style="width:70px;">
+                      <button class="btn btn-outline-secondary btn-sm">Update</button>
+                    </form>
+                  </td>
+                  <td class="text-end">$ {{ '%.2f'|format((it.unit_price or 0)|float) }}</td>
+                  <td class="text-end">$ {{ '%.2f'|format(((it.unit_price or 0)|float * (it.qty or 1)) ) }}</td>
+                  <td class="text-end">
+                    <form action="{{ url_for('main.cart_remove') }}" method="post" class="d-inline">
+                      <input type="hidden" name="item_id" value="{{ it.id }}">
+                      <button class="btn btn-outline-danger btn-sm">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% if not cart.items %}
+                <tr>
+                  <td colspan="6" class="text-center text-muted">No items selected.</td>
+                </tr>
+                {% endif %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="4" class="text-end">Total</th>
+                  <th class="text-end">$ {{ '%.2f'|format(total|float) }}</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
           </div>
         </div>
       </div>
-    </main>
-    <footer>
-      <p class="text-center">Developed by: Juliana Cortes</p>
-    </footer>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+
+      <div class="card mt-4">
+        <div class="card-body">
+          <h4 class="mb-3">Your details</h4>
+          <form method="post" action="{{ url_for('main.checkout') }}" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">{{ form.full_name.label.text }}</label>
+                {{ form.full_name(class="form-control", placeholder="Full name") }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ form.email.label.text }}</label>
+                {{ form.email(class="form-control", placeholder="you@example.com") }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ form.phone.label.text }}</label>
+                {{ form.phone(class="form-control", placeholder="+61...") }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ form.payment_method.label.text }}</label>
+                {{ form.payment_method(class="form-select") }}
+              </div>
+              <div class="col-12">
+                <label class="form-label d-block">{{ form.fulfilment_method.label.text }}</label>
+                <div class="d-flex flex-wrap gap-3">
+                  {% for sub in form.fulfilment_method %}
+                    <label class="d-flex align-items-center gap-2">
+                      {{ sub() }} {{ sub.label.text }}
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-flex justify-content-center">
+                  <button class="btn btn-navbar btn-lg px-4">Review & Place Order</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          {% if form.errors %}
+            <div class="alert alert-danger mt-3">Please fix the highlighted errors.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+<!-- orser summary pnnel (from here)-->
+    <div class="col-12 col-lg-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="mb-3">Order Summary</h5>
+          {% if cart.items %}
+            <ul class="list-unstyled mb-3" id="summary-list">
+              {% for it in cart.items %}
+             <li class="d-flex align-items-center justify-content-between mb-3 p-2 border rounded-3"
+                  data-id="{{ it.id }}" data-unit="{{ (it.unit_price or 0)|float }}">
+                <div class="d-flex align-items-center gap-3 order-con">
+                  <img src="{{ url_for('static', filename='img/' ~ it.service.coverImage) }}"
+                       alt="{{ it.service.name or 'item' }}"
+                       style="width:64px;height:64px;object-fit:cover;border-radius:10px;">
+                  <div class="order-con me-4">
+                    <div class="d-flex justify-content-between">
+                      <p class="fw-semibold">#{{ loop.index }} {{ it.service.name }}</p>
+                      <p class="text-muted small">${{ '%.2f'|format((it.service.price)|float) }}</p>
+                    </div>
+                    <div class="mb-3">
+                      <p>{{ it.photographer.firstName }} {{ it.photographer.lastName }}</p>
+                    </div>  
+                      <div class="text-muted small d-flex justify-content-between">
+                        <p>Session Type: {{ it.type.type }}</p>
+                        <p>${{ '%.2f'|format((it.type.price)|float) }}</p>
+                      </div>
+                      {% if it.addon %}
+                        <div class="text-muted small d-flex justify-content-between">
+                          <p>{{ it.addon.addOn }}</p>
+                          <p>${{ '%.2f'|format((it.addon.price)|float) }}</p>
+                        </div>
+                      {% endif %}
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                  <div class="text-end ms-2" style="width:90px;">
+                    <div class="fw-semibold line-total">{{"$%.2f"|format(it.subtotal|float)}}</div>
+                  </div>
+
+                  <form action="{{ url_for('main.cart_remove') }}" method="post" class="m-0 remove-form">
+                    <input type="hidden" name="item_id" value="{{ it.id }}">
+                    <button class="btn btn-outline-danger btn-sm" title="Remove">×</button>
+                  </form>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+            <hr>
+          {% else %}
+            <div class="text-muted mb-4">Your order list is empty. Please select a service to continue!</div>
+          {% endif %}
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-semibold">Total</span>
+            <span class="fw-semibold" id="summary-total">{{"$%.2f"|format(total_cost|float)}} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- orser summary pnnel (to here) **PLESE DELETE WHEN YOU MERGE-->
+
+  </div>
+</div>
+
+<script>
+(function(){
+  function clamp(n){ n=parseInt(n||'1',10); if(!Number.isFinite(n)||n<1)n=1; if(n>99)n=99; return n; }
+
+  function recalcTotals(){
+    var sum=0;
+    document.querySelectorAll('#summary-list > li').forEach(function(li){
+      var unit = Number(li.dataset.unit)||0;
+      var qty  = Number(li.querySelector('.qty-input')?.value||1);
+      var line = unit*qty;
+      var cell = li.querySelector('.line-total');
+      if(cell) cell.textContent = '$ ' + line.toFixed(2);
+      sum += line;
+    });
+    var totalEl = document.getElementById('summary-total');
+    if(totalEl) totalEl.textContent = '$ ' + sum.toFixed(2);
+  }
+
+  var submitTimer=null;
+  function scheduleSubmit(form){
+    clearTimeout(submitTimer);
+    submitTimer = setTimeout(function(){ try{ form.submit(); }catch(e){} }, 400);
+  }
+
+  document.querySelectorAll('.qty-form').forEach(function(form){
+    var dec=form.querySelector('.qty-dec');
+    var inc=form.querySelector('.qty-inc');
+    var inp=form.querySelector('.qty-input');
+    var view=form.querySelector('.qty-view');
+
+    function setQty(v){
+      v = clamp(v);
+      inp.value = v;
+      view.textContent = v;
+      recalcTotals();
+      scheduleSubmit(form);
+    }
+
+    dec.addEventListener('click', function(){ setQty((parseInt(inp.value||'1',10)-1)); });
+    inc.addEventListener('click', function(){ setQty((parseInt(inp.value||'1',10)+1)); });
+  });
+
+  document.querySelectorAll('.remove-form').forEach(function(rf){
+    rf.addEventListener('submit', function(){
+      var li = rf.closest('li');
+      if(li){ li.remove(); recalcTotals(); }
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', recalcTotals);
+})();
+</script>
+{% endblock %}

@@ -33,6 +33,14 @@
   margin: .5rem;
 }
 
+/* checkout */
+.order-con {
+  width: 70%;
+}
+
+.order-con p {
+  margin: 0;
+}
 /* login page */
 .login-con {
   width: 800px;

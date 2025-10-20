@@ -3,7 +3,7 @@ from project.models import Cart, Cart_Service
 from flask import session
 
 
-def add_to_cart(serviceId, pho_id, typeId, addOnId):
+def add_to_cart(serviceId, pho_id, typeId, addOnId, subtotal):
     # get current session data
     cart = get_cart()
     # create a new data (append a new item to the list in the cart)
@@ -12,9 +12,18 @@ def add_to_cart(serviceId, pho_id, typeId, addOnId):
             service = get_single_service(serviceId),
             photographer = get_photographer(pho_id),
             type = get_single_type(typeId),
-            addon = get_single_addOn(addOnId)
+            addon = get_single_addOn(addOnId),
+            subtotal = subtotal
         )
     )
+    # store the updated data back into session
+    _save_cart_to_session(cart)
+
+def remove_cart_item(cart_item_id):
+    # get current session data
+    cart = get_cart()
+    # create a new list of items that do not match the specific id
+    cart.remove_cart_item(cart_item_id)
     # store the updated data back into session
     _save_cart_to_session(cart)
 
@@ -29,6 +38,7 @@ def get_cart():
             photographerInCurrentSession = get_photographer(item["photographer"]["id"])
             typeInCurrentSession = get_single_type(item["type"]["id"])
             addonInCurrentSession = get_single_addOn(item["addon"]["id"])
+            subtotal = item["subtotal"]
             # Add the results into cart item
             if serviceInCurrentSession and photographerInCurrentSession:
                 cart.add_item(Cart_Service(
@@ -36,7 +46,8 @@ def get_cart():
                     service = serviceInCurrentSession,
                     photographer = photographerInCurrentSession,
                     type = typeInCurrentSession,
-                    addon = addonInCurrentSession
+                    addon = addonInCurrentSession,
+                    subtotal = subtotal                    
                 ))
     return cart
 
@@ -53,11 +64,11 @@ def _save_cart_to_session(cart):
                 },
                 "type": {
                     "id": item.type.id
-                }
-                ,
+                },
                 "addon": {
                     "id": (item.addon.id) if item.addon else None
-                }
+                },
+                "subtotal": item.subtotal
             } for item in cart.items
         ]
     }

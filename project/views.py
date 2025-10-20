@@ -34,6 +34,7 @@ from project.db import (
     get_types
 )
 from project.wrappers import only_photographers
+from project.session import get_cart, remove_cart_item
 
 bp = Blueprint("main", __name__)
 
@@ -54,7 +55,24 @@ def save_image(file_storage):
     file_storage.save(dest)
     return filename 
 
+@bp.route("/checkout/", methods=["GET", "POST"])
+def checkout():
+    cart = get_cart()
+    return render_template("checkout.html", cart=cart, total_cost = cart.total_cost() )
 
+@bp.post("/cart/remove/")
+def cart_remove():
+    item_id = request.form.get("item_id")
+    cart = get_cart()
+    item = cart.get_item(item_id)
+
+    if item:
+        flash("Your item has been removed from your cart.")
+        remove_cart_item(item_id)
+    else:
+        flash("Item not found in basket.", "warning")
+
+    return redirect(url_for("main.checkout"))
 
 @bp.route('/photographer/<int:photographer_id>', methods = [ 'POST', 'GET'])
 def vendor_management(photographer_id):
@@ -187,11 +205,6 @@ def index():
     )
 
 
-@bp.post("/checkout/")
-def checkout():
-    return render_template("checkout.html")
-
-
 # Add item to session
 @bp.post("/cart/")
 def adding_to_cart():
@@ -201,7 +214,7 @@ def adding_to_cart():
     serviceId = request.form.get("serviceId")
     typeId = request.form.get("typeId")
     addOnId = request.form.get("addOnId")
-
+    subtotal = request.form.get("subtotal")
     # handle the case when type is not selected.(type is requierd)
     if typeId == "":
         flash("Please select a session type before adding to cart.", "error")
@@ -209,8 +222,8 @@ def adding_to_cart():
     # handle the case when addOn is not selected (addon is optional)
     if addOnId == "":
         addOnId = "None"
-
-    add_to_cart(serviceId, pho_id, typeId, addOnId)
+    
+    add_to_cart(serviceId, pho_id, typeId, addOnId, subtotal)
     flash("Your items have been added to your cart!")
     return redirect(url_for("main.itemDetails", photographer_service_id=phSerId))
 
@@ -234,7 +247,7 @@ def itemDetails(photographer_service_id):
     selectedAddOn = get_single_addOn(selected_addOn_id)
 
     # caluculate price (service + type + addon)
-    price = (
+    subtotal = (
         service.price
         + (selectedType.price if selectedType else 0)
         + (selectedAddOn.price if selectedAddOn else 0)
@@ -264,7 +277,7 @@ def itemDetails(photographer_service_id):
         selectedType=selectedType,
         addOns=addOns,
         selectedAddOn=selectedAddOn,
-        price=price,
+        subtotal=subtotal,
         form=form,
     )
 

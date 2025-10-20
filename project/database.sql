@@ -22,14 +22,13 @@ CREATE TABLE Client
     phone VARCHAR(15) NOT NULL,
     firstName VARCHAR(20) NOT NULL,
     lastName VARCHAR(20) NOT NULL,
-    preferredPaymentMethod VARCHAR(50) NOT NULL,
-    address VARCHAR(255) NOT NULL
+    preferredPaymentMethod VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Service
 (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(100) NOT NULL,
     shortDescription VARCHAR(100) NULL,
     longDescription VARCHAR(255) NULL,
     price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -114,22 +113,39 @@ CREATE TABLE Orders
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     createdDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    message VARCHAR(100) NULL,
-    paymentMethod VARCHAR(50) NOT NULL,
-    photographer_id INT,
     client_id INT,
-    FOREIGN KEY (client_id) REFERENCES Client(client_id),
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+    address VARCHAR(255) NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES Client(client_id)
 );
+
 
 CREATE TABLE Order_Service
 (
     orderService_id INT AUTO_INCREMENT PRIMARY KEY,
-    service_id INT,
     order_id INT,
+    service_id INT,
+    type_id INT,
+    addOn_id INT, 
+    photographer_id INT,
+    subtotal DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (service_id) REFERENCES Service(service_id),
+	FOREIGN KEY (type_id) REFERENCES ServiceType(type_id),
+    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id),
+    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+);
+
+CREATE TABLE Payment
+(
+	payment_id INT AUTO_INCREMENT PRIMARY KEY,
+	order_id INT,
+    payment_method VARCHAR(50) NOT NULL,
+    payment_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    total_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    payment_status ENUM('Pending', 'Confirmed', 'Cancelled') DEFAULT 'Pending',
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
+
 
 CREATE TABLE Inquiry
 (
@@ -145,17 +161,17 @@ INSERT INTO Admin (email, password, phone, firstName, lastName, lastUpdated) VAL
 ('admin1@gmail.com', '1234qwer', '0490557292', '', '', '2024-10-16 13:25:00'),
 ('admin2@gmail.com', '1234qwer', '0490557292', '', '', '2024-10-19 11:40:00');
 
-INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymentMethod, address) VALUES
-('julicortesarb@gmail.com', '1234qwer', '0490557292', 'Juliana', 'Cortes', 'Credit Card', '22 Street Av'),
-('mike.hansen88@yahoo.com', 'passM!ke88', '0451234567', 'Michael', 'Hansen', 'PayPal', '12 Maple Drive'),
-('sara_lee12@gmail.com', 'saraLeePwd', '0478901234', 'Sara', 'Lee', 'Debit Card', '450 Ocean Blvd'),
-('tom.jenkins@outlook.com', 'jenkinsT90', '0498765432', 'Tom', 'Jenkins', 'Bank Transfer', '99 Elm Street'),
-('diana.ross@mail.com', 'rossDiana21', '0487654321', 'Diana', 'Ross', 'Credit Card', '102 Pine Ave'),
-('lucas_ng@live.com', 'lucasNg@2023', '0477123456', 'Lucas', 'Ng', 'Cash', '78 Sunset Road'),
-('emilybrown123@gmail.com', 'emBrown!45', '0466123456', 'Emily', 'Brown', 'Credit Card', '66 Birch Lane'),
-('omar.youssef@gmail.com', 'Omar2024$', '0433556677', 'Omar', 'Youssef', 'Debit Card', '120 King Street'),
-('natalie_woods@hotmail.com', 'natWoods99', '0499776655', 'Natalie', 'Woods', 'PayPal', '33 Riverbank Rd'),
-('leo.fernandez@mail.com', 'FernLeo#10', '0422446688', 'Leo', 'Fernandez', 'Credit Card', '88 Queen Ave');
+INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymentMethod) VALUES
+('julicortesarb@gmail.com', '1234qwer', '0490557292', 'Juliana', 'Cortes', 'Credit Card'),
+('mike.hansen88@yahoo.com', 'passM!ke88', '0451234567', 'Michael', 'Hansen', 'PayPal'),
+('sara_lee12@gmail.com', 'saraLeePwd', '0478901234', 'Sara', 'Lee', 'Debit Card'),
+('tom.jenkins@outlook.com', 'jenkinsT90', '0498765432', 'Tom', 'Jenkins', 'Bank Transfer'),
+('diana.ross@mail.com', 'rossDiana21', '0487654321', 'Diana', 'Ross', 'Credit Card'),
+('lucas_ng@live.com', 'lucasNg@2023', '0477123456', 'Lucas', 'Ng', 'Cash'),
+('emilybrown123@gmail.com', 'emBrown!45', '0466123456', 'Emily', 'Brown', 'Credit Card'),
+('omar.youssef@gmail.com', 'Omar2024$', '0433556677', 'Omar', 'Youssef', 'Debit Card'),
+('natalie_woods@hotmail.com', 'natWoods99', '0499776655', 'Natalie', 'Woods', 'PayPal'),
+('leo.fernandez@mail.com', 'FernLeo#10', '0422446688', 'Leo', 'Fernandez', 'Credit Card');
 
 INSERT INTO Service (name, shortDescription, longDescription, price, coverImage) VALUES
 ('Wedding Photography', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00, 'drew-coffman-llWjwo200fo-unsplash.jpg'),
@@ -199,16 +215,16 @@ INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
 
 
 INSERT INTO Cart (createdDate, lastUpdated, client_id) VALUES
-('2024-10-01 10:00:00','2024-10-01 10:00:00',1),
-('2024-10-02 14:15:00','2024-10-02 14:15:00',2),
-('2024-10-03 09:30:00','2024-10-03 09:30:00',3),
-('2024-10-04 17:45:00','2024-10-04 17:45:00',4),
-('2024-10-05 12:00:00','2024-10-05 12:00:00',5),
-('2024-10-06 08:30:00','2024-10-06 08:30:00',6),
-('2024-10-07 11:00:00','2024-10-07 11:00:00',7),
-('2024-10-08 13:25:00','2024-10-08 13:25:00',8),
-('2024-10-09 15:10:00','2024-10-09 15:10:00',9),
-('2024-10-10 16:50:00','2024-10-10 16:50:00',10);
+('2025-01-01 09:30:00','2025-01-01 09:30:00',1),
+('2025-01-03 11:45:00','2025-01-03 11:45:00',2),
+('2025-01-04 14:10:00','2025-01-04 14:10:00',3),
+('2025-01-06 10:25:00','2025-01-06 10:25:00',4),
+('2025-01-08 16:40:00','2025-01-08 16:40:00',5),
+('2025-01-10 09:50:00','2025-01-10 09:50:00',6),
+('2025-01-12 13:05:00','2025-01-12 13:05:00',7),
+('2025-01-14 08:20:00','2025-01-14 08:20:00',8), 
+('2025-01-16 18:35:00','2025-01-16 18:35:00',9), 
+('2025-01-18 11:10:00','2025-01-18 11:10:00',10);
 
 
 INSERT INTO Image (imageSource, image_description, service_id, photographer_id) VALUES
@@ -218,7 +234,6 @@ INSERT INTO Image (imageSource, image_description, service_id, photographer_id) 
 ('andrew-s-ouo1hbizWwo-unsplash.jpg','Cat in a playful pose',2, 1),
 ('garrett-jackson-oOnJWBMlb5A-unsplash.jpg','Newborn baby sleeping peacefully',3, 1),
 ('hollie-santos-aUtvHsu8Uzk-unsplash.jpg','Parents with their newborn baby',3, 1),
-('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
 ('daniel-korpai-hbTKIbuMmBI-unsplash.jpg','High-end watch on display',4, 1),
 ('imani-bahati-LxVxPA1LOVM-unsplash.jpg','Stylish shoes for sale',4, 1);
 
@@ -236,3 +251,44 @@ INSERT INTO Cart_Service (service_id, cart_id, type_id, addOn_id) VALUES
 (2,8,2,1),
 (4,9,1,2),
 (3,10,2,1);
+
+INSERT INTO Orders (createdDate, lastUpdated, client_id, address) VALUES
+('2025-01-05 10:15:00', '2025-01-05 10:15:00', 1, '22 Street Av, Parramatta NSW 2150'),
+('2025-01-08 14:30:00', '2025-01-08 14:30:00', 2, '12 Maple Drive, Carlton VIC 3053'),
+('2025-01-12 09:45:00', '2025-01-12 10:00:00', 3, '450 Ocean Blvd, Surfers Paradise QLD 4217'),
+('2025-01-15 13:20:00', '2025-01-15 13:20:00', 4, '99 Elm Street, Adelaide SA 5000'),
+('2025-01-17 16:05:00', '2025-01-17 16:30:00', 5, '102 Pine Ave, Fremantle WA 6160'),
+('2025-01-20 11:50:00', '2025-01-20 12:00:00', 6, '78 Sunset Road, Hobart TAS 7000'),
+('2025-01-22 08:10:00', '2025-01-22 08:10:00', 7, '66 Birch Lane, Canberra ACT 2601'),
+('2025-01-24 15:25:00', '2025-01-24 15:40:00', 1, '120 King Street, Brisbane QLD 4000'),
+('2025-01-26 10:05:00', '2025-01-26 10:10:00', 2, '33 Riverbank Rd, Geelong VIC 3220'),
+('2025-01-28 18:45:00', '2025-01-28 19:00:00', 3, '88 Queen Ave, Newcastle NSW 2300');
+
+INSERT INTO Order_Service (order_id, service_id, type_id, addOn_id, photographer_id, subtotal) VALUES
+(1, 1, 2, 2, 1, 2150.00),
+(2, 2, 1, 1, 2, 350.00),
+(3, 3, 3, 3, 3, 1750.00),
+(4, 4, 2, NULL, 4, 550.00),
+(5, 1, 3, 3, 2, 2250.00),
+(6, 2, 2, 2, 1, 450.00),
+(7, 4, 1, 1, 5, 550.00),
+(8, 3, 2, NULL, 3, 1550.00),
+(9, 1, 1, NULL, 4, 2000.00),
+(10, 2, 3, 3, 5, 550.00);
+
+INSERT INTO Payment (order_id, payment_method, payment_date, total_price, payment_status) VALUES
+(1, 'Credit Card', '2025-01-06 12:30:00', 2150.00, 'Confirmed'),
+(2, 'Cash', '2025-01-09 15:00:00', 350.00, 'Confirmed'),
+(3, 'Credit Card', '2025-01-13 11:20:00', 1750.00, 'Pending'),
+(4, 'Credit Card', '2025-01-16 09:45:00', 550.00, 'Confirmed'),
+(5, 'Cash', '2025-01-18 14:10:00', 2250.00, 'Cancelled'),
+(6, 'Credit Card', '2025-01-19 16:30:00', 450.00, 'Confirmed'),
+(7, 'Cash', '2025-01-20 10:15:00', 550.00, 'Pending'),
+(8, 'Credit Card', '2025-01-21 12:40:00', 1550.00, 'Confirmed'),
+(9, 'Cash', '2025-01-23 17:00:00', 2000.00, 'Confirmed'),
+(10, 'Credit Card', '2025-01-25 18:25:00', 550.00, 'Pending');
+
+
+
+    
+ 
