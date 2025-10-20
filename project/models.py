@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 from uuid import uuid4
 from datetime import datetime
-from enum import Enum
+
 
 @dataclass
 class Image:
@@ -60,7 +60,8 @@ class Orders:
     createdDate: datetime
     lastUpdated: datetime
     client_id: str
-    address: str
+    address: str 
+    payment_method: str
 
 @dataclass
 class OrderService:
@@ -71,21 +72,6 @@ class OrderService:
     addOn_id: str 
     photographer_id: str
     subtotal: float = 0.00
-
-class PaymentStatus(Enum):
-    PENDING = 'Pending'
-    CONFIRMED = 'Confirmed'
-    CANCELLED = 'Cancelled'
-
-
-@dataclass
-class Payment:
-    id: str
-    order_id: str
-    payment_method: str
-    total_price: float = 0.00
-    payment_status: PaymentStatus
-
 
 @dataclass
 class User:
@@ -133,6 +119,7 @@ class Inquiry:
     createdDate: str
 
     
+
 
 
 
