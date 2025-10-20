@@ -15,15 +15,15 @@ from werkzeug.utils import secure_filename
 
 # Form imports
 from .forms import (
-    PhotographerEditForm, 
-    PhotographerAddImage, 
+    PhotographerEditForm,
+    PhotographerAddImage,
     AddServiceForm,
-    AddTypeForm, 
+    AddTypeForm,
     AddOnForm,
-    InquireryForm, 
-    LoginForm, 
-    RegisterForm, 
-    FiltersForm
+    InquireryForm,
+    LoginForm,
+    RegisterForm,
+    FiltersForm,
 )
 
 # Database function imports
@@ -84,10 +84,12 @@ def save_image(file_storage):
     file_storage.save(dest)
     return filename
 
+
 @bp.route("/checkout/", methods=["GET", "POST"])
 def checkout():
     cart = get_cart()
-    return render_template("checkout.html", cart=cart, total_cost = cart.total_cost() )
+    return render_template("checkout.html", cart=cart, total_cost=cart.total_cost())
+
 
 @bp.post("/cart/remove/")
 def cart_remove():
@@ -103,7 +105,8 @@ def cart_remove():
 
     return redirect(url_for("main.checkout"))
 
-@bp.route('/vendor/<int:photographer_id>', methods = [ 'POST', 'GET'])
+
+@bp.route("/vendor/<int:photographer_id>", methods=["POST", "GET"])
 # @only_photographers
 def vendor_management(photographer_id):
     form = PhotographerEditForm(prefix="EditProfile")
@@ -153,7 +156,7 @@ def vendor_management(photographer_id):
     )
 
 
-@bp.route('/vendor/management/', methods=['GET'])
+@bp.route("/vendor/management/", methods=["GET"])
 # @only_photographers
 def vendor_management_check():
     if session.get("userType") != "photographer":
@@ -223,7 +226,9 @@ def index():
 
     all_services = get_all_services()
     form = FiltersForm()
-    form.service_type.choices = [(int(service["id"]), service["name"]) for service in all_services]
+    form.service_type.choices = [
+        (int(service["id"]), service["name"]) for service in all_services
+    ]
 
     # Initialize filters dictionary
     filters = {}
@@ -238,6 +243,8 @@ def index():
             query_params["location"] = form.location.data
         if form.availability.data:
             query_params["availability"] = form.availability.data
+        if form.min_rating.data is not None:
+            query_params["min_rating"] = str(form.min_rating.data)
 
         print(f"Redirecting with query params: {query_params}")
         return redirect(url_for("main.index", **query_params))
@@ -248,6 +255,8 @@ def index():
         service_type = request.args.get("service_type")
         location = request.args.get("location")
         availability = request.args.get("availability")
+        min_rating = request.args.get("min_rating")
+        search_query = request.args.get("search")
 
         if service_type:
             filters["service_type"] = service_type
@@ -258,6 +267,11 @@ def index():
         if availability:
             filters["availability"] = availability
             form.availability.data = availability
+        if min_rating:
+            filters["min_rating"] = float(min_rating)
+            form.min_rating.data = float(min_rating)
+        if search_query:
+            filters["search"] = search_query
 
         print(f"Query params filters: {filters}")
 
@@ -290,7 +304,7 @@ def adding_to_cart():
     # handle the case when addOn is not selected (addon is optional)
     if addOnId == "":
         addOnId = "None"
-    
+
     add_to_cart(serviceId, pho_id, typeId, addOnId, subtotal)
     flash("Your items have been added to your cart!")
     return redirect(url_for("main.itemDetails", photographer_service_id=phSerId))
@@ -439,13 +453,18 @@ def vendor(photographer_id):
     images = get_images_for_photographer(photographer_id)
     services = get_services_for_photographer(photographer_id)
     vendorProfile = get_photographer_management(photographer_id)
-    
-    return render_template('vendor_gallery.html', photographer = photographer, images = images, 
-                           services = services, vendorProfile = vendorProfile)
 
+    return render_template(
+        "vendor_gallery.html",
+        photographer=photographer,
+        images=images,
+        services=services,
+        vendorProfile=vendorProfile,
+    )
 
 
 # functions about admin management: add and delete servcie, session, and add-om
+
 
 @bp.route("/admin/manage/", methods=["GET"])
 @only_admins
@@ -453,19 +472,27 @@ def admin_management():
     services = get_services()
     types = get_types()
     addons = get_addOns()
-    return render_template("admin_manage.html",serviceForm=AddServiceForm(prefix="service"),typeForm=AddTypeForm(prefix="type"),
-                           addonForm=AddOnForm(prefix="addon"), services = services, types = types, addons = addons)
+    return render_template(
+        "admin_manage.html",
+        serviceForm=AddServiceForm(prefix="service"),
+        typeForm=AddTypeForm(prefix="type"),
+        addonForm=AddOnForm(prefix="addon"),
+        services=services,
+        types=types,
+        addons=addons,
+    )
 
-@bp.post('/admin/manage/service/')
+
+@bp.post("/admin/manage/service/")
 def add_new_service():
-    serviceForm = AddServiceForm(prefix ="service")
-    typeForm = AddTypeForm(prefix = "type")
-    addonForm = AddOnForm(prefix = "addon")
+    serviceForm = AddServiceForm(prefix="service")
+    typeForm = AddTypeForm(prefix="type")
+    addonForm = AddOnForm(prefix="addon")
 
-    if  serviceForm.validate_on_submit():
-        name  = serviceForm.serviceName.data
+    if serviceForm.validate_on_submit():
+        name = serviceForm.serviceName.data
         short = serviceForm.serviceShortDescription.data
-        long  = serviceForm.serviceLongDescription.data
+        long = serviceForm.serviceLongDescription.data
         price = float(serviceForm.servicePrice.data)
 
         coverImage = None
@@ -475,15 +502,22 @@ def add_new_service():
 
         admin_insert_service(name, short, long, price, coverImage)
         flash("Service added!", "success")
-        return redirect(url_for('main.admin_management'))
-    
+        return redirect(url_for("main.admin_management"))
+
     services = get_services()
-    types    = get_types()
-    addons   = get_addOns()
+    types = get_types()
+    addons = get_addOns()
 
     flash("Please fill the Service form", "error")
-    return render_template('admin_manage.html', serviceForm = serviceForm, typeForm = typeForm, addonForm = addonForm,
-                           services = services, types = types, addons = addons)
+    return render_template(
+        "admin_manage.html",
+        serviceForm=serviceForm,
+        typeForm=typeForm,
+        addonForm=addonForm,
+        services=services,
+        types=types,
+        addons=addons,
+    )
 
 
 @bp.post("/admin/manage/type")
@@ -500,14 +534,22 @@ def add_new_type():
         admin_add_type(name, short, price)
         flash("Service Type Added!", "success")
         return redirect(url_for("main.admin_management"))
-    
+
     services = get_services()
-    types    = get_types()
-    addons   = get_addOns()
+    types = get_types()
+    addons = get_addOns()
 
     flash("Please fill the Type form", "error")
-    return render_template("admin_manage.html",serviceForm=serviceForm,typeForm=typeForm,addonForm=addonForm, 
-                           services = services, types = types, addons = addons)
+    return render_template(
+        "admin_manage.html",
+        serviceForm=serviceForm,
+        typeForm=typeForm,
+        addonForm=addonForm,
+        services=services,
+        types=types,
+        addons=addons,
+    )
+
 
 @bp.post("/admin/manage/addon")
 def add_new_addon():
@@ -518,18 +560,26 @@ def add_new_addon():
     if addonForm.validate_on_submit():
         name = addonForm.addOn.data
         price = float(addonForm.price.data)
-        
+
         admin_add_addon(name, price)
         flash("Add-On Added!", "success")
         return redirect(url_for("main.admin_management"))
-    
+
     services = get_services()
-    types    = get_types()
-    addons   = get_addOns()
+    types = get_types()
+    addons = get_addOns()
 
     flash("Please fill the Add-on Form", "error")
-    return render_template("admin_manage.html",serviceForm=serviceForm,typeForm=typeForm,addonForm=addonForm, 
-                           services = services, types = types, addons = addons)
+    return render_template(
+        "admin_manage.html",
+        serviceForm=serviceForm,
+        typeForm=typeForm,
+        addonForm=addonForm,
+        services=services,
+        types=types,
+        addons=addons,
+    )
+
 
 @bp.post("/admin/manage/service/delete")
 def delete_service():
@@ -545,6 +595,7 @@ def delete_service():
         flash("Cannot delete: service is not found", "error")
     return redirect(url_for("main.admin_management"))
 
+
 @bp.post("/admin/manage/type/delete")
 def delete_type():
     type_id = request.form.get("type_id", type=int)
@@ -559,6 +610,7 @@ def delete_type():
         flash("Cannot delete: session type is not found", "error")
     return redirect(url_for("main.admin_management"))
 
+
 @bp.post("/admin/manage/addon/delete")
 def delete_addon():
     addon_id = request.form.get("addon_id", type=int)
@@ -572,8 +624,3 @@ def delete_addon():
     else:
         flash("Cannot delete: add-on is not found", "error")
     return redirect(url_for("main.admin_management"))
-
-
-
-
-

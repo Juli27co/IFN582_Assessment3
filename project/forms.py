@@ -9,7 +9,14 @@ from wtforms.fields import (
     MultipleFileField,
 )
 from wtforms.fields import PasswordField
-from wtforms.validators import InputRequired, Email, Optional, DataRequired, Length
+from wtforms.validators import (
+    InputRequired,
+    Email,
+    Optional,
+    DataRequired,
+    Length,
+    NumberRange,
+)
 from flask_wtf.file import FileField, FileAllowed
 
 
@@ -73,6 +80,7 @@ from flask_wtf.file import FileField, MultipleFileField, FileAllowed
 from wtforms.validators import InputRequired, Email
 from project.db import get_services
 from project.models import Service
+from wtforms.validators import NumberRange
 
 
 class AddServiceForm(FlaskForm):
@@ -94,19 +102,20 @@ class AddServiceForm(FlaskForm):
     )
     serviceSubmit = SubmitField("Add New Service")
 
+
 class AddTypeForm(FlaskForm):
-    typeName = StringField("Type Name",validators=[InputRequired(), Length(max=100)])
-    shortDescription = TextAreaField("Short Description",validators=[InputRequired(), Length(max=255)])
-    price = DecimalField("Price",validators=[DataRequired()])
+    typeName = StringField("Type Name", validators=[InputRequired(), Length(max=100)])
+    shortDescription = TextAreaField(
+        "Short Description", validators=[InputRequired(), Length(max=255)]
+    )
+    price = DecimalField("Price", validators=[DataRequired()])
     submit = SubmitField("Add Type")
 
 
 class AddOnForm(FlaskForm):
-    addOn = StringField("Add-On Name",validators=[DataRequired(), Length(max=255)])
-    price = DecimalField("Price",validators=[DataRequired()])
+    addOn = StringField("Add-On Name", validators=[DataRequired(), Length(max=255)])
+    price = DecimalField("Price", validators=[DataRequired()])
     submit = SubmitField("Save Add-On")
-
-
 
 
 class InquireryForm(FlaskForm):
@@ -165,9 +174,29 @@ location_choices = [
     ("Perth", "Perth"),
 ]
 
+
 class FiltersForm(FlaskForm):
     """Form for filtering photographers on the index page."""
+
     service_type = RadioField("Service Type :", choices=[])
     location = RadioField("Location :", choices=location_choices)
     availability = RadioField("Availability :", choices=availability_choices)
+    min_rating = DecimalField(
+        "Minimum Rating :",
+        places=1,
+        validators=[InputRequired(), NumberRange(min=0, max=5)],
+        render_kw={"min": 0, "max": 5, "type": "range", "step": "0.1"},
+        default=0.0,
+    )
     submit = SubmitField("Apply Filters")
+
+
+class SearchForm(FlaskForm):
+    """Form for searching photographers on the index page."""
+
+    search_query = StringField(
+        "Search Photographers",
+        validators=[Optional(), Length(min=1, max=100)],
+        render_kw={"placeholder": "Enter photographer name..."},
+    )
+    submit = SubmitField("Search")

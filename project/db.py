@@ -1,27 +1,36 @@
 from . import mysql
 from .models import Service
-from MySQLdb.cursors import DictCursor 
+from MySQLdb.cursors import DictCursor
+
 
 def get_photographer_management(photographer_id: int):
-    cur = mysql.connection.cursor(DictCursor) 
-    cur.execute("""
+    cur = mysql.connection.cursor(DictCursor)
+    cur.execute(
+        """
         SELECT photographer_id, email, password, phone, firstName, lastName,
                bioDescription, location, availability, rating, profilePicture
         FROM Photographer
         WHERE photographer_id = %s
-    """, (photographer_id,))
+    """,
+        (photographer_id,),
+    )
     row = cur.fetchone()
     cur.close()
-    return row 
+    return row
+
 
 def add_or_update_photographer(form, photographer_id=None, image_filename=None):
     cur = mysql.connection.cursor()
     if photographer_id:
         params = [
-            form.email.data, form.phone.data,
-            form.firstName.data, form.lastName.data,
-            form.bioDescription.data, form.location.data,
-            form.availability.data, (form.rating.data or 0.0)
+            form.email.data,
+            form.phone.data,
+            form.firstName.data,
+            form.lastName.data,
+            form.bioDescription.data,
+            form.location.data,
+            form.availability.data,
+            (form.rating.data or 0.0),
         ]
 
         set_cols = """
@@ -30,7 +39,7 @@ def add_or_update_photographer(form, photographer_id=None, image_filename=None):
         """
         if getattr(form, "password", None) and (form.password.data or ""):
             set_cols += ", password=%s"
-            params.append(form.password.data)  
+            params.append(form.password.data)
 
         if image_filename:
             set_cols += ", profilePicture=%s"
@@ -38,95 +47,126 @@ def add_or_update_photographer(form, photographer_id=None, image_filename=None):
 
         params.append(photographer_id)
 
-        cur.execute(f"UPDATE Photographer SET {set_cols} WHERE photographer_id=%s", params) 
+        cur.execute(
+            f"UPDATE Photographer SET {set_cols} WHERE photographer_id=%s", params
+        )
     else:
-        cur.execute("""
+        cur.execute(
+            """
             INSERT INTO Photographer
                 (email, password, phone, firstName, lastName,
                  bioDescription, location, availability, rating, profilePicture)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (
-            form.email.data,
-            (getattr(form, "password", None) and form.password.data) or "",  
-            form.phone.data, form.firstName.data, form.lastName.data,
-            form.bioDescription.data, form.location.data,
-            form.availability.data, form.rating.data or 0.0,
-            image_filename  
-        ))
+        """,
+            (
+                form.email.data,
+                (getattr(form, "password", None) and form.password.data) or "",
+                form.phone.data,
+                form.firstName.data,
+                form.lastName.data,
+                form.bioDescription.data,
+                form.location.data,
+                form.availability.data,
+                form.rating.data or 0.0,
+                image_filename,
+            ),
+        )
         photographer_id = cur.lastrowid
 
     mysql.connection.commit()
     cur.close()
-    return photographer_id  
-
+    return photographer_id
 
 
 def get_all_services():
-    cur = mysql.connection.cursor(DictCursor) 
+    cur = mysql.connection.cursor(DictCursor)
     cur.execute("SELECT service_id AS id, name AS name FROM Service ORDER BY name")
     rows = cur.fetchall()
     cur.close()
     services = []
     for r in rows or []:
-        services.append({"id": r["id"], "name": r["name"]}) 
+        services.append({"id": r["id"], "name": r["name"]})
     return services
 
-def insert_image(service_id: int, photographer_id: int, image_relative_path: str, image_description: str) -> int:
+
+def insert_image(
+    service_id: int,
+    photographer_id: int,
+    image_relative_path: str,
+    image_description: str,
+) -> int:
     cur = mysql.connection.cursor()
     try:
-        cur.execute("""
+        cur.execute(
+            """
             INSERT INTO Image (imageSource, image_description, service_id, photographer_id)
             VALUES (%s, %s, %s, %s)
-        """, (image_relative_path, image_description, service_id, photographer_id))
+        """,
+            (image_relative_path, image_description, service_id, photographer_id),
+        )
         mysql.connection.commit()
         return cur.lastrowid
     finally:
         cur.close()
 
+
 def ensure_photographer_service(photographer_id: int, service_id: int) -> None:
-    cur = mysql.connection.cursor(DictCursor) 
+    cur = mysql.connection.cursor(DictCursor)
     try:
-        cur.execute("""
+        cur.execute(
+            """
             SELECT photographerService_id
             FROM Photographer_Service
             WHERE photographer_id=%s AND service_id=%s
-        """, (photographer_id, service_id))
+        """,
+            (photographer_id, service_id),
+        )
         row = cur.fetchone()
         if not row:
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO Photographer_Service (photographer_id, service_id)
                 VALUES (%s, %s)
-            """, (photographer_id, service_id))
+            """,
+                (photographer_id, service_id),
+            )
             mysql.connection.commit()
     finally:
         cur.close()
 
+
 def get_images_for_photographer(photographer_id: int):
-    cur = mysql.connection.cursor(DictCursor)  
+    cur = mysql.connection.cursor(DictCursor)
     try:
-        cur.execute("""
+        cur.execute(
+            """
             SELECT image_id, imageSource, image_description, service_id, photographer_id
             FROM Image
             WHERE photographer_id=%s
             ORDER BY image_id DESC
-        """, (photographer_id,))
+        """,
+            (photographer_id,),
+        )
         rows = cur.fetchall() or []
-        return rows  
+        return rows
     finally:
         cur.close()
+
 
 def delete_image_row(image_id: int, photographer_id: int) -> int:
     cur = mysql.connection.cursor()
     try:
-        cur.execute("""
+        cur.execute(
+            """
             DELETE FROM Image
             WHERE image_id=%s AND photographer_id=%s
-        """, (image_id, photographer_id))
+        """,
+            (image_id, photographer_id),
+        )
         mysql.connection.commit()
         return cur.rowcount
     finally:
         cur.close()
-
 
 
 from hashlib import sha256
@@ -141,9 +181,10 @@ from project.models import (
     AddOn,
     PhotographerService,
     Inquiry,
-    Admin
+    Admin,
 )
 from . import mysql
+
 
 def get_clients():
     cur = mysql.connection.cursor()
@@ -200,6 +241,21 @@ def get_photographers(filters):
             query += " AND availability = %s"
         params.append(filters["availability"])
 
+    if filters.get("min_rating"):
+        if "WHERE" in query and "s.name" in query:
+            query += " AND p.rating >= %s"
+        else:
+            query += " AND rating >= %s"
+        params.append(filters["min_rating"])
+
+    if filters.get("search"):
+        if "WHERE" in query and "s.name" in query:
+            query += " AND (p.firstName LIKE %s OR p.lastName LIKE %s)"
+        else:
+            query += " AND (firstName LIKE %s OR lastName LIKE %s)"
+        search_term = f"%{filters['search']}%"
+        params.extend([search_term, search_term])
+
     print(f"Executing query: {query}")
     print(f"With params: {params}")
 
@@ -243,6 +299,7 @@ def get_services():
         )
         for row in results
     ]
+
 
 def get_inquiries():
     cur = mysql.connection.cursor()
@@ -360,13 +417,14 @@ def get_types():
     cur.close()
     return [
         ServiceType(
-            id=row['type_id'],
-            name=row['type_name'],              
-            shortDescription=row['shortDescription'],
-            price=float(row['price'])
+            id=row["type_id"],
+            name=row["type_name"],
+            shortDescription=row["shortDescription"],
+            price=float(row["price"]),
         )
         for row in rows
-    ]   
+    ]
+
 
 def get_single_type(typeId):
     cur = mysql.connection.cursor()
@@ -385,13 +443,12 @@ def get_single_type(typeId):
     cur.close()
     return (
         ServiceType(
-            row['type_id'],
-            row['type_name'],
-            row['shortDescription'],
-            row['price']
-        ) 
-        if row else None
-    )    
+            row["type_id"], row["type_name"], row["shortDescription"], row["price"]
+        )
+        if row
+        else None
+    )
+
 
 def get_addOns():
     cur = mysql.connection.cursor()
@@ -405,14 +462,7 @@ def get_addOns():
     )
     results = cur.fetchall()
     cur.close()
-    return [
-        AddOn(
-            row["addOn_id"],
-            row["addOn"], 
-            row["price"]
-        )
-        for row in results
-    ]
+    return [AddOn(row["addOn_id"], row["addOn"], row["price"]) for row in results]
 
 
 def get_single_addOn(addonId):
@@ -429,14 +479,7 @@ def get_single_addOn(addonId):
     )
     row = cur.fetchone()
     cur.close()
-    return (
-        AddOn(
-            row['addOn_id'],
-            row['addOn'],
-            row['price']
-        ) 
-        if row else None
-    )
+    return AddOn(row["addOn_id"], row["addOn"], row["price"]) if row else None
 
 
 def get_single_service(serviceId):
@@ -463,9 +506,10 @@ def get_single_service(serviceId):
             row["shortDescription"],
             row["longDescription"],
             row["price"],
-            row["coverImage"]
+            row["coverImage"],
         )
-        if row else None
+        if row
+        else None
     )
 
 
@@ -485,11 +529,10 @@ def get_photographer_service(photographer_service_id):
     cur.close()
     return (
         PhotographerService(
-            row["photographerService_id"],
-            row["photographer_id"], 
-            row["service_id"]
+            row["photographerService_id"], row["photographer_id"], row["service_id"]
         )
-        if row else None
+        if row
+        else None
     )
 
 
@@ -528,7 +571,7 @@ def get_images_by_photographer_service(photographer_service):
 # for form on item_detail page
 def add_inquiry(form):
     cur = mysql.connection.cursor()
-    
+
     cur.execute(
         """
         INSERT INTO Inquiry (
@@ -591,43 +634,50 @@ def add_user(form):
     mysql.connection.commit()
     cur.close()
 
+
 def get_photographer(photographer_id):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         SELECT photographer_id, email, password, phone, firstName, lastName,
                bioDescription, location, availability, rating, profilePicture
         FROM Photographer
         WHERE photographer_id = %s
-    """, (photographer_id,))
+    """,
+        (photographer_id,),
+    )
     row = cur.fetchone()
     cur.close()
-    
+
     if not row:
         return None
 
     return Photographer(
-        "photographer",                         
-        str(row["photographer_id"]),           
-        row["email"],                           
-        row["password"],                       
-        row["phone"],                           
-        row["firstName"],                      
-        row["lastName"],                   
-        row["bioDescription"],                
-        row["location"],                       
-        row["availability"],                   
-        float(row["rating"] or 0.0),           
-        row["profilePicture"] or "placeholder-image.png"
+        "photographer",
+        str(row["photographer_id"]),
+        row["email"],
+        row["password"],
+        row["phone"],
+        row["firstName"],
+        row["lastName"],
+        row["bioDescription"],
+        row["location"],
+        row["availability"],
+        float(row["rating"] or 0.0),
+        row["profilePicture"] or "placeholder-image.png",
     )
 
 
 def get_images_for_photographer(photographer_id):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         SELECT image_id, imageSource, image_description, service_id, photographer_id
         FROM Image
         WHERE photographer_id = %s
-    """, (photographer_id,))
+    """,
+        (photographer_id,),
+    )
     results = cur.fetchall()
     cur.close()
 
@@ -637,35 +687,37 @@ def get_images_for_photographer(photographer_id):
             row["imageSource"],
             row["image_description"],
             str(row["service_id"]),
-            str(row["photographer_id"])
+            str(row["photographer_id"]),
         )
         for row in results
     ]
 
 
-
 def get_services_for_photographer(photographer_id):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         SELECT
             ps.photographerService_id AS photographer_service_id,
             s.service_id, s.name, s.shortDescription, s.longDescription, s.price
         FROM Photographer_Service ps
         JOIN Service s ON s.service_id = ps.service_id
         WHERE ps.photographer_id = %s
-    """, (photographer_id,))
+    """,
+        (photographer_id,),
+    )
     rows = cur.fetchall()
     cur.close()
 
     return [
         Service(
-            id=row['service_id'],
-            name=row['name'],
-            shortDescription=row['shortDescription'],
-            longDescription=row['longDescription'],
-            price=float(row['price']),
-            coverImage=row.get('coverImage', "foobar"),  
-            photographer_service_id=row['photographer_service_id']
+            id=row["service_id"],
+            name=row["name"],
+            shortDescription=row["shortDescription"],
+            longDescription=row["longDescription"],
+            price=float(row["price"]),
+            coverImage=row.get("coverImage", "foobar"),
+            photographer_service_id=row["photographer_service_id"],
         )
         for row in rows
     ]
@@ -673,31 +725,42 @@ def get_services_for_photographer(photographer_id):
 
 def admin_insert_service(name, short_desc, long_desc, price, cover_image=None):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         INSERT INTO Service (name, shortDescription, longDescription, price, coverImage)
         VALUES (%s, %s, %s, %s, %s)
-    """, (name, short_desc, long_desc, price, cover_image))
+    """,
+        (name, short_desc, long_desc, price, cover_image),
+    )
     mysql.connection.commit()
     cur.close()
 
 
 def admin_add_type(name, short_desc, price):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         INSERT INTO ServiceType (type_name, shortDescription, price)
         VALUES (%s, %s, %s)
-    """, (name, short_desc, price))
+    """,
+        (name, short_desc, price),
+    )
     mysql.connection.commit()
     cur.close()
 
+
 def admin_add_addon(name, price):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         INSERT INTO Addon (AddOn, price)
         VALUES (%s, %s)
-    """, (name, price))
+    """,
+        (name, price),
+    )
     mysql.connection.commit()
     cur.close()
+
 
 def admin_delete_service(service_id: int):
     cur = mysql.connection.cursor()
