@@ -557,8 +557,8 @@ def add_user(form):
     if form.user_type.data == "client":
         cur.execute(
             """
-            INSERT INTO Client (email, password, firstName, lastName, phone, preferredPaymentMethod, address)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO Client (email, password, firstName, lastName, phone)
+            VALUES (%s, %s, %s, %s, %s)
         """,
             (
                 form.email.data,
@@ -566,8 +566,6 @@ def add_user(form):
                 form.firstName.data,
                 form.lastName.data,
                 form.phone.data,
-                "",
-                "",
             ),
         )
     elif form.user_type.data == "photographer":

@@ -78,7 +78,9 @@
                         <i class="fa fa-gear" style="font-size:24px"></i> Setting
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Manage Portfolio</a></li>
+                        {% if session.get('userType') == 'vendor' %}
+                          <li><a class="dropdown-item" href="#">Manage Portfolio</a></li>
+                        {% endif %}
                         {% if session.get('userType') == 'admin' %}
                           <li><a class="dropdown-item" href="#">Admin Panel</a></li>
                         {% endif %}
