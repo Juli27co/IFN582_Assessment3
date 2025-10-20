@@ -79,9 +79,7 @@
                 placeholder="Search photographers..."
                 aria-label="Search"
               />
-              <button class="btn btn-light" type="submit">
-                Search
-              </button>
+              <button class="btn btn-light" type="submit">Search</button>
             </form>
             <div
               class="d-flex ms-2 justify-content-end align-items-center mt-1"
@@ -102,6 +100,7 @@
                     <i class="fa fa-gear" style="font-size: 24px"></i> Setting
                   </button>
                   <ul class="dropdown-menu">
+                    {% if session.get('userType') == 'photographer' %}
                     <li>
                       <a
                         class="dropdown-item"
@@ -109,7 +108,7 @@
                         >Manage Portfolio</a
                       >
                     </li>
-                    {% if session.get('userType') == 'admin' %}
+                    {% endif %} {% if session.get('userType') == 'admin' %}
                     <li>
                       <a
                         class="dropdown-item"
