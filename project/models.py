@@ -1,15 +1,32 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List, Optional
+from uuid import uuid4
+from datetime import datetime
+from enum import Enum
 
-@dataclass 
-class Client:
+@dataclass
+class Image:
+    image_id: str
+    imageSource: str
+    description: str
+    service_id: str
+    photographer_id: str
+
+
+@dataclass
+class ServiceType:
     id: str
-    email: str
-    password: str
-    phone: str
-    firstName: str
-    lastName: str
-    preferredPaymentMethod: str
-    address: str
+    type: str
+    shortDescription: str
+    price: float
+
+
+@dataclass
+class AddOn:
+    id: str
+    addOn: str
+    price: float
+
 
 @dataclass
 class Service:
@@ -20,27 +37,102 @@ class Service:
     price: float = 0.00
     coverImage: str = "foobar"
 
+
 @dataclass
-class Photographer:
+class Cart_Service:
+    service: Service
+    type: ServiceType
+    addon: AddOn
+    # generate unique identifier
+    id: str = field(default_factory=lambda: str(uuid4))
+
+
+@dataclass
+class Cart:
+    items: List[Cart_Service] = field(default_factory=lambda: [])
+
+    def add_item(self, item: Cart_Service):
+        self.items.append(item)
+
+@dataclass 
+class Orders:
+    id: str
+    createdDate: datetime
+    lastUpdated: datetime
+    client_id: str
+    address: str
+
+@dataclass
+class OrderService:
+    id: str
+    order_id: str
+    service_id: str
+    type_id: str
+    addOn_id: str 
+    photographer_id: str
+    subtotal: float = 0.00
+
+class PaymentStatus(Enum):
+    PENDING = 'Pending'
+    CONFIRMED = 'Confirmed'
+    CANCELLED = 'Cancelled'
+
+
+@dataclass
+class Payment:
+    id: str
+    order_id: str
+    payment_method: str
+    total_price: float = 0.00
+    payment_status: PaymentStatus
+
+
+@dataclass
+class User:
+    role: str
     id: str
     email: str
     password: str
     phone: str
     firstName: str
     lastName: str
-    bioDescription: str 
-    location: str
-    availability: str 
-    rating: float = 0.0
-    profilePicture: str = "foobar"
 
 @dataclass
-class Image:
+class Client(User):
+    preferredPaymentMethod: str
+    address: str
+
+@dataclass
+class Photographer(User):
+    bioDescription: str
+    location: str
+    availability: str
+    rating: float
+    profilePicture: str = "placeholder-image.png"
+
+
+@dataclass
+class Admin(User):
+    pass
+
+
+@dataclass
+class PhotographerService:
     id: str
-    service_id: str
     photographer_id: str
-    imageSource: str = "foobar"
-    imageDescription: str = "foobar"
+    service_id: str
+
+
+@dataclass
+class Inquiry:
+    inquiry_id: int
+    fullName: str
+    email: str
+    phone: str
+    message: str
+    createdDate: str
+
     
+
 
 
