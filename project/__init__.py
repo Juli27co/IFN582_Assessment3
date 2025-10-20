@@ -34,6 +34,15 @@ def create_app():
     from project import views
     app.register_blueprint(views.bp)
     
+    @app.context_processor
+    def inject_global_data():
+        from project.db import get_all_services
+        try:
+            services = get_all_services()
+        except Exception as e:
+            print(f"Error loading services for context: {e}")
+            services = []
+        return dict(global_services=services)
                            
     @app.errorhandler(404) 
     # inbuilt function which takes error as parameter 

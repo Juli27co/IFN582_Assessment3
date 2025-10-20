@@ -177,7 +177,7 @@ def get_photographers(filters):
             FROM Photographer p
             INNER JOIN Photographer_Service ps ON p.photographer_id = ps.photographer_id
             INNER JOIN Service s ON ps.service_id = s.service_id
-            WHERE s.name = %s
+            WHERE s.service_id = %s
         """
         params = [filters["service_type"]]
     else:

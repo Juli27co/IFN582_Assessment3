@@ -72,8 +72,8 @@
         {% for photographer in photographers %}
         <div class="card">
           <img
-             src="{% if photographer.profilePicture %}{{ url_for('static', filename='img/' ~ photographer.profilePicture) }}{% else %}{{ url_for('static', filename='img/placeholder-image.png') }}{% endif %}",
-             class="card-img-top img-fit "
+            src="{% if photographer.profilePicture %}{{ url_for('static', filename='img/' ~ photographer.profilePicture) }}{% else %}{{ url_for('static', filename='img/placeholder-image.png') }}{% endif %}"
+            class="card-img-top"
             alt="photographer-image"
           />
           <div class="card-body">

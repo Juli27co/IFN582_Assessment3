@@ -10,8 +10,14 @@
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="{{ url_for('static', filename='css/styles.css') }}"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
@@ -19,7 +25,9 @@
 
       <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
         <div class="container-fluid">
-          <a class="navbar-brand text-white" href="{{url_for('main.index')}}">FotoBooking</a>
+          <a class="navbar-brand text-white" href="{{url_for('main.index')}}"
+            >FotoBooking</a
+          >
           <button
             class="navbar-toggler"
             type="button"
@@ -33,25 +41,25 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {% for service in global_services %}
               <li class="nav-item">
-                <a class="nav-link text-light" aria-current="page" href="#"
-                  >Newborn</a
+                <a
+                  class="nav-link text-light"
+                  href="/?service_type={{ service.id }}"
                 >
+                  {{ service.name }}
+                </a>
               </li>
+              {% endfor %} {% if session.get('userType') == "client" %}
               <li class="nav-item">
-                <a class="nav-link text-light" href="#">Weddings</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#">Pets</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#">Products</a>
-              </li>
-              {% if session.get('userType') == "client" %}
-              <li class="nav-item">
-                <button type="button" class="btn btn-primary position-relative mt-1">
-                  <i class="fa fa-shopping-cart" style="font-size:24px"></i>
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2">
+                <button
+                  type="button"
+                  class="btn btn-primary position-relative mt-1"
+                >
+                  <i class="fa fa-shopping-cart" style="font-size: 24px"></i>
+                  <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
+                  >
                     {{ session.get('cart', {}).get('items', [])|length }}
                     <span class="visually-hidden">unread messages</span>
                   </span>
@@ -68,61 +76,79 @@
               />
               <button class="btn btn-light" type="submit">Search</button>
             </form>
-            <div class="d-flex ms-2">
+            <div class="d-flex ms-2 justify-content-end align-items-center mt-1">
               {% if session.get('logged_in') %}
-                <span class="navbar-text text-light me-2">Welcome, {{ session.get('user').firstName }}!</span>
-                {% if session.get('userType') == 'photographer' or session.get('userType') == 'admin' %}
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <button class="btn dropdown-toggle btn-outline-light me-2" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-gear" style="font-size:24px"></i> Setting
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{url_for('main.vendor_management_check' )}}">Manage Portfolio</a></li>
-                        {% if session.get('userType') == 'admin' %}
-                          <li><a class="dropdown-item" href="#">Admin Panel</a></li>
-                        {% endif %}
-                      </ul>
+              <span class="navbar-text text-light me-2"
+                >Welcome, {{ session.get('user').firstName }}!</span
+              >
+              {% if session.get('userType') == 'photographer' or
+              session.get('userType') == 'admin' %}
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                  <button
+                    class="btn dropdown-toggle btn-outline-light me-2"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i class="fa fa-gear" style="font-size: 24px"></i> Setting
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="{{url_for('main.vendor_management_check' )}}"
+                        >Manage Portfolio</a
+                      >
                     </li>
+                    {% if session.get('userType') == 'admin' %}
+                    <li><a class="dropdown-item" href="#">Admin Panel</a></li>
+                    {% endif %}
                   </ul>
-                {% endif %}
-                  <a href="{{ url_for('main.logout') }}" class="btn btn-outline-light">Logout</a>
+                </li>
+              </ul>
+              {% endif %}
+              <a
+                href="{{ url_for('main.logout') }}"
+                class="btn btn-outline-light"
+                >Logout</a
+              >
               {% else %}
-                <a href="{{ url_for('main.login') }}" class="btn btn-outline-light me-2">Login</a>
-                <a href="{{ url_for('main.register') }}" class="btn btn-light">Register</a>
+              <a
+                href="{{ url_for('main.login') }}"
+                class="btn btn-outline-light me-2"
+                >Login</a
+              >
+              <a href="{{ url_for('main.register') }}" class="btn btn-light"
+                >Register</a
+              >
               {% endif %}
             </div>
           </div>
         </div>
       </nav>
       <!--For flash message when form submission has error-->
-      {% with messages = get_flashed_messages(category_filter='message') %}
-        {% if messages %}
-          <div class="alert alert-primary text-center p-2" role="alert" style="margin: 0px;">
-            {% for message in messages %}
-              {{ message }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %} 
-      {% with messages = get_flashed_messages(category_filter='error') %}
-        {% if messages %}
-          <div class="alert alert-danger text-center p-2" role="alert" style="margin: 0px;">
-            {% for message in messages %}
-              {{ message }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %} 
-
-      {% block head %}
-      {% endblock %}
+      {% with messages = get_flashed_messages(category_filter='message') %} {%
+      if messages %}
+      <div
+        class="alert alert-primary text-center p-2"
+        role="alert"
+        style="margin: 0px"
+      >
+        {% for message in messages %} {{ message }} {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% with messages =
+      get_flashed_messages(category_filter='error') %} {% if messages %}
+      <div
+        class="alert alert-danger text-center p-2"
+        role="alert"
+        style="margin: 0px"
+      >
+        {% for message in messages %} {{ message }} {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block head %} {% endblock %}
     </header>
 
-    <main>
-      {% block main %}
-      {% endblock %}
-    </main>
+    <main>{% block main %} {% endblock %}</main>
 
     <footer>
       <p class="text-center py-5">Developed by: Juliana Cortes</p>
