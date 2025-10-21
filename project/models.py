@@ -1,15 +1,7 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 from uuid import uuid4
 from datetime import datetime
-from enum import Enum
-
-
-# for using in the form.available
-class AvailabilityStatus(Enum):
-    weekly_only = "Weekdays only"
-    weekend_only = "Weekends only"
-    short_notice_booking = "Short notice booking"
 
 
 @dataclass
@@ -17,8 +9,8 @@ class Image:
     image_id: str
     imageSource: str
     description: str
-    serviceId: str
-    portpholioId: str
+    service_id: str
+    photographer_id: str
 
 
 @dataclass
@@ -59,7 +51,6 @@ class User:
 @dataclass
 class Client(User):
     preferredPaymentMethod: str
-    address: str
 
 @dataclass
 class Photographer(User):
@@ -121,20 +112,6 @@ class OrderService:
     addOn_id: str 
     photographer_id: str
     subtotal: float = 0.00
-
-class PaymentStatus(Enum):
-    PENDING = 'Pending'
-    CONFIRMED = 'Confirmed'
-    CANCELLED = 'Cancelled'
-
-
-@dataclass
-class Payment:
-    id: str
-    order_id: str
-    payment_method: str
-    payment_status: PaymentStatus
-    total_price: float = 0.00
 
 @dataclass
 class PhotographerService:
