@@ -50,20 +50,22 @@
                   {{ service.name }}
                 </a>
               </li>
-              {% endfor %} {% if session.get('userType') == "client" %}
+              {% endfor %} {% if session.get('userType') == "client" or session.get('userType') == None %}
               <li class="nav-item">
-                <button
-                  type="button"
-                  class="btn btn-primary position-relative mt-1"
-                >
-                  <i class="fa fa-shopping-cart" style="font-size: 24px"></i>
-                  <span
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
+                <a href="{{ url_for('main.orderCheckout') }}">
+                  <button
+                    type="button"
+                    class="btn btn-primary position-relative mt-1"
                   >
-                    {{ session.get('cart', {}).get('items', [])|length }}
-                    <span class="visually-hidden">unread messages</span>
-                  </span>
-                </button>
+                    <i class="fa fa-shopping-cart" style="font-size: 24px"></i>
+                    <span
+                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2"
+                    >
+                      {{ session.get('cart', {}).get('items', [])|length }}
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  </button>
+                </a>
               </li>
               {% endif %}
             </ul>

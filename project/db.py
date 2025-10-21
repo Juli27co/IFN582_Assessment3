@@ -789,17 +789,6 @@ def admin_delete_addon(addon_id: int):
     finally:
         cur.close()
 
-
-# def insert_order_detail(client_id, address, payment_method):
-#     cur = mysql.connection.cursor()
-#     cur.execute("""
-#         INSERT INTO Orders (client_id, address, payment_method)
-#         VALUES (%s, %s, %s)
-#     """, (client_id, address, payment_method))
-#     mysql.connection.commit()
-#     cur.close()
-
-
 def insert_order_detail(order):
     cur = mysql.connection.cursor()
     cur.execute(

@@ -71,7 +71,6 @@ class Cart_Service:
     photographer: Photographer
     type: ServiceType
     addon: AddOn
-    # generate unique identifier
     id: str = field(default_factory=lambda: str(uuid4()))
     subtotal: float = 0.00
 
@@ -98,8 +97,6 @@ class Cart:
 @dataclass 
 class Orders:
     id: str
-    # createdDate: datetime
-    # lastUpdated: datetime
     client_id: str
     address: str
     payment_method: str

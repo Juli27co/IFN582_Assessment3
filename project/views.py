@@ -135,9 +135,6 @@ def orderCheckout():
     )
 
 
-# ==================================
-
-
 @bp.post("/cart/remove/")
 def cart_remove():
     item_id = request.form.get("item_id")
