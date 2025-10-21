@@ -106,9 +106,10 @@ def orderCheckout():
         client_id = user["id"]
         address = form.address.data
         payment_method = form.payment_method.data
-        order = convert_cartItem_to_order(get_cart(),client_id, address, payment_method)
+        order = convert_cartItem_to_order(client_id, address, payment_method, get_cart())
         insert_order_detail(order)
-        flash("Your booking has been set to company successfully! Our staff will contact you shortly.", "success")
+        empty_cart()
+        flash("Your booking has been set to company successfully! Our staff will contact you shortly.")
         return redirect(url_for('main.orderCheckout'))
 
     readonly = 'user' in session

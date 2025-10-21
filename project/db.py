@@ -810,7 +810,13 @@ def insert_order_detail(order):
         cur.execute("""
         INSERT INTO Order_Service (order_id, service_id, type_id, addOn_id, photographer_id, subtotal)
         VALUES (%s, %s, %s, %s, %s, %s)
-    """,(order_id, item.service.id, item.type.id, item.addOn.id, item.photographer.id, item.subtotal))
+    """,(
+            order_id, item.service.id,
+            item.type.id,
+            item.addon.id if item.addon else None,
+            item.photographer.id,
+            item.subtotal
+        ))
     
     mysql.connection.commit()
     cur.close()

@@ -57,7 +57,7 @@ def convert_cartItem_to_order(client_id, address, payment_method,cart):
         client_id=client_id,
         address=address,
         payment_method=payment_method,
-        items=cart
+        items=cart.items
     )
 
 def _save_cart_to_session(cart):
