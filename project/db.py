@@ -789,6 +789,7 @@ def admin_delete_addon(addon_id: int):
     finally:
         cur.close()
 
+
 # def insert_order_detail(client_id, address, payment_method):
 #     cur = mysql.connection.cursor()
 #     cur.execute("""
@@ -798,25 +799,44 @@ def admin_delete_addon(addon_id: int):
 #     mysql.connection.commit()
 #     cur.close()
 
+
 def insert_order_detail(order):
     cur = mysql.connection.cursor()
-    cur.execute("""
+    cur.execute(
+        """
         INSERT INTO Orders (client_id, address, payment_method)
         VALUES (%s, %s, %s)
-    """, (order.client_id, order.address, order.payment_method))
+    """,
+        (order.client_id, order.address, order.payment_method),
+    )
     order_id = cur.lastrowid
 
     for item in order.items:
-        cur.execute("""
+        cur.execute(
+            """
         INSERT INTO Order_Service (order_id, service_id, type_id, addOn_id, photographer_id, subtotal)
         VALUES (%s, %s, %s, %s, %s, %s)
-    """,(
-            order_id, item.service.id,
-            item.type.id,
-            item.addon.id if item.addon else None,
-            item.photographer.id,
-            item.subtotal
-        ))
-    
+    """,
+            (
+                order_id,
+                item.service.id,
+                item.type.id,
+                item.addon.id if item.addon else None,
+                item.photographer.id,
+                item.subtotal,
+            ),
+        )
+
     mysql.connection.commit()
     cur.close()
+
+
+def get_all_locations():
+    cur = mysql.connection.cursor(DictCursor)
+    cur.execute(
+        "SELECT DISTINCT location FROM Photographer WHERE location IS NOT NULL ORDER BY location"
+    )
+    rows = cur.fetchall()
+    cur.close()
+    locations = [r["location"] for r in rows or []]
+    return locations

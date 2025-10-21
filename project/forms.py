@@ -166,20 +166,11 @@ availability_choices = [
     ("Weekdays", "Weekdays only"),
     ("Short notice bookings", "Short notice bookings"),
 ]
-
-location_choices = [
-    ("Sydney", "Sydney"),
-    ("Melbourne", "Melbourne"),
-    ("Brisbane", "Brisbane"),
-    ("Perth", "Perth"),
-]
-
-
 class FiltersForm(FlaskForm):
     """Form for filtering photographers on the index page."""
 
     service_type = RadioField("Service Type :", choices=[])
-    location = RadioField("Location :", choices=location_choices)
+    location = RadioField("Location :", choices=[])
     availability = RadioField("Availability :", choices=availability_choices)
     min_rating = DecimalField(
         "Minimum Rating :",
@@ -201,8 +192,11 @@ class SearchForm(FlaskForm):
     )
     submit = SubmitField("Search")
 
+
 class CheckoutForm(FlaskForm):
-    full_name = StringField("Full name", validators=[InputRequired(), Length(min=2, max=100)])
+    full_name = StringField(
+        "Full name", validators=[InputRequired(), Length(min=2, max=100)]
+    )
     email = StringField("Email", validators=[InputRequired(), Email()])
     phone = StringField("PhoneNumber", validators=[InputRequired()])
     address = StringField("Address", validators=[InputRequired()])

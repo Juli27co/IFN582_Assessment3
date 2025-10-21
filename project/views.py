@@ -7,7 +7,7 @@ from flask import (
     redirect,
     current_app,
     url_for,
-    session
+    session,
 )
 from hashlib import sha256
 import os
@@ -24,46 +24,53 @@ from .forms import (
     LoginForm,
     RegisterForm,
     FiltersForm,
-    CheckoutForm
+    CheckoutForm,
 )
 
 # Database function imports
 from .db import (
-    get_photographer,
+    add_inquiry,
     add_or_update_photographer,
-    get_photographer_management,
-    get_services_for_photographer,
-    get_all_services,
-    insert_image,
-    ensure_photographer_service,
-    get_images_for_photographer,
-    delete_image_row,
-    admin_insert_service,
-    get_services,
-    admin_add_type,
+    add_user,
     admin_add_addon,
+    admin_add_type,
+    admin_delete_addon,
     admin_delete_service,
     admin_delete_type,
-    admin_delete_addon,
-    add_inquiry,
-    add_user,
+    admin_insert_service,
     check_for_admin,
     check_for_client,
     check_for_photographer,
+    delete_image_row,
+    ensure_photographer_service,
     get_addOns,
+    get_all_locations,
+    get_all_services,
     get_clients,
     get_images_by_photographer_service,
+    get_images_for_photographer,
+    get_photographer,
+    get_photographer_management,
     get_photographer_service,
     get_photographers,
+    get_services,
+    get_services_for_photographer,
     get_single_addOn,
     get_single_service,
     get_single_type,
     get_types,
-    insert_order_detail
+    insert_image,
+    insert_order_detail,
 )
 
 # Session and wrapper imports
-from project.session import add_to_cart, get_cart, remove_cart_item, empty_cart, convert_cartItem_to_order
+from project.session import (
+    add_to_cart,
+    get_cart,
+    remove_cart_item,
+    empty_cart,
+    convert_cartItem_to_order,
+)
 from project.wrappers import only_photographers, only_admins
 
 bp = Blueprint("main", __name__)
@@ -86,7 +93,8 @@ def save_image(file_storage):
     file_storage.save(dest)
     return filename
 
-@bp.route('/client/checkout/', methods=['GET', 'POST'])
+
+@bp.route("/client/checkout/", methods=["GET", "POST"])
 def orderCheckout():
     cart = get_cart()
     form = CheckoutForm()
@@ -94,8 +102,8 @@ def orderCheckout():
 
     if user:
         form.full_name.data = f"{user['firstName']} {user['lastName']}"
-        form.email.data = user['email']
-        form.phone.data = user['phone']
+        form.email.data = user["email"]
+        form.phone.data = user["phone"]
 
     # handle when form is submitted
     if form.validate_on_submit():
@@ -106,15 +114,29 @@ def orderCheckout():
         client_id = user["id"]
         address = form.address.data
         payment_method = form.payment_method.data
-        order = convert_cartItem_to_order(client_id, address, payment_method, get_cart())
+        order = convert_cartItem_to_order(
+            client_id, address, payment_method, get_cart()
+        )
         insert_order_detail(order)
         empty_cart()
-        flash("Your booking has been set to company successfully! Our staff will contact you shortly.")
-        return redirect(url_for('main.orderCheckout'))
+        flash(
+            "Your booking has been set to company successfully! Our staff will contact you shortly."
+        )
+        return redirect(url_for("main.orderCheckout"))
 
-    readonly = 'user' in session
-    return render_template("checkout.html", form=form, user=user, readonly=readonly, cart=cart, total_cost=cart.total_cost())
+    readonly = "user" in session
+    return render_template(
+        "checkout.html",
+        form=form,
+        user=user,
+        readonly=readonly,
+        cart=cart,
+        total_cost=cart.total_cost(),
+    )
+
+
 # ==================================
+
 
 @bp.post("/cart/remove/")
 def cart_remove():
@@ -130,11 +152,13 @@ def cart_remove():
 
     return redirect(url_for("main.orderCheckout"))
 
+
 @bp.post("/cart/clear/")
 def clear_cart():
     empty_cart()
     flash("Your cart has been cleared.")
     return redirect(url_for("main.orderCheckout"))
+
 
 @bp.route("/vendor/<int:photographer_id>", methods=["POST", "GET"])
 # @only_photographers
@@ -255,10 +279,13 @@ def delete_image(photographer_id, image_id):
 def index():
 
     all_services = get_all_services()
+    all_locations = get_all_locations()
     form = FiltersForm()
     form.service_type.choices = [
         (int(service["id"]), service["name"]) for service in all_services
     ]
+    print(f"All locations: {all_locations}")
+    form.location.choices = [(loc, loc) for loc in all_locations if loc]
 
     # Initialize filters dictionary
     filters = {}
