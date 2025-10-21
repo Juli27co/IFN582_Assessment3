@@ -73,8 +73,8 @@ CREATE TABLE Image
     image_description VARCHAR(255),
     service_id INT,
     photographer_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE,
+    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Photographer_Service
@@ -82,8 +82,8 @@ CREATE TABLE Photographer_Service
     photographerService_id INT AUTO_INCREMENT PRIMARY KEY,
     photographer_id INT,
     service_id INT,
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id),
-    FOREIGN KEY (service_id) REFERENCES Service(service_id)
+    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Cart
@@ -92,7 +92,7 @@ CREATE TABLE Cart
     createdDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     lastUpdated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     client_id INT,
-    FOREIGN KEY (client_id) REFERENCES Client(client_id)
+    FOREIGN KEY (client_id) REFERENCES Client(client_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Cart_Service
@@ -102,10 +102,10 @@ CREATE TABLE Cart_Service
     cart_id INT,
     type_id INT,
     addOn_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-    FOREIGN KEY (cart_id) REFERENCES Cart(cart_id),
-    FOREIGN KEY (type_id) REFERENCES ServiceType(type_id),
-    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id)
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE RESTRICT,
+    FOREIGN KEY (cart_id) REFERENCES Cart(cart_id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES ServiceType(type_id) ON DELETE SET NULL,
+    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id) ON DELETE SET NULL
 );
 
 CREATE TABLE Orders
@@ -116,7 +116,7 @@ CREATE TABLE Orders
     client_id INT,
     address VARCHAR(255) NOT NULL,
     payment_method VARCHAR(50) NOT NULL,
-    FOREIGN KEY (client_id) REFERENCES Client(client_id)
+    FOREIGN KEY (client_id) REFERENCES Client(client_id) ON DELETE CASCADE
 );
 
 
@@ -129,11 +129,11 @@ CREATE TABLE Order_Service
     addOn_id INT, 
     photographer_id INT,
     subtotal DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
-    FOREIGN KEY (service_id) REFERENCES Service(service_id),
-	FOREIGN KEY (type_id) REFERENCES ServiceType(type_id),
-    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id),
-    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id)
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE RESTRICT,
+	FOREIGN KEY (type_id) REFERENCES ServiceType(type_id) ON DELETE SET NULL,
+    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id) ON DELETE SET NULL,
+    FOREIGN KEY (photographer_id) REFERENCES Photographer(photographer_id) ON DELETE SET NULL
 );
 
 
@@ -289,6 +289,3 @@ INSERT INTO Order_Service (order_id, service_id, type_id, addOn_id, photographer
 (8, 3, 2, NULL, 3, 1550.00),
 (9, 1, 1, NULL, 4, 2000.00),
 (10, 2, 3, 3, 5, 550.00);
-
-
-  

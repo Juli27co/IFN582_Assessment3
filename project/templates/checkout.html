@@ -4,6 +4,73 @@
 
 {% block main %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+
+  <!-- startiing customer's detail (left panel)-->
+  <main class="row p-5 bg-light">
+    {% if not user %}
+      <div class="alert alert-danger">
+        <strong>Please log in before submitting your booking</strong>.
+      </div>
+    {% endif %}
+      <div class="col-7">
+        <div class="card">
+          <h1 class="ms-4 mt-4"><strong>Client Details</strong></h1>
+          <h4 class="ms-4 mt-4">Please log in before completing your details</h4>
+          <form class="row g-3 p-4" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="col-md-12">
+              {{ wtf.render_field(form.full_name, readonly=readonly) }}
+            </div>
+            <div class="col-md-6">
+              {{ wtf.render_field(form.email, readonly=readonly) }}
+            </div>
+            <div class="col-md-6">
+              {{ wtf.render_field(form.phone, readonly=readonly) }}
+            </div>
+            <div class="col-12">
+              {{ wtf.render_field(form.address) }}
+            </div>
+            
+            <div class="col-12 pt-4 border-top">
+              <h4>Select a payment method</h4>
+              {{ wtf.render_field(form.payment_method) }}
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">
+                {{ wtf.render_field(form.checkout_submit) }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+<!-- eding customer's detail (left panel)-->
+
+
+
+
+
+
+
+
+<style>
+.btn-navbar{background-color:#212529;border-color:#212529;color:#fff;}
+.btn-navbar:hover,.btn-navbar:focus{background-color:#1a1e21;border-color:#1a1e21;color:#fff;}
+.min-w-40{min-width:40px;display:inline-block;}
+</style>
+
 <div class="container my-5">
   <div class="row g-4">
 

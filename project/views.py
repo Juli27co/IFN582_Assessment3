@@ -656,3 +656,28 @@ def delete_addon():
     else:
         flash("Cannot delete: add-on is not found", "error")
     return redirect(url_for("main.admin_management"))
+
+@bp.route('/client/checkout/', methods=['GET', 'POST'])
+def orderCheckout():
+    form = CheckoutForm()
+    user = session.get("user")
+
+    if request.method == 'GET' and user:
+        form.full_name.data = f"{user['firstName']} {user['lastName']}"
+        form.email.data = user['email']
+        form.phone.data = user['phone']
+
+    if request.method == 'POST':
+        if not user:
+            flash("Please log in before placing your order.", "error")
+            return redirect(url_for("main.login"))
+
+        client_id = user["id"]
+        address = form.address.data
+        payment_method = form.payment_method.data
+        insert_order_detail(client_id, address, payment_method)
+        flash("Your booking has been set to company successfully! Our staff will contact you shortly.", "success")
+        return redirect(url_for('main.orderCheckout'))
+
+    readonly = 'user' in session
+    return render_template("checkout.html", form=form, user=user, readonly=readonly)
