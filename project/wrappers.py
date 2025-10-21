@@ -52,3 +52,23 @@ def only_admins(func):
 
     return wrapper
 
+
+def photographer_private(func):
+    """Decorator to ensure photographers can only access their own data."""
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if "user" not in session or session["user"]["id"] == 0:
+            flash("Please log in before moving on.", "error")
+            return redirect(url_for("main.login"))
+        print("Checking photographer private access")
+        print(f"Session user: {session['user']['role']}")
+        print(f"Requested photographer ID: {kwargs.get('photographer_id')}")
+        if session["user"]["role"] != "admin":
+            photographer_id = kwargs.get("photographer_id")
+            if photographer_id is None or int(photographer_id) != session["user"]["id"]:
+                flash("You do not have permission to view this page.", "error")
+                return redirect(url_for("main.index"))
+        return func(*args, **kwargs)
+
+    return wrapper

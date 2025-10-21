@@ -71,7 +71,7 @@ from project.session import (
     empty_cart,
     convert_cartItem_to_order,
 )
-from project.wrappers import only_photographers, only_admins
+from project.wrappers import only_photographers, only_admins, photographer_private
 
 bp = Blueprint("main", __name__)
 
@@ -161,7 +161,8 @@ def clear_cart():
 
 
 @bp.route("/vendor/<int:photographer_id>", methods=["POST", "GET"])
-# @only_photographers
+@only_photographers
+@photographer_private
 def vendor_management(photographer_id):
     form = PhotographerEditForm(prefix="EditProfile")
 
@@ -211,16 +212,16 @@ def vendor_management(photographer_id):
 
 
 @bp.route("/vendor/management/", methods=["GET"])
-# @only_photographers
+@only_photographers
 def vendor_management_check():
     if session.get("userType") != "photographer":
         flash("Please log in as a photographer.", "error")
         return redirect(url_for("main.login"))
 
     vendor = session.get("photographer_id")
-    if not vendor:
-        flash("Photographer ID missing.", "error")
-        return redirect(url_for("main.login"))
+    if vendor is None or int(vendor) != session["user"]["id"]:
+        flash("You do not have permission to view this page.", "error")
+        return redirect(url_for("main.index"))
 
     return redirect(url_for("main.vendor_management", photographer_id=vendor))
 
