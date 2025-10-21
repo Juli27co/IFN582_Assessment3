@@ -202,7 +202,7 @@ class CheckoutForm(FlaskForm):
     address = StringField("Address", validators=[InputRequired()])
     payment_method = RadioField(
         "Payment Method",
-        choices=[("cash", "Cash"), ("credit card", "Credite card")],
+        choices=[("cash", "Cash"), ("credit card", "Credit card")],
         validators=[InputRequired()],
     )
     checkout_submit = SubmitField("Checkout")
