@@ -166,10 +166,10 @@ INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymen
 
 
 INSERT INTO Service (name, shortDescription, longDescription, price, coverImage) VALUES
-('Wedding Photography', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00, 'drew-coffman-llWjwo200fo-unsplash.jpg'),
-('Pets Photography', 'Professional portrait sessions for pets.', 'Our pets photography sessions are perfect for capturing timeless images of your furry friends in a relaxed setting.', 300.00, 'jamie-street-s9Tf1eBDFqw-unsplash.jpg'),
-('Newborn Photography', 'Capture the precious moments of your newborn with professional photography services.', 'We specialize in newborn photography, offering a gentle and personalized experience to preserve the earliest moments of your baby’s life.', 1500.00, 'janko-ferlic-EpbIXGCrtK0-unsplash.jpg'),
-('Product Photography', 'High-quality product photography to showcase your items.', 'Our product photography service is designed to highlight the features and details of your products, ideal for e-commerce and marketing materials.', 500.00, 'pmv-chamara-CeQiQxNNdUM-unsplash.jpg');
+('Wedding', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00, 'drew-coffman-llWjwo200fo-unsplash.jpg'),
+('Pets', 'Professional portrait sessions for pets.', 'Our pets photography sessions are perfect for capturing timeless images of your furry friends in a relaxed setting.', 300.00, 'jamie-street-s9Tf1eBDFqw-unsplash.jpg'),
+('Newborn', 'Capture the precious moments of your newborn with professional photography services.', 'We specialize in newborn photography, offering a gentle and personalized experience to preserve the earliest moments of your baby’s life.', 1500.00, 'janko-ferlic-EpbIXGCrtK0-unsplash.jpg'),
+('Product', 'High-quality product photography to showcase your items.', 'Our product photography service is designed to highlight the features and details of your products, ideal for e-commerce and marketing materials.', 500.00, 'pmv-chamara-CeQiQxNNdUM-unsplash.jpg');
 
 INSERT INTO ServiceType (type_name, shortDescription, price) VALUES
 ('Mini Session', 'Basic session with 5 edited photos.', 0.00),
