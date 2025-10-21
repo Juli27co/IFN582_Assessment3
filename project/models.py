@@ -98,10 +98,13 @@ class Cart:
 @dataclass 
 class Orders:
     id: str
-    createdDate: datetime
-    lastUpdated: datetime
+    # createdDate: datetime
+    # lastUpdated: datetime
     client_id: str
     address: str
+    payment_method: str
+    items: List[Cart_Service] = field(default_factory=list)
+
 
 @dataclass
 class OrderService:

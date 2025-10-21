@@ -323,7 +323,7 @@ def check_for_client(email, password):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT client_id, password, email, firstName, lastName, phone
+        SELECT client_id, password, email, firstName, lastName, phone, preferredPaymentMethod
         FROM Client
         WHERE email = %s AND password = %s
     """,
@@ -340,7 +340,6 @@ def check_for_client(email, password):
             row["phone"],
             row["firstName"],
             row["lastName"],
-            "",
             "",
         )
     return None
@@ -600,8 +599,8 @@ def add_user(form):
     if form.user_type.data == "client":
         cur.execute(
             """
-            INSERT INTO Client (email, password, firstName, lastName, phone)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO Client (email, password, firstName, lastName, phone, preferredPaymentMethod)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """,
             (
                 form.email.data,
@@ -609,6 +608,7 @@ def add_user(form):
                 form.firstName.data,
                 form.lastName.data,
                 form.phone.data,
+                "",
             ),
         )
     elif form.user_type.data == "photographer":
@@ -789,11 +789,28 @@ def admin_delete_addon(addon_id: int):
     finally:
         cur.close()
 
-def insert_order_detail(client_id, address, payment_method):
+# def insert_order_detail(client_id, address, payment_method):
+#     cur = mysql.connection.cursor()
+#     cur.execute("""
+#         INSERT INTO Orders (client_id, address, payment_method)
+#         VALUES (%s, %s, %s)
+#     """, (client_id, address, payment_method))
+#     mysql.connection.commit()
+#     cur.close()
+
+def insert_order_detail(order):
     cur = mysql.connection.cursor()
     cur.execute("""
         INSERT INTO Orders (client_id, address, payment_method)
         VALUES (%s, %s, %s)
-    """, (client_id, address, payment_method))
+    """, (order.client_id, order.address, order.payment_method))
+    order_id = cur.lastrowid
+
+    for item in order.items:
+        cur.execute("""
+        INSERT INTO Order_Service (order_id, service_id, type_id, addOn_id, photographer_id, subtotal)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """,(order_id, item.service.id, item.type.id, item.addOn.id, item.photographer.id, item.subtotal))
+    
     mysql.connection.commit()
     cur.close()

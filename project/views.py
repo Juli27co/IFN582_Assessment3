@@ -63,7 +63,7 @@ from .db import (
 )
 
 # Session and wrapper imports
-from project.session import add_to_cart, get_cart, remove_cart_item, empty_cart
+from project.session import add_to_cart, get_cart, remove_cart_item, empty_cart, convert_cartItem_to_order
 from project.wrappers import only_photographers, only_admins
 
 bp = Blueprint("main", __name__)
@@ -92,12 +92,13 @@ def orderCheckout():
     form = CheckoutForm()
     user = session.get("user")
 
-    if request.method == 'GET' and user:
+    if user:
         form.full_name.data = f"{user['firstName']} {user['lastName']}"
         form.email.data = user['email']
         form.phone.data = user['phone']
 
-    if request.method == 'POST':
+    # handle when form is submitted
+    if form.validate_on_submit():
         if not user:
             flash("Please log in before placing your order.", "error")
             return redirect(url_for("main.login"))
@@ -105,18 +106,14 @@ def orderCheckout():
         client_id = user["id"]
         address = form.address.data
         payment_method = form.payment_method.data
-        insert_order_detail(client_id, address, payment_method)
+        order = convert_cartItem_to_order(get_cart(),client_id, address, payment_method)
+        insert_order_detail(order)
         flash("Your booking has been set to company successfully! Our staff will contact you shortly.", "success")
         return redirect(url_for('main.orderCheckout'))
 
     readonly = 'user' in session
     return render_template("checkout.html", form=form, user=user, readonly=readonly, cart=cart, total_cost=cart.total_cost())
-
-# @bp.route("/checkout/", methods=["GET", "POST"])
-# def checkout():
-#     cart = get_cart()
-#     return render_template("checkout.html", cart=cart, total_cost=cart.total_cost())
-
+# ==================================
 
 @bp.post("/cart/remove/")
 def cart_remove():
@@ -656,28 +653,3 @@ def delete_addon():
     else:
         flash("Cannot delete: add-on is not found", "error")
     return redirect(url_for("main.admin_management"))
-
-@bp.route('/client/checkout/', methods=['GET', 'POST'])
-def orderCheckout():
-    form = CheckoutForm()
-    user = session.get("user")
-
-    if request.method == 'GET' and user:
-        form.full_name.data = f"{user['firstName']} {user['lastName']}"
-        form.email.data = user['email']
-        form.phone.data = user['phone']
-
-    if request.method == 'POST':
-        if not user:
-            flash("Please log in before placing your order.", "error")
-            return redirect(url_for("main.login"))
-
-        client_id = user["id"]
-        address = form.address.data
-        payment_method = form.payment_method.data
-        insert_order_detail(client_id, address, payment_method)
-        flash("Your booking has been set to company successfully! Our staff will contact you shortly.", "success")
-        return redirect(url_for('main.orderCheckout'))
-
-    readonly = 'user' in session
-    return render_template("checkout.html", form=form, user=user, readonly=readonly)

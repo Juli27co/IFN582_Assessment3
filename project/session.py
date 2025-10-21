@@ -1,5 +1,5 @@
 from project.db import get_single_service, get_single_type, get_single_addOn, get_photographer
-from project.models import Cart, Cart_Service
+from project.models import Cart, Cart_Service, Orders
 from flask import session
 
 
@@ -50,6 +50,15 @@ def get_cart():
                     subtotal = subtotal                    
                 ))
     return cart
+
+def convert_cartItem_to_order(client_id, address, payment_method,cart):
+    return Orders(
+        id=None,
+        client_id=client_id,
+        address=address,
+        payment_method=payment_method,
+        items=cart
+    )
 
 def _save_cart_to_session(cart):
     session["cart"] = {

@@ -53,27 +53,6 @@
           <p class="m-0"><b> {{ photographer.availability }} </b></p>
           <p class="small order-guide">*Once your order is placed, our team will contact you to finalise the schedule.</p>
         </div>
-          <!-- <form 
-          id="product-form-schedule" 
-          method="POST" 
-          action="#"
-        > -->
-          <!-- <div class="dropdown mb-3">
-            <label class="form-label">Preferred photoshoot schedule (Required)</label>
-            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-for-schedule" data-bs-toggle="dropdown">
-                Choose a preferred schedule
-            </button>
-            <ul class="dropdown-menu">
-              {% for availability in photographer.availability %}
-                <li>
-                  <button  name="form-schedule" value="" type="submit" class="dropdown-item">
-                    <a class="dropdown-item">{{ photographer.availability }}</a>
-                  </button>
-                </li>
-              {% endfor %}
-            </ul>
-          </div> -->
-        <!-- </form> -->
 
         <form 
           id="product-form-type" 
@@ -84,7 +63,7 @@
             <label class="form-label-item">Session Type (Required)</label>
             <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-for-type" data-bs-toggle="dropdown">
               {% if selectedType %}
-                {{ selectedType.type }}(+{{"$%.2f"|format(selectedType.price)}}) — {{selectedType.shortDescription}}
+                {{ selectedType.name }}(+{{"$%.2f"|format(selectedType.price)}}) — {{selectedType.shortDescription}}
               {% else %}
                 Choose a session
               {% endif %}
@@ -93,7 +72,7 @@
               {% for type in types %}
                 <li>
                   <button  name="form-type" value="{{type.id}}" type="submit" class="dropdown-item">
-                    <a class="dropdown-item">{{type.type}}(+{{"$%.2f"|format(type.price)}}) — {{type.shortDescription}}</a>
+                    <a class="dropdown-item">{{type.name}}(+{{"$%.2f"|format(type.price)}}) — {{type.shortDescription}}</a>
                   </button>
                 </li>
               {% endfor %}

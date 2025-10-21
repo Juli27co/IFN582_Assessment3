@@ -3,30 +3,18 @@
 {% import 'bootstrap5/form.html' as wtf %}
 
 {% block main %}
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-
-
-  <!-- startiing customer's detail (left panel)-->
   <main class="row p-5 bg-light">
+    <!-- customer's detail (left panel)-->
     {% if not user %}
       <div class="alert alert-danger">
-        <strong>Please log in before submitting your booking</strong>.
+        <!-- <strong>Please log in before submitting your booking</strong>. -->
+        <strong>Please log in before completing your details</strong>.
       </div>
     {% endif %}
       <div class="col-7">
         <div class="card">
           <h1 class="ms-4 mt-4"><strong>Client Details</strong></h1>
-          <h4 class="ms-4 mt-4">Please log in before completing your details</h4>
+          <!-- <h4 class="ms-4 mt-4">Please log in before completing your details</h4> -->
           <form class="row g-3 p-4" method="POST">
             {{ form.hidden_tag() }}
             <div class="col-md-12">
@@ -55,74 +43,7 @@
         </div>
       </div>
 
-
-<!-- eding customer's detail (left panel)-->
-
-
-
-
-
-
-
-
-<style>
-.btn-navbar{background-color:#212529;border-color:#212529;color:#fff;}
-.btn-navbar:hover,.btn-navbar:focus{background-color:#1a1e21;border-color:#1a1e21;color:#fff;}
-.min-w-40{min-width:40px;display:inline-block;}
-</style>
-
-<div class="container my-5">
-  <div class="row g-4">
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  <main class="row p-5 bg-light">
-    {% if not user %}
-      <div class="alert alert-danger">
-        <strong>Please log in before completing your booking</strong>.
-      </div>
-    {% endif %}
-      <div class="col-7">
-        <div class="card">
-          <h1 class="ms-4 mt-4"><strong>Client Details</strong></h1>
-          <h4 class="ms-4 mt-4">Please log in before complete your details</h4>
-          <form class="row g-3 p-4" method="POST">
-            {{ form.hidden_tag() }}
-            <div class="col-md-12">
-              {{ wtf.render_field(form.full_name, readonly=readonly) }}
-            </div>
-            <div class="col-md-6">
-              {{ wtf.render_field(form.email, readonly=readonly) }}
-            </div>
-            <div class="col-md-6">
-              {{ wtf.render_field(form.phone, readonly=readonly) }}
-            </div>
-            <div class="col-12">
-              {{ wtf.render_field(form.address) }}
-            </div>
-            
-            <div class="col-12 pt-4 border-top">
-              <h4>Select a payment method</h4>
-              {{ wtf.render_field(form.payment_method) }}
-            </div>
-            <div class="col-12">
-              <button type="submit" class="btn btn-primary">
-                {{ wtf.render_field(form.checkout_submit) }}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-<!-- orser summary pnnel (from here)-->
+    <!-- order summary pnnel (right panel)-->
     <div class="col-12 col-lg-5">
       <div class="card">
         <div class="card-body">
@@ -152,7 +73,7 @@
                       <p>{{ it.photographer.firstName }} {{ it.photographer.lastName }}({{ it.photographer.availability }})</p>
                     </div>  
                       <div class="text-muted small d-flex justify-content-between">
-                        <p>Session Type: {{ it.type.type }}</p>
+                        <p>Session Type: {{ it.type.name }}</p>
                         <p>${{ '%.2f'|format((it.type.price)|float) }}</p>
                       </div>
                       {% if it.addon %}
@@ -189,61 +110,5 @@
         </div>
       </div>
     </div>
-<!-- orser summary pnnel (to here) **PLESE DELETE WHEN YOU MERGE-->
 
-  </div>
-</div>
-
-<script>
-(function(){
-  function clamp(n){ n=parseInt(n||'1',10); if(!Number.isFinite(n)||n<1)n=1; if(n>99)n=99; return n; }
-
-  function recalcTotals(){
-    var sum=0;
-    document.querySelectorAll('#summary-list > li').forEach(function(li){
-      var unit = Number(li.dataset.unit)||0;
-      var qty  = Number(li.querySelector('.qty-input')?.value||1);
-      var line = unit*qty;
-      var cell = li.querySelector('.line-total');
-      if(cell) cell.textContent = '$ ' + line.toFixed(2);
-      sum += line;
-    });
-    var totalEl = document.getElementById('summary-total');
-    if(totalEl) totalEl.textContent = '$ ' + sum.toFixed(2);
-  }
-
-  var submitTimer=null;
-  function scheduleSubmit(form){
-    clearTimeout(submitTimer);
-    submitTimer = setTimeout(function(){ try{ form.submit(); }catch(e){} }, 400);
-  }
-
-  document.querySelectorAll('.qty-form').forEach(function(form){
-    var dec=form.querySelector('.qty-dec');
-    var inc=form.querySelector('.qty-inc');
-    var inp=form.querySelector('.qty-input');
-    var view=form.querySelector('.qty-view');
-
-    function setQty(v){
-      v = clamp(v);
-      inp.value = v;
-      view.textContent = v;
-      recalcTotals();
-      scheduleSubmit(form);
-    }
-
-    dec.addEventListener('click', function(){ setQty((parseInt(inp.value||'1',10)-1)); });
-    inc.addEventListener('click', function(){ setQty((parseInt(inp.value||'1',10)+1)); });
-  });
-
-  document.querySelectorAll('.remove-form').forEach(function(rf){
-    rf.addEventListener('submit', function(){
-      var li = rf.closest('li');
-      if(li){ li.remove(); recalcTotals(); }
-    });
-  });
-
-  document.addEventListener('DOMContentLoaded', recalcTotals);
-})();
-</script>
 {% endblock %}
