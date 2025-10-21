@@ -7,7 +7,7 @@ from flask import (
     redirect,
     current_app,
     url_for,
-    session,
+    session
 )
 from hashlib import sha256
 import os
@@ -24,6 +24,7 @@ from .forms import (
     LoginForm,
     RegisterForm,
     FiltersForm,
+    CheckoutForm
 )
 
 # Database function imports
@@ -58,6 +59,7 @@ from .db import (
     get_single_service,
     get_single_type,
     get_types,
+    insert_order_detail
 )
 
 # Session and wrapper imports
@@ -84,11 +86,36 @@ def save_image(file_storage):
     file_storage.save(dest)
     return filename
 
-
-@bp.route("/checkout/", methods=["GET", "POST"])
-def checkout():
+@bp.route('/client/checkout/', methods=['GET', 'POST'])
+def orderCheckout():
     cart = get_cart()
-    return render_template("checkout.html", cart=cart, total_cost=cart.total_cost())
+    form = CheckoutForm()
+    user = session.get("user")
+
+    if request.method == 'GET' and user:
+        form.full_name.data = f"{user['firstName']} {user['lastName']}"
+        form.email.data = user['email']
+        form.phone.data = user['phone']
+
+    if request.method == 'POST':
+        if not user:
+            flash("Please log in before placing your order.", "error")
+            return redirect(url_for("main.login"))
+
+        client_id = user["id"]
+        address = form.address.data
+        payment_method = form.payment_method.data
+        insert_order_detail(client_id, address, payment_method)
+        flash("Your booking has been set to company successfully! Our staff will contact you shortly.", "success")
+        return redirect(url_for('main.orderCheckout'))
+
+    readonly = 'user' in session
+    return render_template("checkout.html", form=form, user=user, readonly=readonly, cart=cart, total_cost=cart.total_cost())
+
+# @bp.route("/checkout/", methods=["GET", "POST"])
+# def checkout():
+#     cart = get_cart()
+#     return render_template("checkout.html", cart=cart, total_cost=cart.total_cost())
 
 
 @bp.post("/cart/remove/")
@@ -103,13 +130,13 @@ def cart_remove():
     else:
         flash("Item not found in basket.", "warning")
 
-    return redirect(url_for("main.checkout"))
+    return redirect(url_for("main.orderCheckout"))
 
 @bp.post("/cart/clear/")
 def clear_cart():
     empty_cart()
     flash("Your cart has been cleared.")
-    return redirect(url_for("main.checkout"))
+    return redirect(url_for("main.orderCheckout"))
 
 @bp.route("/vendor/<int:photographer_id>", methods=["POST", "GET"])
 # @only_photographers
