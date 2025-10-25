@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from wtforms import widgets,SelectMultipleField
 from wtforms.fields import (
     SubmitField,
     StringField,
@@ -15,10 +16,23 @@ from wtforms.validators import (
     Optional,
     DataRequired,
     Length,
-    NumberRange,
+    NumberRange
 )
-from flask_wtf.file import FileField, FileAllowed
+from flask_wtf.file import FileField, MultipleFileField, FileAllowed
 
+# from wtforms.fields import (
+#     SubmitField,
+#     StringField,
+#     TextAreaField,
+#     RadioField,
+#     SelectMultipleField,
+#     DecimalField,
+#     SelectField,
+#     PasswordField,
+# )
+# from project.db import get_services
+# from project.models import Service
+# from wtforms.validators import NumberRange
 
 # Edit photographer form link to models and DB, also using for edit profile
 class PhotographerEditForm(FlaskForm):
@@ -64,24 +78,6 @@ class PhotographerAddImage(FlaskForm):
         validators=[InputRequired()],
     )
     submit = SubmitField("Submit")
-
-
-from wtforms.fields import (
-    SubmitField,
-    StringField,
-    TextAreaField,
-    RadioField,
-    SelectMultipleField,
-    DecimalField,
-    SelectField,
-    PasswordField,
-)
-from flask_wtf.file import FileField, MultipleFileField, FileAllowed
-from wtforms.validators import InputRequired, Email
-from project.db import get_services
-from project.models import Service
-from wtforms.validators import NumberRange
-
 
 class AddServiceForm(FlaskForm):
     serviceName = StringField(
@@ -166,12 +162,30 @@ availability_choices = [
     ("Weekdays", "Weekdays only"),
     ("Short notice bookings", "Short notice bookings"),
 ]
+# class FiltersForm(FlaskForm):
+#     """Form for filtering photographers on the index page."""
+#     service_type = RadioField("Service Type :", choices=[])
+#     location = RadioField("Location :", choices=[])
+#     availability = RadioField("Availability :", choices=availability_choices)
+#     min_rating = DecimalField(
+#         "Minimum Rating :",
+#         places=1,
+#         validators=[InputRequired(), NumberRange(min=0, max=5)],
+#         render_kw={"min": 0, "max": 5, "type": "range", "step": "0.1"},
+#         default=0.0,
+#     )
+#     submit = SubmitField("Apply Filters")
+
+#-----------This is new FiltersForm(FlaskForm)-----------
+class MulticheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label = False)
+    option_widget = widgets.CheckboxInput()
+
 class FiltersForm(FlaskForm):
     """Form for filtering photographers on the index page."""
-
-    service_type = RadioField("Service Type :", choices=[])
-    location = RadioField("Location :", choices=[])
-    availability = RadioField("Availability :", choices=availability_choices)
+    service_type = MulticheckboxField("Service Type :", choices=[])
+    location = MulticheckboxField("Location :", choices=[])
+    availability = MulticheckboxField("Availability :", choices=availability_choices)
     min_rating = DecimalField(
         "Minimum Rating :",
         places=1,
@@ -181,6 +195,7 @@ class FiltersForm(FlaskForm):
     )
     submit = SubmitField("Apply Filters")
 
+#-----------This is new FiltersForm(FlaskForm)-----------
 
 class SearchForm(FlaskForm):
     """Form for searching photographers on the index page."""
