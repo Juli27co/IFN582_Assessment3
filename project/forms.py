@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import widgets,SelectMultipleField
+from wtforms import widgets, SelectMultipleField
 from wtforms.fields import (
     SubmitField,
     StringField,
@@ -8,8 +8,8 @@ from wtforms.fields import (
     DecimalField,
     RadioField,
     MultipleFileField,
+    PasswordField,
 )
-from wtforms.fields import PasswordField
 from wtforms.validators import (
     InputRequired,
     Email,
@@ -18,21 +18,7 @@ from wtforms.validators import (
     Length,
     NumberRange
 )
-from flask_wtf.file import FileField, MultipleFileField, FileAllowed
-
-# from wtforms.fields import (
-#     SubmitField,
-#     StringField,
-#     TextAreaField,
-#     RadioField,
-#     SelectMultipleField,
-#     DecimalField,
-#     SelectField,
-#     PasswordField,
-# )
-# from project.db import get_services
-# from project.models import Service
-# from wtforms.validators import NumberRange
+from flask_wtf.file import FileField, FileAllowed
 
 # Edit photographer form link to models and DB, also using for edit profile
 class PhotographerEditForm(FlaskForm):
@@ -159,21 +145,7 @@ availability_choices = [
     ("Weekdays", "Weekdays only"),
     ("Short notice bookings", "Short notice bookings"),
 ]
-# class FiltersForm(FlaskForm):
-#     """Form for filtering photographers on the index page."""
-#     service_type = RadioField("Service Type :", choices=[])
-#     location = RadioField("Location :", choices=[])
-#     availability = RadioField("Availability :", choices=availability_choices)
-#     min_rating = DecimalField(
-#         "Minimum Rating :",
-#         places=1,
-#         validators=[InputRequired(), NumberRange(min=0, max=5)],
-#         render_kw={"min": 0, "max": 5, "type": "range", "step": "0.1"},
-#         default=0.0,
-#     )
-#     submit = SubmitField("Apply Filters")
 
-#-----------This is new FiltersForm(FlaskForm)-----------
 class MulticheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label = False)
     option_widget = widgets.CheckboxInput()
@@ -191,18 +163,6 @@ class FiltersForm(FlaskForm):
         default=0.0,
     )
     submit = SubmitField("Apply Filters")
-
-#-----------This is new FiltersForm(FlaskForm)-----------
-
-class SearchForm(FlaskForm):
-    """Form for searching photographers on the index page."""
-
-    search_query = StringField(
-        "Search Photographers",
-        validators=[Optional(), Length(min=1, max=100)],
-        render_kw={"placeholder": "Enter photographer name..."},
-    )
-    submit = SubmitField("Search")
 
 
 class CheckoutForm(FlaskForm):

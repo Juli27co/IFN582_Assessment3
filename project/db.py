@@ -1,5 +1,5 @@
 from . import mysql
-from .models import Service
+from .models import Service, Photographer
 
 
 
@@ -171,7 +171,7 @@ def delete_image_row(image_id: int, photographer_id: int):
 
 from hashlib import sha256
 from . import mysql
-from project.models import (
+from .models import (
     Admin,
     Client,
     Service,
@@ -181,92 +181,70 @@ from project.models import (
     AddOn,
     PhotographerService,
     Inquiry,
-    Admin,
 )
-from . import mysql
-
-
-def get_clients():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Client")
-    results = cur.fetchall()
-    cur.close()
-    return [
-        Client(
-            "client",
-            row["client_id"],
-            row["email"],
-            row["password"],
-            row["phone"],
-            row["firstName"],
-            row["lastName"],
-            row["preferredPaymentMethod"],
-            row["address"],
-        )
-        for row in results
-    ]
 
 
 def get_photographers(filters):
     cur = mysql.connection.cursor()
-
-    # Base query - use JOIN if filtering by service_type
+    
     if filters.get("service_type"):
-        query = """
-            SELECT DISTINCT p.photographer_id, p.email, p.password, p.phone, p.firstName, p.lastName, 
-                   p.bioDescription, p.location, p.availability, p.rating, p.profilePicture
-            FROM Photographer p
-            INNER JOIN Photographer_Service ps ON p.photographer_id = ps.photographer_id
-            INNER JOIN Service s ON ps.service_id = s.service_id
-            WHERE s.service_id = %s
-        """
-        params = [filters["service_type"]]
+        service_types = filters["service_type"]
+        if not isinstance(service_types, list):
+            service_types = [service_types]
+        
+        if service_types:
+            query = """
+                SELECT DISTINCT p.photographer_id, p.email, p.password, p.phone, p.firstName, p.lastName,
+                       p.bioDescription, p.location, p.availability, p.rating, p.profilePicture
+                FROM Photographer p
+                INNER JOIN Photographer_Service ps ON p.photographer_id = ps.photographer_id
+                WHERE ps.service_id IN ({})
+            """.format(",".join(["%s"] * len(service_types)))
+            params = service_types
+        else:
+            query = "SELECT * FROM Photographer WHERE 1=1"
+            params = []
     else:
         query = "SELECT * FROM Photographer WHERE 1=1"
         params = []
-
-    # Add location filter
+    
     if filters.get("location"):
-        if "WHERE" in query and "s.name" in query:
-            query += " AND p.location = %s"
-        else:
-            query += " AND location = %s"
-        params.append(filters["location"])
-
-    # Add availability filter
+        locations = filters["location"]
+        if not isinstance(locations, list):
+            locations = [locations]
+        
+        if locations:
+            placeholders = ",".join(["%s"] * len(locations))
+            query += f" AND location IN ({placeholders})"
+            params.extend(locations)
+    
     if filters.get("availability"):
-        if "WHERE" in query and "s.name" in query:
-            query += " AND p.availability = %s"
-        else:
-            query += " AND availability = %s"
-        params.append(filters["availability"])
-
+        availabilities = filters["availability"]
+        if not isinstance(availabilities, list):
+            availabilities = [availabilities]
+        
+        if availabilities:
+            placeholders = ",".join(["%s"] * len(availabilities))
+            query += f" AND availability IN ({placeholders})"
+            params.extend(availabilities)
+    
     if filters.get("min_rating"):
-        if "WHERE" in query and "s.name" in query:
-            query += " AND p.rating >= %s"
-        else:
-            query += " AND rating >= %s"
+        query += " AND rating >= %s"
         params.append(filters["min_rating"])
-
+    
     if filters.get("search"):
-        if "WHERE" in query and "s.name" in query:
-            query += " AND (p.firstName LIKE %s OR p.lastName LIKE %s)"
-        else:
-            query += " AND (firstName LIKE %s OR lastName LIKE %s)"
         search_term = f"%{filters['search']}%"
+        query += " AND (firstName LIKE %s OR lastName LIKE %s)"
         params.extend([search_term, search_term])
-
-    print(f"Executing query: {query}")
-    print(f"With params: {params}")
-
+    
     cur.execute(query, params)
     results = cur.fetchall()
     cur.close()
-
-    print(f"Found {len(results)} photographers")
-
-    return [
-        Photographer(
+    
+    
+    photographers = []
+    for row in results:
+        photographer = Photographer(
             role="photographer",
             id=str(row["photographer_id"]),
             email=row["email"],
@@ -278,10 +256,11 @@ def get_photographers(filters):
             location=row.get("location") or "",
             availability=row.get("availability") or "",
             rating=float(row.get("rating") or 0.0),
-            profilePicture=(row.get("profilePicture") or None),
+            profilePicture=row.get("profilePicture") or None,
         )
-        for row in results
-    ]
+        photographers.append(photographer)
+    
+    return photographers
 
 
 def get_services():
@@ -296,24 +275,6 @@ def get_services():
             row["shortDescription"],
             row["longDescription"],
             row["price"],
-        )
-        for row in results
-    ]
-
-
-def get_inquiries():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Inquiry")
-    results = cur.fetchall()
-    cur.close()
-    return [
-        Inquiry(
-            row["inquiry_id"],
-            row["fullName"],
-            row["email"],
-            row["phone"],
-            row["message"],
-            row["createdDate"],
         )
         for row in results
     ]
