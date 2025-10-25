@@ -142,26 +142,26 @@
           </div>
         </div>
       </nav>
-      <!--For flash message when form submission has error-->
-      {% with messages = get_flashed_messages(category_filter='message') %} {%
-      if messages %}
-      <div
-        class="alert alert-primary text-center p-2"
-        role="alert"
-        style="margin: 0px"
-      >
-        {% for message in messages %} {{ message }} {% endfor %}
-      </div>
-      {% endif %} {% endwith %} {% with messages =
-      get_flashed_messages(category_filter='error') %} {% if messages %}
-      <div
-        class="alert alert-danger text-center p-2"
-        role="alert"
-        style="margin: 0px"
-      >
-        {% for message in messages %} {{ message }} {% endfor %}
-      </div>
-      {% endif %} {% endwith %} {% block head %} {% endblock %}
+      <!--For flash message -->  
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for category, message in messages %}
+                  {% if category == "message" %}
+                    <div class="alert alert-primary alert-dismissible fade show message-con" role="alert">
+                  {% elif category == "error" %}
+                    <div class="alert alert-danger alert-dismissible fade show message-con" role="alert">
+                  {% else %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show message-con" role="alert">
+                  {% endif %}
+                      <p>{{ message }}</p>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+              {% endfor %}
+          {% endif %}
+      {% endwith %}
+
+      {% block head %} 
+      {% endblock %}
     </header>
 
     <main>{% block main %} {% endblock %}</main>
