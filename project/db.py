@@ -1,10 +1,10 @@
 from . import mysql
 from .models import Service
-from MySQLdb.cursors import DictCursor
+
 
 
 def get_photographer_management(photographer_id: int):
-    cur = mysql.connection.cursor(DictCursor)
+    cur = mysql.connection.cursor()
     cur.execute(
         """
         SELECT photographer_id, email, password, phone, firstName, lastName,
@@ -79,7 +79,7 @@ def add_or_update_photographer(form, photographer_id=None, image_filename=None):
 
 
 def get_all_services():
-    cur = mysql.connection.cursor(DictCursor)
+    cur = mysql.connection.cursor()
     cur.execute("SELECT service_id AS id, name AS name FROM Service ORDER BY name")
     rows = cur.fetchall()
     cur.close()
@@ -110,8 +110,8 @@ def insert_image(
         cur.close()
 
 
-def ensure_photographer_service(photographer_id: int, service_id: int) -> None:
-    cur = mysql.connection.cursor(DictCursor)
+def ensure_photographer_service(photographer_id: int, service_id: int):
+    cur = mysql.connection.cursor()
     try:
         cur.execute(
             """
@@ -136,7 +136,7 @@ def ensure_photographer_service(photographer_id: int, service_id: int) -> None:
 
 
 def get_images_for_photographer(photographer_id: int):
-    cur = mysql.connection.cursor(DictCursor)
+    cur = mysql.connection.cursor()
     try:
         cur.execute(
             """
@@ -153,7 +153,7 @@ def get_images_for_photographer(photographer_id: int):
         cur.close()
 
 
-def delete_image_row(image_id: int, photographer_id: int) -> int:
+def delete_image_row(image_id: int, photographer_id: int):
     cur = mysql.connection.cursor()
     try:
         cur.execute(
@@ -208,7 +208,7 @@ def get_clients():
 
 
 def get_photographers(filters):
-    cur = mysql.connection.cursor(DictCursor)
+    cur = mysql.connection.cursor()
 
     # Base query - use JOIN if filtering by service_type
     if filters.get("service_type"):
@@ -821,7 +821,7 @@ def insert_order_detail(order):
 
 
 def get_all_locations():
-    cur = mysql.connection.cursor(DictCursor)
+    cur = mysql.connection.cursor()
     cur.execute(
         "SELECT DISTINCT location FROM Photographer WHERE location IS NOT NULL ORDER BY location"
     )
