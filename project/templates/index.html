@@ -73,34 +73,26 @@
         <div class="card vendor_box">
           <img
             src="{% if photographer.profilePicture %}{{ url_for('static', filename='img/' ~ photographer.profilePicture) }}{% else %}{{ url_for('static', filename='img/placeholder-image.png') }}{% endif %}"
-            class="card-img-top"
+            class="card-img-top img-fit"
             alt="photographer-image"
           />
           <div class="card-body">
             <h5 class="card-title">
               {{ photographer.firstName }} {{ photographer.lastName }}
             </h5>
-            <p style="padding: 5px" class="card-text">
+            <p class="card-text photographer-card-desc">
               {{ photographer.bioDescription }}
             </p>
-            <p class="card-text">
-              <small class="text-muted">📍 {{ photographer.location }}</small>
-            </p>
-            <p class="card-text">
-              <small class="text-muted"
-                >⭐ Rating: {{ photographer.rating }}/5</small
+            <p class="card-text"><small class="text-muted">📍 {{ photographer.location }}</small></p>
+            <p class="card-text"><small class="text-muted">⭐ Rating: {{ photographer.rating }}/5</small></p>
+            <p class="card-text"><small class="text-muted">📅 {{ photographer.availability }}</small></p>
+            <div class="mt-auto d-flex justify-content-center">
+              <a
+                href="/vendor_gallery/{{ photographer.id }}"
+                class="btn button-style"
+                >View Portfolio</a
               >
-            </p>
-            <p class="card-text">
-              <small class="text-muted"
-                >📅 {{ photographer.availability }}</small
-              >
-            </p>
-            <a
-              href="/vendor_gallery/{{ photographer.id }}"
-              class="btn button-style"
-              >View Portfolio</a
-            >
+            </div>
           </div>
         </div>
         {% endfor %}

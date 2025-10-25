@@ -142,7 +142,8 @@
 
 .photographer-card-desc {
   padding: 5px;
-  height: 100%;
+  height: auto;
+  min-height: 100px;
 }
 
 .portfolio-fixed {

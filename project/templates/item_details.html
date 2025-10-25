@@ -37,7 +37,7 @@
           {{ service.longDescription }}
         </p>
         <!-- showing info of photographer  -->
-        <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="d-flex flex-column flex-sm-row align-items-center gap-3 mb-4">
           <img
             src="{% if photographer.profilePicture %}{{ url_for('static', filename='img/' ~ photographer.profilePicture) }}{% else %}{{ url_for('static', filename='img/placeholder-image.png') }}{% endif %}"
             alt="Profile photo"
@@ -112,35 +112,39 @@
             <div class="subtotal">Price</div>
             <div class="fs-3 fw-semibold">{{"$%.2f"|format(subtotal)}}</div>
           </div>
-          <div class="ms-auto d-flex align-items-center gap-2">
-            <form 
-              method="POST" 
-              action="{{ url_for('main.adding_to_cart') }}"
-            >
-              <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
-              <input type="hidden" name="photographer_id" value={{photographer.id}}>
-              <input type="hidden" name="serviceId" value={{service.id}}>
-              <input type="hidden" name="typeId" value={{selectedType.id}}>
-              <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
-              <input type="hidden" name="subtotal" value="{{subtotal}}">
-              <button type="submit" class="btn button-style btn-lg ">
-                Add to Cart
-              </button>
-            </form>
-            <form
-              method="POST" 
-              action="{{ url_for('main.orderCheckout') }}"
-            >
-              <button type="submit" class="btn button-style btn-lg">
-                Checkout
-              </button>
-            </form>
+          <div class="ms-auto d-flex flex-column flex-sm-row align-items-center gap-2">
+            <div>
+              <form 
+                method="POST" 
+                action="{{ url_for('main.adding_to_cart') }}"
+              >
+                <input type="hidden" name="photographer_service_id" value={{pho_ser_id}}>
+                <input type="hidden" name="photographer_id" value={{photographer.id}}>
+                <input type="hidden" name="serviceId" value={{service.id}}>
+                <input type="hidden" name="typeId" value={{selectedType.id}}>
+                <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
+                <input type="hidden" name="subtotal" value="{{subtotal}}">
+                <button type="submit" class="btn button-style btn-lg ">
+                  Add to Cart
+                </button>
+              </form>
+            </div>
+            <div>
+              <form
+                method="POST" 
+                action="{{ url_for('main.orderCheckout') }}"
+              >
+                <button type="submit" class="btn button-style btn-lg">
+                  Checkout
+                </button>
+              </form>
+            </div>
           </div>
           </div>
         </div>
 
         <!-- showing inquiry form  -->
-        <div class="small text-muted">
+        <div class="small text-muted d-flex justify-content-center align-items-center">
           Free rescheduling within 14 days. Safety and hygiene measures
           observed.
         </div>
