@@ -21,9 +21,11 @@
   </head>
   <body>
     <header>
-      <h1 style="padding: 20px" class="main-header mb-0">FotoBooking</h1>
+      <h1 style="padding: 20px; " class="main-header mb-0">FotoBooking</h1>
 
-      <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
+      <nav class="navbar navbar-expand-lg main-theme-bg"
+        data-bs-theme="dark"
+      >
         <div class="container-fluid">
           <a class="navbar-brand text-white" href="{{url_for('main.index')}}"
             >FotoBooking</a
@@ -55,7 +57,7 @@
                 <a href="{{ url_for('main.orderCheckout') }}">
                   <button
                     type="button"
-                    class="btn btn-primary position-relative mt-1"
+                    class="btn position-relative mt-1"
                   >
                     <i class="fa fa-shopping-cart" style="font-size: 24px"></i>
                     <span
@@ -80,6 +82,7 @@
                 name="search"
                 placeholder="Search photographers..."
                 aria-label="Search"
+                style="background-color:#1b4965; color:white; border:none; ::placeholder{color:#e0e0e0;}"
               />
               <button class="btn btn-light" type="submit">Search</button>
             </form>
@@ -167,7 +170,9 @@
     <main>{% block main %} {% endblock %}</main>
 
     <footer>
-      <div class="bg-primary text-bg-primary pb-3">
+      <div class="main-theme-bg text-white mt-5" 
+        data-bs-theme="dark" 
+        pb-3>
         <div class="m-0 p-4 text-center company_info">
             <h5>FotoBooking</h5>
             <p>2 George St, Brisbane City QLD 4000</p>

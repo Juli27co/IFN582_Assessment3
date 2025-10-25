@@ -153,17 +153,16 @@ INSERT INTO Admin (email, password, phone, firstName, lastName, lastUpdated) VAL
 
 
 INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymentMethod) VALUES
-('julicortesarb@gmail.com', '8d2d88bb4441fbd89795917d6eb585ef67a...4a03904ab38', '0490557292', 'Juliana', 'Cortes', 'Credit Card'),
-('mike.hansen88@yahoo.com', '38aab61555a84be5f1eea1d6790a6005419...aaf816a6f0b', '0451234567', 'Michael', 'Hansen', 'Credit Card'),
-('sara_lee12@gmail.com', '00c20396f065af467701c634bbf43e1b0bb05b...9de76047368e5b7b3ac1d190', '0478901234', 'Sara', 'Lee', 'Cash'),
-('tom.jenkins@outlook.com', '038ff275dbded9e17df4c869fd6ac730d73...95fee2a243343e', '0498765432', 'Tom', 'Jenkins', 'Credit Card'),
-('diana.ross@mail.com', 'd21dafb415326ffd763b873dfbf28ca8a2dda32...6cfdb889b3b075717d1d13', '0487654321', 'Diana', 'Ross', 'Cash'),
-('lucas_ng@live.com', 'c332d7c13cc97a04d5b7e24a15b8616a501c20f59...9404e65a81b38ff0c', '0477123456', 'Lucas', 'Ng', 'Credit Card'),
-('emilybrown123@gmail.com', '7036f91acd9f9c4458b3f202c6e140824fe...245b6b6bb9c578', '0466123456', 'Emily', 'Brown', 'Credit Card'),
-('omar.youssef@gmail.com', '84f32adc0b64c8c07fe694e434218b79d0cd...c3c72cc1fb201', '0433556677', 'Omar', 'Youssef', 'Credit Card'),
-('natalie_woods@hotmail.com', '292c311b5be4843641a62041e5ebc29ea...3641c34788d8bc598fa', '0499776655', 'Natalie', 'Woods', 'Cash'),
-('leo.fernandez@mail.com', '5b1fb5283ff377dc62077b408f2e6cdca042...abaad5551980', '0422446688', 'Leo', 'Fernandez', 'Credit Card');
-
+('julicortesarb@gmail.com', '8d2d88bb4441fbd89795917d6eb585ef67aa7f13b57f30eda8b994a03904ab38', '0490557292', 'Juliana', 'Cortes', 'Credit Card'),
+('mike.hansen88@yahoo.com', '38aab61555a84be5f1eea1d6790a6005419f035b5efcf757832a1aaf816a6f0b', '0451234567', 'Michael', 'Hansen', 'Credit Card'),
+('sara_lee12@gmail.com',    '00c20396f065af467701c634bbf43e1b0bb05b6f9de76047368e5b7b3ac1d190', '0478901234', 'Sara', 'Lee', 'Cash'),
+('tom.jenkins@outlook.com', '038ff275dbded9e17df4c869fd6ac730d73ef21e1e13eec9a095fee2a243343e', '0498765432', 'Tom', 'Jenkins', 'Credit Card'),
+('diana.ross@mail.com',     'd21dafb415326ffd763b873dfbf28ca8a2dda32dfe6cfdb889b3b075717d1d13', '0487654321', 'Diana', 'Ross', 'Cash'),
+('lucas_ng@live.com',       'c332d7c13cc97a04d5b7e24a15b8616a501c20f59fb0dfd9404e65a81b38ff0c', '0477123456', 'Lucas', 'Ng', 'Credit Card'),
+('emilybrown123@gmail.com', '7036f91acd9f9c4458b3f202c6e140824fed8476277a03d7f8245b6b6bb9c578', '0466123456', 'Emily', 'Brown', 'Credit Card'),
+('omar.youssef@gmail.com',  '84f32adc0b64c8c07fe694e434218b79d0cd18ea673c1fd2b47c3c72cc1fb201', '0433556677', 'Omar', 'Youssef', 'Credit Card'),
+('natalie_woods@hotmail.com','292c311b5be4843641a62041e5ebc29ea00767d8290283641c34788d8bc598fa', '0499776655', 'Natalie', 'Woods', 'Cash'),
+('leo.fernandez@mail.com',  '5b1fb5283ff377dc62077b408f2e6cdca042fcdf94084a5ba506abaad5551980', '0422446688', 'Leo', 'Fernandez', 'Credit Card');
 
 INSERT INTO Service (name, shortDescription, longDescription, price, coverImage) VALUES
 ('Wedding', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00, 'drew-coffman-llWjwo200fo-unsplash.jpg'),
@@ -181,24 +180,23 @@ INSERT INTO AddOn (addOn, price) VALUES
 ('Printed Album', 100.00),
 ('Both : Extra Edited Photos + Printed Album', 150.00);
 
-INSERT INTO Photographer 
+INSERT INTO Photographer
 (email, password, phone, firstName, lastName, bioDescription, location, availability, rating, profilePicture) VALUES
-('john.doe@example.com', '4dbd5e49147b5102ee2731ac03dd0db7decc3b8715c3df3c1f3ddc62dcbcf86d', '0412345678', 'John', 'Doe', 'Experienced photographer specializing in portrait and event photography.', 'Sydney', 'Weekdays', 4.8, 'clem-onojeghuo-jUAcCtbMb0k-unsplash.jpg'),
-('emily.smith@example.com', '5e9debce1deef8c0096b74dec27f4704a9eece077978c88a2530ed30db07f450', '0498765432', 'Emily', 'Smith', 'Specializing in landscape photography with a keen eye for natural light and outdoor scenes.', 'Melbourne', 'Weekdays', 4.7, 'jakob-owens-f3s0i96CRGQ-unsplash.jpg'),
-('michael.jones@example.com', 'b63df8656b78eb0db74d65d15ab6c36b8ba0a3f7bef4ebfcc41c4ad75dd5724b', '0401122334', 'Michael', 'Jones', 'Freelance photographer with a focus on corporate headshots and commercial photography.', 'Brisbane', 'Short notice bookings', 4.9, 'home-page-welcome.jpg'),
-('sophia.wilson@example.com', '7bb2dbd81bf00f3564e035db97e7d224b1d887645370a2f4ed5dcc5cfaa9eb29', '0455667788', 'Sophia', 'Wilson', 'Creative portrait photographer with over 10 years of experience capturing moments that tell stories.', 'Perth', 'Weekends', 5.0, 'andre-furtado-JtV6zyOZSrA-unsplash.jpg'),
-('david.brown@example.com', '88d21bcd079235290778ebf22486b7e71c6fe2a5230f1cc5c764ae4b17bc8344', '0422333445', 'David', 'Brown', 'Experienced in wedding and engagement photography, known for capturing genuine emotions and timeless moments.', 'Adelaide', 'Weekends', 4.6, 'alif-ngoylung-jg-6ARMiaPM-unsplash.jpg'),
-('olivia.miller@example.com', 'dbe816a84781322fad7cba8cabb6c3477ff13978ba5f530f2ed2e84fcf4a048f', '0433556677', 'Olivia', 'Miller', 'Family and newborn photographer dedicated to capturing the purest moments of life with warmth and elegance.', 'Gold Coast', 'Weekdays', 4.9, 'jakob-owens-DQPP9rVLYGQ-unsplash.jpg'),
-('benjamin.taylor@example.com', 'be09643fd6a65f76801be40de19d55fd799238e85e4805b7ecbd0443897c8523', '0466778899', 'Benjamin', 'Taylor', 'Fashion and editorial photographer with a passion for capturing the latest trends and unique styles.', 'Sydney', 'Weekdays', 4.8, 'luigi-estuye-lucreative-HVK4t3leM1I-unsplash.jpg'),
-('ava.anderson@example.com', 'eb7f1a6e2264a882c78fa074be472482fb9be174376721b594c8570a9bd8c09d', '0477889900', 'Ava', 'Anderson', 'Specializes in event photography and commercial shoots, ensuring high-quality results for every project.', 'Melbourne', 'Weekends', 4.7, 'marco-xu-ToUPBCO62Lw-unsplash.jpg'),
-('liam.thomas@example.com', 'aefd9a7f7cf078ea869e3d62138d0f99865947d6d9135ad0f8c0c3c70264d63f', '0488992233', 'Liam', 'Thomas', 'Travel and adventure photographer who captures breathtaking landscapes and remote destinations.', 'Hobart', 'Weekdays', 4.9, 'patrick-pahlke-G7wgKn7j_Rs-unsplash.jpg'),
-('chloe.davis@example.com', 'da56f72946d3fe164d2ba180baf97c16cfe92b086dd8a7da4c9cc5188b1479a9', '0412349876', 'Chloe', 'Davis', 'Wedding and portrait photographer with a passion for capturing candid moments and emotional stories.', 'Canberra', 'Short notice bookings', 4.8, 'stacey-koenitz-bduka9UJzrk-unsplash.jpg'),
-('alex.hughes@example.com', 'e3a1da282372e7b47476e5d070abb13e5047e985bad416f9332a63b1d607a8e5', '0411999888', 'Alex', 'Hughes', 'Portrait and corporate photographer delivering clean, modern looks for websites and LinkedIn.', 'Newcastle', 'Weekdays', 4.7, 'home-page-welcome.jpg'),
-('zoe.martin@example.com', '65b2c6b17d3b0af160e650fc311eb68cb5d170a9a226ccbaa0dc185cce27910b', '0499001122', 'Zoe', 'Martin', 'Family and maternity photographer known for warm tones and natural outdoor light.', 'Sunshine Coast', 'Weekends', 4.9, 'stacey-koenitz-bduka9UJzrk-unsplash.jpg'),
-('ethan.walker@example.com', 'da8c3441e824c0caa630acf018d5d908734738b536206e6d1d10d58a818b1223', '0400776655', 'Ethan', 'Walker', 'Documentary-style event photographer capturing candid moments and brand stories.', 'Darwin', 'Short notice bookings', 4.8, 'jakob-owens-f3s0i96CRGQ-unsplash.jpg'),
-('mia.white@example.com', 'f1a3e04947893999b0890973025cd24e65106892c6ce1beb9a00c815589b8cce', '0422555011', 'Mia', 'White', 'Wedding and engagement specialist with timeless, airy edits and detail-focused coverage.', 'Geelong', 'Weekdays', 4.6, 'andre-furtado-JtV6zyOZSrA-unsplash.jpg'),
-('noah.king@example.com', '3e067006faa5a8436f96a4a2b390c164fbccac89c1f4cab8963f8ae7617d3905', '0477003344', 'Noah', 'King', 'Studio and product photographer obsessed with crisp lighting and color accuracy.', 'Townsville', 'Weekends', 5.0, 'jakob-owens-DQPP9rVLYGQ-unsplash.jpg');
-
+('john.doe@example.com', 'bfbfe08edb20e274563cd69250f4e1be3c17bbb919a68082b7fb82802e10ffe0', '0412345678', 'John', 'Doe', 'Experienced photographer specializing in portrait and event photography.', 'Sydney', 'Weekdays', 4.8, 'clem-onojeghuo-jUAcCtbMb0k-unsplash.jpg'),
+('emily.smith@example.com', '631fdd64916871af1c2689bf24d6e166ce34726c01bd936dcf60bd680ae29e84', '0498765432', 'Emily', 'Smith', 'Specializing in landscape photography with a keen eye for natural light and outdoor scenes.', 'Melbourne', 'Weekdays', 4.7, 'jakob-owens-f3s0i96CRGQ-unsplash.jpg'),
+('michael.jones@example.com', 'd379613d37191f8f64d18ed31314890154647a4e2ba135cb2ab83d7cd5eb4d84', '0401122334', 'Michael', 'Jones', 'Freelance photographer with a focus on corporate headshots and commercial photography.', 'Brisbane', 'Short notice bookings', 4.9, 'home-page-welcome.jpg'),
+('sophia.wilson@example.com', 'ccf80f566d86ebe6d1de6741c701e144f7d84e9884ab72e2fba3283ab0d0a36d', '0455667788', 'Sophia', 'Wilson', 'Creative portrait photographer with over 10 years of experience capturing moments that tell stories.', 'Perth', 'Weekends', 5.0, 'andre-furtado-JtV6zyOZSrA-unsplash.jpg'),
+('david.brown@example.com', '6f186e817dbe400af280ef52acfdeb843e98df2c4f470c170f01585097c8558e', '0422333445', 'David', 'Brown', 'Experienced in wedding and engagement photography, known for capturing genuine emotions and timeless moments.', 'Adelaide', 'Weekends', 4.6, 'alif-ngoylung-jg-6ARMiaPM-unsplash.jpg'),
+('olivia.miller@example.com', '1948f517f8d097b864159837bc56a4c32a39e4d6b9c68bcc441e5d5e31b0a54d', '0433556677', 'Olivia', 'Miller', 'Family and newborn photographer dedicated to capturing the purest moments of life with warmth and elegance.', 'Gold Coast', 'Weekdays', 4.9, 'jakob-owens-f3s0i96CRGQ-unsplash.jpg'),
+('benjamin.taylor@example.com', '1ec31f066d9c637d6d858decac04df243af61c80c12d33db8924a7c7b9a14ae2', '0466778899', 'Benjamin', 'Taylor', 'Fashion and editorial photographer with a passion for capturing the latest trends and unique styles.', 'Sydney', 'Weekdays', 4.8, 'luigi-estuye-lucreative-HVK4t3leM1I-unsplash.jpg'),
+('ava.anderson@example.com', 'fb34ad71f3c4362954fc3bd671c21ebd9ae0f7032d2df1eed2af218e971e70aa', '0477889900', 'Ava', 'Anderson', 'Specializes in event photography and commercial shoots, ensuring high-quality results for every project.', 'Melbourne', 'Weekends', 4.7, 'marco-xu-ToUPBCO62Lw-unsplash.jpg'),
+('liam.thomas@example.com', '5f229cace76bf919146d896308a8f08bc93f89e4548ba6271096809682e1231b', '0488992233', 'Liam', 'Thomas', 'Travel and adventure photographer who captures breathtaking landscapes and remote destinations.', 'Hobart', 'Weekdays', 4.9, 'patrick-pahlke-G7wgKn7j_Rs-unsplash.jpg'),
+('chloe.davis@example.com', 'e9787e0f795522c22b1274f1c189ddc8a5fc9e92ea4ceeaa6b79634f066b132c', '0412349876', 'Chloe', 'Davis', 'Wedding and portrait photographer with a passion for capturing candid moments and emotional stories.', 'Canberra', 'Short notice bookings', 4.8, 'stacey-koenitz-bduka9UJzrk-unsplash.jpg'),
+('alex.hughes@example.com', '09757beb485e1cf5ff89a57b0294ab8507c4472698adc5401c038493d6109535', '0411999888', 'Alex', 'Hughes', 'Portrait and corporate photographer delivering clean, modern looks for websites and LinkedIn.', 'Newcastle', 'Weekdays', 4.7, 'home-page-welcome.jpg'),
+('zoe.martin@example.com', '68f1c48ba69dbd3c8c9529a93003009f4fcf98c2d8d4a1bd303f2471694c5c2f', '0499001122', 'Zoe', 'Martin', 'Family and maternity photographer known for warm tones and natural outdoor light.', 'Sunshine Coast', 'Weekends', 4.9, 'stacey-koenitz-bduka9UJzrk-unsplash.jpg'),
+('ethan.walker@example.com', 'ec3a2d011eb79312b7137c3924b8395102cecbd0aa712f9b75f101c9d834224d', '0400776655', 'Ethan', 'Walker', 'Documentary-style event photographer capturing candid moments and brand stories.', 'Darwin', 'Short notice bookings', 4.8, 'jakob-owens-f3s0i96CRGQ-unsplash.jpg'),
+('mia.white@example.com', '0f5358f0e3b2ccba51fe0d532fcdaa3006d0d70f5a2bbc10d39a57aa4589a5b3', '0422555011', 'Mia', 'White', 'Wedding and engagement specialist with timeless, airy edits and detail-focused coverage.', 'Geelong', 'Weekdays', 4.6, 'andre-furtado-JtV6zyOZSrA-unsplash.jpg'),
+('noah.king@example.com', '0afe867eef6010ee8326b9fe1d2cee2667413309943129bc6830c26e9f9d0516', '0477003344', 'Noah', 'King', 'Studio and product photographer obsessed with crisp lighting and color accuracy.', 'Townsville', 'Weekends', 5.0, 'jakob-owens-DQPP9rVLYGQ-unsplash.jpg');
 
 INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
 (1,1),

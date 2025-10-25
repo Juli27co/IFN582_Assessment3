@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class="container mt-5">
-  <h2 class="mb-4">Upload Images for Your Service</h2>
+  <h2 class="mb-4 display-6">Upload Images for Your Service</h2>
 
   <form method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
@@ -17,7 +17,7 @@
     </a>
   </div>
   <div class="col text-end">
-    {{ wtf.render_field(form.submit, class_="btn btn-primary") }}
+    {{ wtf.render_field(form.submit, class_="btn button-style") }}
   </div>
 </div>
   </form>
@@ -36,7 +36,7 @@
 
 
   <hr class="my-4">
-  <h4 class="mb-3">Your Images</h4>
+  <h4 class="mb-3 display-6">Your Images</h4>
 
   {% if images and images|length > 0 %}
     <div class="row g-3">

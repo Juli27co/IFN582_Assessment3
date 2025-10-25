@@ -23,7 +23,7 @@
       <strong>Please log in before completing your details</strong>.
     </div>
   {% endif %}
-    <div class="col-12 col-lg-7">
+    <div class="col-12 col-lg-6">
       <div class="card">
         <h1 class="ms-4 mt-4"><strong>Client Details</strong></h1>
         <!-- <h4 class="ms-4 mt-4">Please log in before completing your details</h4> -->
@@ -47,16 +47,14 @@
             {{ wtf.render_field(form.payment_method) }}
           </div>
           <div class="col-12">
-            <button type="submit" class="btn btn-primary">
-              {{ wtf.render_field(form.checkout_submit) }}
-            </button>
+              {{ wtf.render_field(form.checkout_submit,  class="btn button-style") }}
           </div>
         </form>
       </div>
     </div>
 
   <!-- order summary pnnel (right panel)-->
-  <div class="col-12 col-lg-5 mt-4 mt-lg-0">
+  <div class="col-12 col-lg-6 mt-4 mt-lg-0">
     <div class="card">
       <div class="card-body">
       <div class="d-flex justify-content-between">
@@ -67,50 +65,56 @@
         </form>
         {% endif %}
       </div>
+        <!--cart item START-->
         {% if cart.items %}
           <ul class="list-unstyled mb-3" id="summary-list">
             {% for it in cart.items %}
-            <li class="d-flex align-items-center justify-content-between mb-3 p-2 border rounded-3"
+            <li class="mb-3 p-2 border rounded-3"
                 data-id="{{ it.id }}" data-unit="{{ (it.unit_price or 0)|float }}">
 
-              <div class="d-flex align-items-center gap-3 order-con">
-
-                <img src="{{ url_for('static', filename='img/' ~ it.service.coverImage) }}"
-                      alt="{{ it.service.name or 'item' }}"
-                      class="order-summary-img">
-
-                <div class="order-con">
-                  <div class="d-flex justify-content-between align-items-end">
-                    <p class="fw-semibold">#{{ loop.index }} {{ it.service.name }}</p>
-                    <p class="text-muted small">${{ '%.2f'|format((it.service.price)|float) }}</p>
+              <div class="row row-cols-1 row-cols-sm-3">
+                  <!-- cart item image -->
+                  <div class="order-img-con col">
+                    <img src="{{ url_for('static', filename='img/' ~ it.service.coverImage) }}"
+                          alt="{{ it.service.name or 'item' }}"
+                          class="order-summary-img"
+                    >
                   </div>
-                  <div class="mb-3">
-                    <p>{{ it.photographer.firstName }} {{ it.photographer.lastName }}</p>
-                    <p>({{ it.photographer.availability }})</p>
-                  </div>  
-                    <div class="text-muted small d-flex justify-content-between">
+                  <!-- cart item info -->
+                  <div class="col order-info-con">
+                    <!-- service -->
+                    <div class="order-price  flex-column flex-sm-row ">
+                      <p class="fw-semibold">#{{ loop.index }} {{ it.service.name }}</p>
+                      <p class="text-muted small">${{ '%.2f'|format((it.service.price)|float) }}</p>
+                    </div>
+                    <div class="mb-3">
+                      <p>{{ it.photographer.firstName }} {{ it.photographer.lastName }}</p>
+                      <p>({{ it.photographer.availability }})</p>
+                    </div>
+                    <!-- details -->  
+                    <div class="text-muted small order-price flex-column flex-sm-row ">
                       <p>Type: {{ it.type.name }}</p>
                       <p>${{ '%.2f'|format((it.type.price)|float) }}</p>
                     </div>
                     {% if it.addon %}
-                      <div class="text-muted small d-flex justify-content-between">
+                      <div class="text-muted small order-price flex-column flex-sm-row ">
                         <p>Add-on: {{ it.addon.addOn }}</p>
                         <p>${{ '%.2f'|format((it.addon.price)|float) }}</p>
                       </div>
                     {% endif %}
+                  </div>
+                  <!-- subtotal & close button -->
+                  <div class="d-flex align-items-center justify-content-between justify-content-md-end gap-2 ms-1">
+                    <div class="text-end order-subtotal">
+                      <div class="fw-semibold">{{"$%.2f"|format(it.subtotal|float)}}</div>
+                    </div>
+                    <form action="{{ url_for('main.cart_remove') }}" method="post" class="m-0 remove-form">
+                      <input type="hidden" name="item_id" value="{{ it.id }}">
+                      <button class="btn btn-outline-danger btn-sm" title="Remove">×</button>
+                    </form>
+                  </div>
                 </div>
-              </div>
 
-              <div class="d-flex align-items-center gap-2">
-                <div class="text-end ms-2" style="width:90px;">
-                  <div class="fw-semibold line-total">{{"$%.2f"|format(it.subtotal|float)}}</div>
-                </div>
-
-                <form action="{{ url_for('main.cart_remove') }}" method="post" class="m-0 remove-form">
-                  <input type="hidden" name="item_id" value="{{ it.id }}">
-                  <button class="btn btn-outline-danger btn-sm" title="Remove">×</button>
-                </form>
-              </div>
             </li>
             {% endfor %}
           </ul>
@@ -118,7 +122,7 @@
         {% else %}
           <div class="text-muted mb-4">Your order list is empty. Please select a service to continue!</div>
         {% endif %}
-
+        <!--cart item END-->
         <div class="d-flex justify-content-between">
           <span class="fw-semibold">Total</span>
           <span class="fw-semibold" id="summary-total">{{"$%.2f"|format(total_cost|float)}} </span>

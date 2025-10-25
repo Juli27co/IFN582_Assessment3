@@ -80,7 +80,7 @@ class AddServiceForm(FlaskForm):
         "Cover image",
         validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"], Length(min=3, max=255))],
     )
-    serviceSubmit = SubmitField("Add New Service")
+    serviceSubmit = SubmitField("Add New Service", render_kw={"class": "btn button-style"})
 
 
 class AddTypeForm(FlaskForm):
@@ -89,13 +89,13 @@ class AddTypeForm(FlaskForm):
         "Short Description", validators=[InputRequired(), Length(max=255)]
     )
     price = DecimalField("Price", validators=[DataRequired()])
-    submit = SubmitField("Add Type")
+    submit = SubmitField("Add Type", render_kw={"class": "btn button-style"})
 
 
 class AddOnForm(FlaskForm):
     addOn = StringField("Add-On Name", validators=[DataRequired(), Length(max=255)])
     price = DecimalField("Price", validators=[DataRequired()])
-    submit = SubmitField("Save Add-On")
+    submit = SubmitField("Save Add-On", render_kw={"class": "btn button-style"})
 
 
 class InquireryForm(FlaskForm):
@@ -121,7 +121,7 @@ class LoginForm(FlaskForm):
         ],
         validators=[InputRequired()],
     )
-    submit = SubmitField("LOGIN")
+    submit = SubmitField("LOGIN", render_kw={"class": "btn button-style"})
 
 
 class RegisterForm(FlaskForm):
@@ -137,7 +137,7 @@ class RegisterForm(FlaskForm):
         choices=[("client", "Client"), ("photographer", "Photographer")],
         validators=[InputRequired()],
     )
-    submit = SubmitField("Make Account")
+    submit = SubmitField("Make Account", render_kw={"class": "btn button-style"})
 
 
 availability_choices = [

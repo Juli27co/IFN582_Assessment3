@@ -30,6 +30,7 @@
       </div>
       <!-- right panel  -->
       <div class="col-md-6">
+        <div class="service-box">
         <!-- showing info of service  -->
         <h2 class="mb-2">{{ service.name }}</h2>
         <p class="mb-4">
@@ -122,7 +123,7 @@
               <input type="hidden" name="typeId" value={{selectedType.id}}>
               <input type="hidden" name="addOnId" value={{selectedAddOn.id}}>
               <input type="hidden" name="subtotal" value="{{subtotal}}">
-              <button type="submit" class="btn btn-primary btn-lg ">
+              <button type="submit" class="btn button-style btn-lg ">
                 Add to Cart
               </button>
             </form>
@@ -130,10 +131,11 @@
               method="POST" 
               action="{{ url_for('main.orderCheckout') }}"
             >
-              <button type="submit" class="btn btn-primary btn-lg">
+              <button type="submit" class="btn button-style btn-lg">
                 Checkout
               </button>
             </form>
+          </div>
           </div>
         </div>
 
