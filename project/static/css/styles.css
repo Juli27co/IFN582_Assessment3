@@ -2,6 +2,17 @@
   text-align: center;
 }
 
+.message-con {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px;
+  align-items: center;
+}
+
+.message-con p{
+  margin: 0px;
+}
+
 .company_info p{
   margin: 0px;
 }
