@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import widgets,SelectMultipleField
+from wtforms import widgets, SelectMultipleField
 from wtforms.fields import (
     SubmitField,
     StringField,
@@ -8,8 +8,8 @@ from wtforms.fields import (
     DecimalField,
     RadioField,
     MultipleFileField,
+    PasswordField,
 )
-from wtforms.fields import PasswordField
 from wtforms.validators import (
     InputRequired,
     Email,
@@ -18,38 +18,22 @@ from wtforms.validators import (
     Length,
     NumberRange
 )
-from flask_wtf.file import FileField, MultipleFileField, FileAllowed
-
-# from wtforms.fields import (
-#     SubmitField,
-#     StringField,
-#     TextAreaField,
-#     RadioField,
-#     SelectMultipleField,
-#     DecimalField,
-#     SelectField,
-#     PasswordField,
-# )
-# from project.db import get_services
-# from project.models import Service
-# from wtforms.validators import NumberRange
+from flask_wtf.file import FileField, FileAllowed
 
 # Edit photographer form link to models and DB, also using for edit profile
 class PhotographerEditForm(FlaskForm):
-    email = StringField("Email", validators=[InputRequired(), Email()])
-    password = PasswordField(
-        "Password",
-    )
-    phone = StringField("Phone", validators=[InputRequired()])
-    firstName = StringField("First name", validators=[InputRequired()])
-    lastName = StringField("Last name", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email(), Length(max=100)])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=6, max=50, message="Password must be 6 characters or longer.")])
+    phone = StringField("Phone", validators=[InputRequired(), Length(max=15)])
+    firstName = StringField("First name", validators=[InputRequired(), Length(min=3, max=20)])
+    lastName = StringField("Last name", validators=[InputRequired(), Length(min=3, max=20)])
     bioDescription = TextAreaField(
         "Bio", validators=[InputRequired(), Length(min=3, max=255)]
     )
     location = StringField(
         "City :",
         render_kw={"placeholder": "Put City Name only e.g. Sydney", "rows": 1},
-        validators=[InputRequired()],
+        validators=[InputRequired(), Length(min=3, max=50)],
     )
     availability = RadioField(
         "Availability",
@@ -63,7 +47,7 @@ class PhotographerEditForm(FlaskForm):
     rating = DecimalField("Rating", validators=[Optional()])
     profilePicture = FileField(
         "Profile image",
-        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"])],
+        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"]), Length(min=3, max=255)],
     )
     submit = SubmitField("Save Changes")
 
@@ -75,14 +59,14 @@ class PhotographerAddImage(FlaskForm):
     )
     image = MultipleFileField(
         "Up load Your Images\n You can upload multiplefiles!!!",
-        validators=[InputRequired()],
+        validators=[InputRequired(), Length(min=3, max=255)],
     )
     submit = SubmitField("Submit")
 
 class AddServiceForm(FlaskForm):
     serviceName = StringField(
         "Service Name :",
-        validators=[InputRequired()],
+        validators=[InputRequired(), Length(min=3, max=100)],
         render_kw={"placeholder": " e.g. Drone Photography"},
     )
     serviceShortDescription = StringField(
@@ -94,7 +78,7 @@ class AddServiceForm(FlaskForm):
     servicePrice = DecimalField("Price", validators=[InputRequired()])
     serviceCoverPicture = FileField(
         "Cover image",
-        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"])],
+        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"], Length(min=3, max=255))],
     )
     serviceSubmit = SubmitField("Add New Service")
 
@@ -117,18 +101,17 @@ class AddOnForm(FlaskForm):
 class InquireryForm(FlaskForm):
     """Form for item_details page."""
 
-    fullName = StringField("Full Name", validators=[InputRequired()])
-    email = StringField("Email", validators=[InputRequired(), Email()])
-    phone = StringField("PhoneNumber", validators=[InputRequired()])
-    message = TextAreaField("", validators=[InputRequired()])
+    fullName = StringField("Full Name", validators=[InputRequired(), Length(max=100)])
+    email = StringField("Email", validators=[InputRequired(), Email(), Length(max=100)])
+    phone = StringField("PhoneNumber", validators=[InputRequired(), Length(max=15)])
+    message = TextAreaField("", validators=[InputRequired(), Length(max=255)])
     submit = SubmitField("Send Message")
-
 
 class LoginForm(FlaskForm):
     """Form for login page."""
 
-    email = StringField("Email", validators=[InputRequired(), Email()])
-    password = PasswordField("Password", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email(), Length(max=100)])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=6, max=50, message="Password must be 6 characters or longer.")])
     user_type = RadioField(
         "User Type",
         choices=[
@@ -144,11 +127,11 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     """Form for user registry."""
 
-    email = StringField("Email", validators=[InputRequired(), Email()])
-    password = PasswordField("Password", validators=[InputRequired()])
-    firstName = StringField("Your first name", validators=[InputRequired()])
-    lastName = StringField("Your surname", validators=[InputRequired()])
-    phone = StringField("Your phone number", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email(), Length(max=100)])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=6, max=50, message="Password must be 6 characters or longer.")])
+    firstName = StringField("Your first name", validators=[InputRequired(), Length(min=3, max=20)])
+    lastName = StringField("Your surname", validators=[InputRequired(), Length(min=3, max=20)])
+    phone = StringField("Your phone number", validators=[InputRequired(), Length(max=15)])
     user_type = RadioField(
         "User Type",
         choices=[("client", "Client"), ("photographer", "Photographer")],
@@ -162,21 +145,7 @@ availability_choices = [
     ("Weekdays", "Weekdays only"),
     ("Short notice bookings", "Short notice bookings"),
 ]
-# class FiltersForm(FlaskForm):
-#     """Form for filtering photographers on the index page."""
-#     service_type = RadioField("Service Type :", choices=[])
-#     location = RadioField("Location :", choices=[])
-#     availability = RadioField("Availability :", choices=availability_choices)
-#     min_rating = DecimalField(
-#         "Minimum Rating :",
-#         places=1,
-#         validators=[InputRequired(), NumberRange(min=0, max=5)],
-#         render_kw={"min": 0, "max": 5, "type": "range", "step": "0.1"},
-#         default=0.0,
-#     )
-#     submit = SubmitField("Apply Filters")
 
-#-----------This is new FiltersForm(FlaskForm)-----------
 class MulticheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label = False)
     option_widget = widgets.CheckboxInput()
@@ -195,26 +164,14 @@ class FiltersForm(FlaskForm):
     )
     submit = SubmitField("Apply Filters")
 
-#-----------This is new FiltersForm(FlaskForm)-----------
-
-class SearchForm(FlaskForm):
-    """Form for searching photographers on the index page."""
-
-    search_query = StringField(
-        "Search Photographers",
-        validators=[Optional(), Length(min=1, max=100)],
-        render_kw={"placeholder": "Enter photographer name..."},
-    )
-    submit = SubmitField("Search")
-
 
 class CheckoutForm(FlaskForm):
     full_name = StringField(
-        "Full name", validators=[InputRequired(), Length(min=2, max=100)]
+        "Full name", validators=[InputRequired(), Length(min=3, max=100)]
     )
-    email = StringField("Email", validators=[InputRequired(), Email()])
-    phone = StringField("PhoneNumber", validators=[InputRequired()])
-    address = StringField("Address", validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired(), Email(), Length(max=100)])
+    phone = StringField("PhoneNumber", validators=[InputRequired(), Length(max=15)])
+    address = StringField("Address", validators=[InputRequired(), Length(min=3, max=255)])
     payment_method = RadioField(
         "Payment Method",
         choices=[("cash", "Cash"), ("credit card", "Credit card")],

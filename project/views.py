@@ -46,7 +46,6 @@ from .db import (
     get_addOns,
     get_all_locations,
     get_all_services,
-    get_clients,
     get_images_by_photographer_service,
     get_images_for_photographer,
     get_photographer,
@@ -211,7 +210,7 @@ def vendor_management(photographer_id):
 @bp.route("/vendor/management/", methods=["GET"])
 @only_photographers
 def vendor_management_check():
-    if session.get("userType") != "photographer":
+    if session["user"]["role"] != "photographer":
         flash("Please log in as a photographer.", "error")
         return redirect(url_for("main.login"))
 
@@ -224,7 +223,7 @@ def vendor_management_check():
 
 
 @bp.route("/vendor/add-images/<int:photographer_id>/", methods=["GET", "POST"])
-# @only_photographers
+@only_photographers
 def add_images_photographer(photographer_id):
     form = PhotographerAddImage()
 
@@ -260,7 +259,7 @@ def add_images_photographer(photographer_id):
 
 
 @bp.post("/vendor/<int:photographer_id>/images/<int:image_id>/delete")
-# @only_photographers
+@only_photographers
 def delete_image(photographer_id, image_id):
     # to delete the images of photographer by photographer_id
     deleted = delete_image_row(image_id, photographer_id)
@@ -293,11 +292,17 @@ def index():
         query_params = {}
 
         if form.service_type.data:
+            # Handle multiple service types - Flask's url_for can handle lists automatically
             query_params["service_type"] = form.service_type.data
+        
         if form.location.data:
+            # Handle multiple locations
             query_params["location"] = form.location.data
+        
         if form.availability.data:
+            # Handle multiple availability options
             query_params["availability"] = form.availability.data
+                
         if form.min_rating.data is not None:
             query_params["min_rating"] = str(form.min_rating.data)
 
@@ -307,9 +312,9 @@ def index():
     # Handle GET request with query parameters
     if request.method == "GET":
         # Get filters from query parameters
-        service_type = request.args.get("service_type")
-        location = request.args.get("location")
-        availability = request.args.get("availability")
+        service_type = request.args.getlist("service_type")
+        location = request.args.getlist("location")
+        availability = request.args.getlist("availability")
         min_rating = request.args.get("min_rating")
         search_query = request.args.get("search")
 
@@ -458,21 +463,20 @@ def login():
 
             if form.user_type.data == "client":
                 user = check_for_client(email, password)
-                userType = "client"
+                role = "client"
             elif form.user_type.data == "photographer":
                 user = check_for_photographer(email, password)
-                userType = "photographer"
+                role = "photographer"
             elif form.user_type.data == "admin":
                 user = check_for_admin(email, password)
-                userType = "admin"
+                role = "admin"
             if not user:
                 flash("Invalid username or password", "error")
                 return redirect(url_for("main.login"))
             # Store full user info in session
             session["user"] = user
-            session["userType"] = userType
             session["logged_in"] = True
-            if userType == "photographer":
+            if role == "photographer":
                 session["photographer_id"] = int(user.id)
             flash("Login successful!")
             return redirect(url_for("main.index"))
