@@ -13,7 +13,7 @@
   margin: 0px;
 }
 
-.company_info p{
+.company_info p {
   margin: 0px;
 }
 
@@ -62,12 +62,20 @@
 .order-con p {
   margin: 0;
 }
+
+.order-summary-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
 /* login page */
 .login-con {
   width: 800px;
 }
 
-.login-pic{
+.login-pic {
     height: 100%;
     object-fit: cover;
     opacity: 0.8;
@@ -115,16 +123,20 @@
   object-fit: cover;    
 }
 
-.portfolio-fixed{
+.photographer-card-desc {
+  padding: 5px;
+  height: 100%;
+}
+
+.portfolio-fixed {
   width: 100%;
   height: 280px;      
   border-radius: 10px;
 }
 
-.portfolio-fixed img{
+.portfolio-fixed img {
   width: 100%;
   height: 100%;
   object-fit: cover;   
   display: block;
 }
-
