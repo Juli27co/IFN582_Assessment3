@@ -98,20 +98,24 @@ def orderCheckout():
     cart = get_cart()
     form = CheckoutForm()
     user = session.get("user")
+    role = session.get("role")
+    if not role:
+        role = session.get("user", {}).get("role", "")
+    role = role.lower()
 
-    if user:
+    if user and role == "client":
         form.full_name.data = f"{user['firstName']} {user['lastName']}"
         form.email.data = user["email"]
         form.phone.data = user["phone"]
 
     # handle when form is submitted
     if form.validate_on_submit():
-        if not user:
-            flash("Please log in before placing your order.", "error")
+        if not user or role != "client":
+            flash("Please log in as a client before placing your order.", "error")
             return redirect(url_for("main.login"))
-
-        client_id = user["id"]
-        address = form.address.data
+        
+        client_id = user.get("client_id") or user.get("id")
+        address = form.address.data.strip()
         payment_method = form.payment_method.data
         order = convert_cartItem_to_order(
             client_id, address, payment_method, get_cart()
@@ -128,6 +132,7 @@ def orderCheckout():
         "checkout.html",
         form=form,
         user=user,
+        role=role,
         readonly=readonly,
         cart=cart,
         total_cost=cart.total_cost(),
@@ -475,6 +480,7 @@ def login():
                 return redirect(url_for("main.login"))
             # Store full user info in session
             session["user"] = user
+            session["role"] = role
             session["logged_in"] = True
             if role == "photographer":
                 session["photographer_id"] = int(user.id)

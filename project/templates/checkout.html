@@ -17,10 +17,10 @@
 
 <main class="row p-5 bg-light">
   <!-- customer's detail (left panel)-->
-  {% if not user %}
+  {% if not user or role != 'client' %}
     <div class="alert alert-danger">
-      <!-- <strong>Please log in before submitting your booking</strong>. -->
-      <strong>Please log in before completing your details</strong>.
+      <!-- <strong>Please log in as a user before submitting your booking</strong>. -->
+      <strong>Please log in as a client before completing your details</strong>.
     </div>
   {% endif %}
     <div class="col-12 col-lg-6">
