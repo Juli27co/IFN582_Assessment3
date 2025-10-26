@@ -21,8 +21,7 @@ CREATE TABLE Client
     password VARCHAR(200) NOT NULL,
     phone VARCHAR(15) NOT NULL,
     firstName VARCHAR(20) NOT NULL,
-    lastName VARCHAR(20) NOT NULL,
-    preferredPaymentMethod VARCHAR(50) NOT NULL
+    lastName VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE Service
@@ -130,17 +129,17 @@ INSERT INTO Admin (email, password, phone, firstName, lastName, lastUpdated) VAL
 ('admin2@gmail.com', 'ef51306214d9a6361ee1d5b452e6d2bb70dc7ebb85bf9e02c3d4747fb57d6bec', '0490557292', '', '', '2025-01-03 11:45:00');
 
 
-INSERT INTO Client (email, password, phone, firstName, lastName, preferredPaymentMethod) VALUES
-('julicortesarb@gmail.com', '8d2d88bb4441fbd89795917d6eb585ef67aa7f13b57f30eda8b994a03904ab38', '0490557292', 'Juliana', 'Cortes', 'Credit Card'),
-('mike.hansen88@yahoo.com', '38aab61555a84be5f1eea1d6790a6005419f035b5efcf757832a1aaf816a6f0b', '0451234567', 'Michael', 'Hansen', 'Credit Card'),
-('sara_lee12@gmail.com',    '00c20396f065af467701c634bbf43e1b0bb05b6f9de76047368e5b7b3ac1d190', '0478901234', 'Sara', 'Lee', 'Cash'),
-('tom.jenkins@outlook.com', '038ff275dbded9e17df4c869fd6ac730d73ef21e1e13eec9a095fee2a243343e', '0498765432', 'Tom', 'Jenkins', 'Credit Card'),
-('diana.ross@mail.com',     'd21dafb415326ffd763b873dfbf28ca8a2dda32dfe6cfdb889b3b075717d1d13', '0487654321', 'Diana', 'Ross', 'Cash'),
-('lucas_ng@live.com',       'c332d7c13cc97a04d5b7e24a15b8616a501c20f59fb0dfd9404e65a81b38ff0c', '0477123456', 'Lucas', 'Ng', 'Credit Card'),
-('emilybrown123@gmail.com', '7036f91acd9f9c4458b3f202c6e140824fed8476277a03d7f8245b6b6bb9c578', '0466123456', 'Emily', 'Brown', 'Credit Card'),
-('omar.youssef@gmail.com',  '84f32adc0b64c8c07fe694e434218b79d0cd18ea673c1fd2b47c3c72cc1fb201', '0433556677', 'Omar', 'Youssef', 'Credit Card'),
-('natalie_woods@hotmail.com','292c311b5be4843641a62041e5ebc29ea00767d8290283641c34788d8bc598fa', '0499776655', 'Natalie', 'Woods', 'Cash'),
-('leo.fernandez@mail.com',  '5b1fb5283ff377dc62077b408f2e6cdca042fcdf94084a5ba506abaad5551980', '0422446688', 'Leo', 'Fernandez', 'Credit Card');
+INSERT INTO Client (email, password, phone, firstName, lastName) VALUES
+('julicortesarb@gmail.com', '8d2d88bb4441fbd89795917d6eb585ef67aa7f13b57f30eda8b994a03904ab38', '0490557292', 'Juliana', 'Cortes'),
+('mike.hansen88@yahoo.com', '38aab61555a84be5f1eea1d6790a6005419f035b5efcf757832a1aaf816a6f0b', '0451234567', 'Michael', 'Hansen'),
+('sara_lee12@gmail.com',    '00c20396f065af467701c634bbf43e1b0bb05b6f9de76047368e5b7b3ac1d190', '0478901234', 'Sara', 'Lee'),
+('tom.jenkins@outlook.com', '038ff275dbded9e17df4c869fd6ac730d73ef21e1e13eec9a095fee2a243343e', '0498765432', 'Tom', 'Jenkins'),
+('diana.ross@mail.com',     'd21dafb415326ffd763b873dfbf28ca8a2dda32dfe6cfdb889b3b075717d1d13', '0487654321', 'Diana', 'Ross'),
+('lucas_ng@live.com',       'c332d7c13cc97a04d5b7e24a15b8616a501c20f59fb0dfd9404e65a81b38ff0c', '0477123456', 'Lucas', 'Ng'),
+('emilybrown123@gmail.com', '7036f91acd9f9c4458b3f202c6e140824fed8476277a03d7f8245b6b6bb9c578', '0466123456', 'Emily', 'Brown'),
+('omar.youssef@gmail.com',  '84f32adc0b64c8c07fe694e434218b79d0cd18ea673c1fd2b47c3c72cc1fb201', '0433556677', 'Omar', 'Youssef'),
+('natalie_woods@hotmail.com','292c311b5be4843641a62041e5ebc29ea00767d8290283641c34788d8bc598fa', '0499776655', 'Natalie', 'Woods'),
+('leo.fernandez@mail.com',  '5b1fb5283ff377dc62077b408f2e6cdca042fcdf94084a5ba506abaad5551980', '0422446688', 'Leo', 'Fernandez');
 
 INSERT INTO Service (name, shortDescription, longDescription, price, coverImage) VALUES
 ('Wedding', 'Capture your special day with beautiful wedding photography.', 'Our wedding photography service includes a full day of coverage, from the ceremony to the reception, ensuring every precious moment is captured.', 2000.00, 'drew-coffman-llWjwo200fo-unsplash.jpg'),

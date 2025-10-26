@@ -50,7 +50,7 @@ class User:
 
 @dataclass
 class Client(User):
-    preferredPaymentMethod: str
+    pass
 
 @dataclass
 class Photographer(User):

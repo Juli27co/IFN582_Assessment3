@@ -284,7 +284,7 @@ def check_for_client(email, password):
     cur = mysql.connection.cursor()
     cur.execute(
         """
-        SELECT client_id, password, email, firstName, lastName, phone, preferredPaymentMethod
+        SELECT client_id, password, email, firstName, lastName, phone
         FROM Client
         WHERE email = %s AND password = %s
     """,
@@ -301,7 +301,6 @@ def check_for_client(email, password):
             row["phone"],
             row["firstName"],
             row["lastName"],
-            "",
         )
     return None
 
@@ -560,8 +559,8 @@ def add_user(form):
     if form.user_type.data == "client":
         cur.execute(
             """
-            INSERT INTO Client (email, password, firstName, lastName, phone, preferredPaymentMethod)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO Client (email, password, firstName, lastName, phone)
+            VALUES (%s, %s, %s, %s, %s)
         """,
             (
                 form.email.data,
@@ -569,7 +568,6 @@ def add_user(form):
                 form.firstName.data,
                 form.lastName.data,
                 form.phone.data,
-                "",
             ),
         )
     elif form.user_type.data == "photographer":

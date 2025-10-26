@@ -23,7 +23,7 @@ from flask_wtf.file import FileField, FileAllowed
 # Edit photographer form link to models and DB, also using for edit profile
 class PhotographerEditForm(FlaskForm):
     email = StringField("Email", validators=[InputRequired(), Email(), Length(max=100)])
-    password = PasswordField("Password", validators=[InputRequired(), Length(min=6, max=50, message="Password must be 6 characters or longer.")])
+    password = PasswordField("Password")
     phone = StringField("Phone", validators=[InputRequired(), Length(max=15)])
     firstName = StringField("First name", validators=[InputRequired(), Length(min=3, max=20)])
     lastName = StringField("Last name", validators=[InputRequired(), Length(min=3, max=20)])
@@ -47,7 +47,7 @@ class PhotographerEditForm(FlaskForm):
     rating = DecimalField("Rating", validators=[Optional()])
     profilePicture = FileField(
         "Profile image",
-        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"]), Length(min=3, max=255)],
+        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"])],
     )
     submit = SubmitField("Save Changes")
 
@@ -59,7 +59,7 @@ class PhotographerAddImage(FlaskForm):
     )
     image = MultipleFileField(
         "Up load Your Images\n You can upload multiplefiles!!!",
-        validators=[InputRequired(), Length(min=3, max=255)],
+        validators=[InputRequired()],
     )
     submit = SubmitField("Submit")
 
@@ -78,7 +78,7 @@ class AddServiceForm(FlaskForm):
     servicePrice = DecimalField("Price", validators=[InputRequired()])
     serviceCoverPicture = FileField(
         "Cover image",
-        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"], Length(min=3, max=255))],
+        validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "webp"])],
     )
     serviceSubmit = SubmitField("Add New Service", render_kw={"class": "btn button-style"})
 
