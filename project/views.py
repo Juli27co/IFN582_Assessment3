@@ -113,12 +113,17 @@ def orderCheckout():
         if not user or role != "client":
             flash("Please log in as a client before placing your order.", "error")
             return redirect(url_for("main.login"))
-        
+
+        cart = get_cart()
+        if not cart.items:
+            flash("Item not found in cart. Please add items first.", "error")
+            return redirect(url_for("main.orderCheckout"))
+
         client_id = user.get("client_id") or user.get("id")
         address = form.address.data.strip()
         payment_method = form.payment_method.data
         order = convert_cartItem_to_order(
-            client_id, address, payment_method, get_cart()
+            client_id, address, payment_method, cart
         )
         insert_order_detail(order)
         empty_cart()
@@ -149,7 +154,7 @@ def cart_remove():
         flash("Your item has been removed from your cart.")
         remove_cart_item(item_id)
     else:
-        flash("Item not found in basket.", "warning")
+        flash("Item not found in cart.", "warning")
 
     return redirect(url_for("main.orderCheckout"))
 
