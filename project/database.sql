@@ -86,28 +86,6 @@ CREATE TABLE Photographer_Service
     FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE
 );
 
-CREATE TABLE Cart
-(
-    cart_id INT AUTO_INCREMENT PRIMARY KEY,
-    createdDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    lastUpdated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    client_id INT,
-    FOREIGN KEY (client_id) REFERENCES Client(client_id) ON DELETE CASCADE
-);
-
-CREATE TABLE Cart_Service
-(
-    cartService_id INT AUTO_INCREMENT PRIMARY KEY,
-    service_id INT,
-    cart_id INT,
-    type_id INT,
-    addOn_id INT,
-    FOREIGN KEY (service_id) REFERENCES Service(service_id) ON DELETE CASCADE,
-    FOREIGN KEY (cart_id) REFERENCES Cart(cart_id) ON DELETE CASCADE,
-    FOREIGN KEY (type_id) REFERENCES ServiceType(type_id) ON DELETE SET NULL,
-    FOREIGN KEY (addOn_id) REFERENCES AddOn(addOn_id) ON DELETE SET NULL
-);
-
 CREATE TABLE Orders
 (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -230,20 +208,6 @@ INSERT INTO Photographer_Service (photographer_id, service_id) VALUES
 (14,4),
 (15,1),
 (15,3);
-
-
-
-INSERT INTO Cart (createdDate, lastUpdated, client_id) VALUES
-('2025-01-01 09:30:00','2025-01-01 09:30:00',1),
-('2025-01-03 11:45:00','2025-01-03 11:45:00',2),
-('2025-01-04 14:10:00','2025-01-04 14:10:00',3),
-('2025-01-06 10:25:00','2025-01-06 10:25:00',4),
-('2025-01-08 16:40:00','2025-01-08 16:40:00',5),
-('2025-01-10 09:50:00','2025-01-10 09:50:00',6),
-('2025-01-12 13:05:00','2025-01-12 13:05:00',7),
-('2025-01-14 08:20:00','2025-01-14 08:20:00',8), 
-('2025-01-16 18:35:00','2025-01-16 18:35:00',9), 
-('2025-01-18 11:10:00','2025-01-18 11:10:00',10);
 
 
 INSERT INTO Image (imageSource, image_description, service_id, photographer_id) VALUES
@@ -377,22 +341,6 @@ INSERT INTO Image (imageSource, image_description, service_id, photographer_id) 
 ('praniket-desai-ZZVP99CMSJE-unsplash.jpg','Wine bottle and glasses with grapes',4, 2),
 ('ela-de-pure-Youa6n5fssM-unsplash.jpg','Cosmetic jars arranged on a podium',4, 9);
 
-
-
-
-INSERT INTO Cart_Service (service_id, cart_id, type_id, addOn_id) VALUES
-(1,1,2,1),
-(4,1,1,2),
-(2,2,1,1),
-(3,3,3,2),
-(1,4,2,1),
-(2,4,1,2),
-(4,5,2,1),
-(3,6,1,1),
-(1,7,3,2),
-(2,8,2,1),
-(4,9,1,2),
-(3,10,2,1);
 
 INSERT INTO Orders (createdDate, lastUpdated, client_id, address, payment_method) VALUES
 ('2025-01-05 10:15:00', '2025-01-05 10:15:00', 1, '22 Street Av, Parramatta NSW 2150', 'Cash'),

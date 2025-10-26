@@ -1,27 +1,3 @@
-blinker==1.9.0
-Bootstrap-Flask==2.4.1
-click==8.1.8
-colorama==0.4.6
-dnspython==2.7.0
-dominate==2.9.1
-email_validator==2.2.0
-Flask==3.1.0
-Flask-MySQLdb==2.0.0
-Flask-WTF==1.2.2
-greenlet==3.1.1
-idna==3.10
-itsdangerous==2.2.0
-Jinja2==3.1.5
-MarkupSafe==3.0.2
-mysqlclient==2.2.7
-numpy==2.2.2
-typing_extensions==4.12.2
-visitor==0.1.3
-Werkzeug==3.1.3
-WTForms==3.2.1
-
-
-=========== This it the copie of sample, so we can adopt that================
 # Libraries to Install
 Make sure to install the required libraries using the `requirements.txt` file
 Run the following commands before attempting to run this code.
@@ -50,14 +26,35 @@ chmod +x ./mac.sh && sudo ./mac.sh
 
 # Database setup
 Make sure to drop the old walkthrough database and execute the two SQL
-files in the exercise folder. `toursite-database.sql` builds the database
-and includes some data in all tables. `add-admins.sql` adds the admin table
-to the database and adds one user to an admin table.
+files in the exercise folder. `database.sql` builds the database
+and includes some data in all tables. 
 
 # User Accounts
-There is one admin account with the following details:
+FotoBooking is a web application designed for booking photography services.
+It provides different functionalities based on the user role:
 
-```
-username: admin
-password: admin
-```
+Admin
+- Manage services, types, add-ons, and price
+- Username: admin1@gmail.com / admin2@gmail.com
+- Password: 1234qwer
+Photographer
+- Register / Login
+- Edit profile and portfolio
+- Add / remove services and gallery images
+- Manage availability
+Photographer1
+- Username: john.doe@example.com
+- Password: John1234
+Photographer2
+- Username: emily.smith@example.com
+- Password: Emily1234
+Client
+- Register / Login
+- Browse and filter photographers by location, service, and rating
+- Add to cart and complete checkout
+Client1
+- Username: julicortesarb@gmail.com
+- Password: JulCor!2026
+Client2
+- Username: mike.hansen88@yahoo.com
+- Password: MicHan!2027

@@ -170,7 +170,7 @@
 
 .service-box:hover {
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  transform: translateY(-3px);
+  transform: translateY(-10px);
 }
 
 .vendor_box {
@@ -180,7 +180,7 @@
 
 .vendor_box:hover {
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  transform: translateY(-3px);
+  transform: translateY(-15px);
 }
 
 /* navbar & footer theme */
