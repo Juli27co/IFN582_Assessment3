@@ -341,7 +341,6 @@ INSERT INTO Image (imageSource, image_description, service_id, photographer_id) 
 ('praniket-desai-ZZVP99CMSJE-unsplash.jpg','Wine bottle and glasses with grapes',4, 2),
 ('ela-de-pure-Youa6n5fssM-unsplash.jpg','Cosmetic jars arranged on a podium',4, 9);
 
-
 INSERT INTO Orders (createdDate, lastUpdated, client_id, address, payment_method) VALUES
 ('2025-01-05 10:15:00', '2025-01-05 10:15:00', 1, '22 Street Av, Parramatta NSW 2150', 'Cash'),
 ('2025-01-08 14:30:00', '2025-01-08 14:30:00', 2, '12 Maple Drive, Carlton VIC 3053', 'Credit card'),
